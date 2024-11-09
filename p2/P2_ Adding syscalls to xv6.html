@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#990000">
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="apple-itunes-app" content="app-id=480883488">
+<link rel="manifest" href="/web-app-manifest/manifest.json">
+  <meta name="sentry-trace" content="5d1ac78f02c2456795ded2e4502295b8-6453bedd725a4013-0"/>
+  <title>P2: Adding syscalls to xv6</title>
+
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Regular-bd03a2cc27.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Bold-cccb897485.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Italic-4eb103b4d1.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/common-3851139992.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/assignments-adde4b105e.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/tinymce-5fc893f669.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/learning_outcomes-0ef38391dc.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/new_user_tutorials-6b15f87caf.css" media="screen" />
+  <link rel="apple-touch-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/apple-touch-icon-585e5d997d.png" />
+  <link rel="icon" type="image/x-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" />
+
+  <link rel="stylesheet" href="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/38736063/Madison_041624.css" media="all" />
+  
+  <script>if (navigator.userAgent.match(/(MSIE|Trident\/)/)) location.replace('/ie-is-not-supported.html')</script>
+  <script>
+    INST = {"environment":"production","allowMediaComments":true,"kalturaSettings":{"domain":"nv.instructuremedia.com","resource_domain":"nv.instructuremedia.com","rtmp_domain":"iad.rtmp.instructuremedia.com","partner_id":"9","subpartner_id":"0","player_ui_conf":"0","kcw_ui_conf":"0","upload_ui_conf":"0","max_file_size_bytes":534773760,"do_analytics":false,"hide_rte_button":false,"js_uploader":true},"logPageViews":true,"editorButtons":[{"name":"YouTube","id":63,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=youtube","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/youtube_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSearch publicly available YouTube videos. A new icon will show up in your course rich editor letting you search YouTube and click to embed videos in your course material.\u003c/p\u003e\n"},{"name":"Vimeo","id":64,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=vimeo","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/vimeo_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eVimeo is a video sharing website on which users can upload, share, and view videos. The community of Vimeo includes indie, professional, and novice filmmakers.\u003c/p\u003e\n"},{"name":"GoogleApps","id":354,"favorite":false,"url":"https://google-drive-lti-iad-prod.instructure.com/lti/rce-content-selection","icon_url":"https://google-drive-lti-iad-prod.instructure.com/icon.png","canvas_icon_class":null,"width":700,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Google Drive to Canvas\u003c/p\u003e\n"},{"name":"Office 365","id":690,"favorite":false,"url":"https://office365-iad-prod.instructure.com/lti/rce-content-item","icon_url":"https://office365-iad-prod.instructure.com/images/office365_icon.png","canvas_icon_class":null,"width":900,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Office 365 to Canvas\u003c/p\u003e\n"},{"name":"BOX","id":691,"favorite":false,"url":"https://www.edu-apps.org/box/","icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png","canvas_icon_class":null,"width":430,"height":200,"use_tray":false,"always_on":false,"description":"\u003cp\u003eEmbed files from Box\u003c/p\u003e\n"},{"name":"Commons Favorites","id":4963,"favorite":false,"url":"https://lor.instructure.com/api/lti/favorite-resources","icon_url":"https://lor.instructure.com/img/icon_commons.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":true,"always_on":false,"description":"\u003cp\u003eFind and share course content\u003c/p\u003e\n"},{"name":"Embed Kaltura Media","id":9199,"favorite":true,"url":"https://1660902-6.kaf.kaltura.com/browseandembed/index/browseandembed","icon_url":"https://cdnsecakmi.kaltura.com/content/static/kalturalogo.png","canvas_icon_class":null,"width":1100,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eMedia Gallery and Embed\u003c/p\u003e\n"},{"name":"SAGE Vantage LTI 1.3 - editor_button","id":16667,"favorite":false,"url":"https://vantage.sagepub.com/lti1p3/tool/F2qexkPLRCSA0Qgi","icon_url":"https://vantage.sagepub.com/images/sagent/Bird-blue-right.svg","canvas_icon_class":null,"width":1000,"height":1000,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSAGE Vantage 1.3 Tool\u003c/p\u003e\n"},{"name":"myBusinessCourse Resource Selection","id":20058,"favorite":false,"url":"https://mybusinesscourse.com/platform/local/integrations/lti.php","icon_url":"https://mybusinesscourse.com/ublish/client/cpb/images/link_logo.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003emyBusinessCourse LTI 1.3\u003c/p\u003e\n"},{"name":"Pearson Links","id":21056,"favorite":false,"url":"https://interop.pearson.com/launch","icon_url":"https://www.pearson.com/us/content/dam/one-dot-com/one-dot-com/us/en/images/PearsonThumbprint-RGB-127x138.png/_jcr_content/renditions/cq5dam.web.1600.9600.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAccess Pearson\u003c/p\u003e\n"}]};
+    ENV = {"ASSET_HOST":"https://du11hjcvx0uqb.cloudfront.net","active_brand_config_json_url":"https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.json","active_brand_config":{"md5":"61f7e559cc87fd00c64673f40997d6a9","variables":{},"share":false,"name":null,"created_at":"2024-07-10T16:20:14-05:00","js_overrides":"https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js","css_overrides":"","mobile_js_overrides":"","mobile_css_overrides":"","parent_md5":"8f6dd81031a173a2b291239d3ac3f2b7"},"confetti_branding_enabled":false,"url_to_what_gets_loaded_inside_the_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-90e5ad1077.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"url_for_high_contrast_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/default/variables-high_contrast-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-795277483f.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"current_user_id":"210042","current_user_global_id":"83960000000210042","current_user_heap_id":"uu-2-b8e0df225888f508350f05f630b51a9475afbaccbb1f7ff370bb169fbe3d4d5d-0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","current_user_roles":["user","student"],"current_user_is_student":true,"current_user_types":[],"current_user_disabled_inbox":false,"current_user_visited_tabs":null,"discussions_reporting":true,"files_domain":"cluster77.canvas-user-content.com","group_information":null,"DOMAIN_ROOT_ACCOUNT_ID":"83960000000000001","DOMAIN_ROOT_ACCOUNT_UUID":"0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","k12":false,"help_link_name":"Help","help_link_icon":"help","use_high_contrast":false,"auto_show_cc":false,"disable_celebrations":false,"disable_keyboard_shortcuts":false,"LTI_LAUNCH_FRAME_ALLOWANCES":["geolocation *","microphone *","camera *","midi *","encrypted-media *","autoplay *","clipboard-write *","display-capture *"],"DEEP_LINKING_POST_MESSAGE_ORIGIN":"https://canvas.wisc.edu","comment_library_suggestions_enabled":false,"SETTINGS":{"open_registration":false,"collapse_global_nav":true,"release_notes_badge_disabled":false,"can_add_pronouns":true,"filter_speed_grader_by_student_group":false},"RAILS_ENVIRONMENT":"Production","IN_PACED_COURSE":false,"SENTRY_FRONTEND":{"dsn":"https://355a1d96717e4038ac25aa852fa79a8f@relay-iad.sentry.insops.net/388","org_slug":"instructure","base_url":"https://sentry.insops.net","normalized_route":"/courses/{course_id}/assignments/{id}","errors_sample_rate":"0.005","traces_sample_rate":"0.005","url_deny_pattern":"instructure-uploads.*amazonaws.com","revision":"canvas-lms@20240731.238"},"DATA_COLLECTION_ENDPOINT":"https://canvas-frontend-data-iad-prod.inscloudgate.net/submit","DOMAIN_ROOT_ACCOUNT_SFID":"001A000000ZQLzgIAH","DIRECT_SHARE_ENABLED":false,"CAN_VIEW_CONTENT_SHARES":false,"FEATURES":{"featured_help_links":true,"account_level_blackout_dates":false,"render_both_to_do_lists":false,"commons_new_quizzes":false,"course_paces_redesign":true,"course_paces_for_students":true,"explicit_latex_typesetting":false,"media_links_use_attachment_id":true,"permanent_page_links":true,"selective_release_backend":true,"selective_release_ui_api":true,"selective_release_optimized_tray":true,"enhanced_course_creation_account_fetching":false,"instui_for_import_page":false,"multiselect_gradebook_filters":true,"assignment_edit_placement_not_on_announcements":false,"platform_service_speedgrader":false,"instui_header":false,"rce_find_replace":true,"courses_popout_sisid":true,"dashboard_graphql_integration":false,"discussion_checkpoints":false,"speedgrader_studio_media_capture":true,"product_tours":false,"usage_rights_discussion_topics":true,"granular_permissions_manage_users":true,"create_course_subaccount_picker":true,"file_verifiers_for_quiz_links":true,"lti_deep_linking_module_index_menu_modal":true,"lti_dynamic_registration":true,"lti_multiple_assignment_deep_linking":true,"lti_overwrite_user_url_input_select_content_dialog":true,"buttons_and_icons_root_account":false,"extended_submission_state":false,"scheduled_page_publication":true,"send_usage_metrics":true,"rce_transform_loaded_content":false,"mobile_offline_mode":false,"react_discussions_post":true,"instui_nav":false,"enhanced_developer_keys_tables":true,"lti_registrations_discover_page":false,"enhanced_rubrics":false,"account_level_mastery_scales":false,"non_scoring_rubrics":true,"top_navigation_placement":false,"embedded_release_notes":true,"canvas_k6_theme":false,"new_math_equation_handling":true},"current_user":{"id":"210042","anonymous_id":"4i2i","display_name":"Yongzhi Lai","avatar_image_url":"https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128\u0026d=identicon","html_url":"https://canvas.wisc.edu/about/210042","pronouns":null,"avatar_is_fallback":false,"email":"LAI38@WISC.EDU"},"current_user_is_admin":false,"page_view_update_url":"/page_views/dc0cb30e-6f09-4b43-adc8-50e334f8f643?page_view_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpIjoiZGMwY2IzMGUtNmYwOS00YjQzLWFkYzgtNTBlMzM0ZjhmNjQzIiwidSI6ODM5NjAwMDAwMDAyMTAwNDIsImMiOiIyMDI0LTA4LTEyVDIwOjM4OjM0Ljk5WiJ9.RTYn8Tjc1lcPYNiSry6urdr3SHVdIHxFg8uLbFxCNgY","context_asset_string":"course_402226","ping_url":"https://canvas.wisc.edu/api/v1/courses/402226/ping","TIMEZONE":"America/Chicago","CONTEXT_TIMEZONE":"America/Chicago","LOCALES":["en"],"BIGEASY_LOCALE":"en_US","FULLCALENDAR_LOCALE":"en","MOMENT_LOCALE":"en","rce_auto_save_max_age_ms":86400000,"K5_USER":false,"USE_CLASSIC_FONT":false,"K5_HOMEROOM_COURSE":false,"K5_SUBJECT_COURSE":false,"LOCALE_TRANSLATION_FILE":"/dist/javascripts/translations/en-67c25a6858.json","ACCOUNT_ID":"123","user_cache_key":"dHBhYkxONnRSMlIyazBpMVdoUXNQTUxPZFJINGYwa01HSjVSSG13enZ5Zlc9\nO1twLTA/OntQXz1IVXBncmFxZTtuamFsa2hwdm9pdWxraW1tYXFld2c=\n","current_context":{"id":"402226","name":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","type":"Course","url":"https://canvas.wisc.edu/courses/402226"},"ASSIGNMENT_POINTS_POSSIBLE":null,"media_comment_asset_string":"user_210042","COURSE_ID":"402226","ROOT_OUTCOME_GROUP":{"id":"129584","title":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","vendor_guid":null,"url":"/api/v1/courses/402226/outcome_groups/129584","subgroups_url":"/api/v1/courses/402226/outcome_groups/129584/subgroups","outcomes_url":"/api/v1/courses/402226/outcome_groups/129584/outcomes","can_edit":false,"import_url":"/api/v1/courses/402226/outcome_groups/129584/import","context_id":"402226","context_type":"Course","description":null},"SUBMISSION_ID":"142518681","FIRST_ANNOTATION_SUBMISSION":false,"RICH_CONTENT_APP_HOST":"rich-content-iad.inscloudgate.net","JWT":"ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJSME5OSWl3aWNtVm5hVzl1SWpvaWRYTXRaV0Z6ZEMweElpd2laVzUyYVhKdmJtMWxiblFpT2lKUWNtOWtkV04wYVc5dUluMC4uYWlHaGZXNFU0ZTB1dFBpci5heDNKdVJUdU0wdzVzLW1jYUlQOW9EM1pFQk5sNE5TQXl4TE85bnh4ZllxMGpuX0dTcExrRmx4RUgwX2NuTEJGbGRrV2VFS3Yzd2pFNnFETG04aW8xNzRjejBtWnhWQkVOdzFtWkNKQVpJdlh4eG1DSnJTT185Xy1DYkxxNHJnWUk0b2t2Tjlyc2VkajRsQy1vc2Yxb2lyZzZRb29RSnlmZHNkdFk3NGRudVdGMW5zZmNyeHlqS2RYUi1NOExyX0tONERTT0pjVmtVaWl2ZDFGTWcyLUlSenFpNnVrYlVpd09BY25PczQyb09RUm1uTldsdXM5UVpYRW90aFlYd0NrWGQ3R2swaUIyR3NUSHFRajl6MlVCaG5TbDFJUEhhcVdvTlBiVndYNnVnWWNjeFUxX3RwN0t4d3FUV21lWEk4aTViX2dyTkw1RFNQR1RHclVUdnJNMV9Ua091dDZrdDVxQlp5SUw5M0lfaTc0Z3BkNTBwN3RIS0hKMmJSdkY4dUVNSE1UUjRyVERsWFV6TklOV1pfU1hqOW4wcWhkWEYzSGRwc0VDeExDOTNCbExGZFJVaG1hbGktTERjMjZlVXRjcmxfaFdMRUNnX0FubWJ3NWMxZUdxM2lNQXJ0d01VaGpSSlVCa0hYMEdSaGRJaDdiTUZpNlZtelRYeDRiSmJwb1V0ZmxIMzBrTlk1Tnhmc2ZNZ3N0dzBTNkVKWllaMHlmU2ttRzExd0M5ZmJ2Mkh2LTFDUG1NVFh5d3NXWnRha29WWFlselBPOGpkblVQNjhWVWxPTGZYRENtdU1uZnltbno0cTRkVE1NMDZaNnRXa08zSVppZHFGYXZNaVZTLUd5U3d6d3FwdzVRVU5haHJtU3JFbjdxcTRteHVPdUFhNTZqSHNBaTYxeEVFYVhFVDdCSHd5a2tPbkRoOFVGQjlvSzV1d2trWGJxZWpSTWZSdVAydjhCNnhFVF9zeGZ3OG4yQ3Nxb3pNOTEydzhJQ2pwZmtBbS1GZldzOEdyNHRlaVZpcWJtWmhaV2k2OEFaZEwxdTE1NFI3QXlNRWhxS011ZGd3LjYzOFVNZFFKdGJZLWVkSERNWEd6dWc=","RICH_CONTENT_CAN_UPLOAD_FILES":false,"RICH_CONTENT_CAN_EDIT_FILES":false,"RICH_CONTENT_FILES_TAB_DISABLED":false,"RICH_CONTENT_INST_RECORD_TAB_DISABLED":false,"RICH_CONTENT_AI_TEXT_TOOLS":false,"ASSIGNMENT_ID":"2301447","PREREQS":{},"EULA_URL":null,"EXTERNAL_TOOLS":[{"id":"691","domain":"edu-apps.org","url":"https://www.edu-apps.org/box/","consumer_key":"f0c24720-f77b-45fc-9e3a-285663c9a9d7","name":"BOX","description":"Embed files from Box","created_at":"2017-07-31T08:22:29-05:00","updated_at":"2017-07-31T08:22:53-05:00","privacy_level":"anonymous","custom_fields":{},"workflow_state":"anonymous","vendor_help_link":null,"account_navigation":null,"assignment_edit":null,"assignment_group_menu":null,"assignment_index_menu":null,"assignment_menu":null,"assignment_selection":null,"assignment_view":null,"collaboration":null,"course_assignments_menu":null,"course_home_sub_navigation":null,"course_navigation":{"enabled":"true","default":"disabled","visibility":"public","label":"BOX","selection_width":430,"selection_height":200,"icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png"},"course_settings_sub_navigation":null,"discussion_topic_index_menu":null,"discussion_topic_menu":null,"file_index_menu":null,"file_menu":null,"global_navigation":null,"homework_submission":{"enabled":"true","label":"BOX","selection_width":430,"selection_height":200,"icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png"},"link_selection":null,"migration_selection":null,"module_group_menu":null,"module_index_menu":null,"module_index_menu_modal":null,"module_menu_modal":null,"module_menu":null,"post_grades":null,"quiz_index_menu":null,"quiz_menu":null,"resource_selection":{"enabled":"true","label":"BOX","selection_width":430,"selection_height":200,"icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png"},"similarity_detection":null,"student_context_card":null,"submission_type_selection":null,"tool_configuration":null,"top_navigation":null,"user_navigation":{"enabled":"true","visibility":"public","label":"BOX","selection_width":430,"selection_height":200,"icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png"},"wiki_index_menu":null,"wiki_page_menu":null,"editor_button":{"enabled":"true","label":"BOX","selection_width":430,"selection_height":200,"icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png"},"is_rce_favorite":false,"selection_width":430,"selection_height":200,"icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png","not_selectable":false,"version":"1.1","unified_tool_id":null,"deployment_id":"691:f39913480cdd695e6f983b96ae1b66d1134205d9"},{"id":"354","domain":"google-drive-lti-iad-prod.instructure.com","url":"https://google-drive-lti-iad-prod.instructure.com/lti/course-navigation","consumer_key":"8fc78ac7-010f-4e61-9f03-6eaea4f1930f","name":"GoogleApps","description":"\nAllows you to pull in documents from Google Drive to Canvas\n","created_at":"2017-02-10T11:19:22-06:00","updated_at":"2020-09-11T18:43:57-05:00","privacy_level":"name_only","custom_fields":{"account_id":"$Canvas.account.id","assignment_title":"$Canvas.assignment.title","base_url":"$Canvas.api.baseUrl","collaboration_members_url":"$Canvas.api.collaborationMembers.url","domain":"$Canvas.api.domain","group_context_ids":"$Canvas.group.contextIds","masquerading_user_id":"$Canvas.masqueradingUser.userId","membership_service_url":"$ToolProxyBinding.memberships.url","time_zone":"$Person.address.timezone","user_id":"$Canvas.user.id","previous_context_ids":"$Canvas.course.previousContextIds"},"workflow_state":"name_only","vendor_help_link":null,"account_navigation":null,"assignment_edit":null,"assignment_group_menu":null,"assignment_index_menu":null,"assignment_menu":null,"assignment_selection":{"enabled":true,"message_type":"ContentItemSelectionRequest","text":"Google Docs Cloud Assignment","url":"https://google-drive-lti-iad-prod.instructure.com/lti/cloud-template-selection","label":"Google Docs Cloud Assignment","selection_width":800,"selection_height":400},"assignment_view":null,"collaboration":{"enabled":true,"canvas_icon_class":"icon-lti","icon_url":"https://google-drive-lti-iad-prod.instructure.com/assets/google_drive_icon-ba12a17e3e3d7f70f910b17f1b4c0500ff0298ad087a93a6c133ca623c40f0f8.png","message_type":"ContentItemSelectionRequest","text":"Google Drive","url":"https://google-drive-lti-iad-prod.instructure.com/lti/collaboration-content-selection","label":"Google Drive","selection_width":800,"selection_height":400},"course_assignments_menu":null,"course_home_sub_navigation":null,"course_navigation":{"enabled":true,"text":"Google Drive","url":"https://google-drive-lti-iad-prod.instructure.com/lti/course-navigation","default":"disabled","label":"Google Drive","selection_width":800,"selection_height":400},"course_settings_sub_navigation":null,"discussion_topic_index_menu":null,"discussion_topic_menu":null,"file_index_menu":null,"file_menu":null,"global_navigation":null,"homework_submission":{"enabled":true,"canvas_icon_class":"icon-lti","icon_url":"https://google-drive-lti-iad-prod.instructure.com/assets/google_drive_icon-ba12a17e3e3d7f70f910b17f1b4c0500ff0298ad087a93a6c133ca623c40f0f8.png","message_type":"ContentItemSelectionRequest","text":"Google Drive","url":"https://google-drive-lti-iad-prod.instructure.com/lti/homework-content-selection","label":"Google Drive","selection_width":800,"selection_height":400},"link_selection":{"enabled":"true","message_type":"ContentItemSelectionRequest","selection_height":600,"selection_width":700,"text":"Google Drive","url":"https://google-drive-lti-iad-prod.instructure.com/lti/module-content-selection","label":"Google Drive"},"migration_selection":null,"module_group_menu":null,"module_index_menu":null,"module_index_menu_modal":null,"module_menu_modal":null,"module_menu":null,"post_grades":null,"quiz_index_menu":null,"quiz_menu":null,"resource_selection":null,"similarity_detection":null,"student_context_card":null,"submission_type_selection":null,"tool_configuration":null,"top_navigation":null,"user_navigation":null,"wiki_index_menu":null,"wiki_page_menu":null,"editor_button":{"enabled":true,"icon_url":"https://google-drive-lti-iad-prod.instructure.com/icon.png","message_type":"ContentItemSelectionRequest","selection_height":600,"selection_width":700,"url":"https://google-drive-lti-iad-prod.instructure.com/lti/rce-content-selection","label":"GoogleApps"},"is_rce_favorite":false,"icon_url":"\nhttps://google-drive-lti-iad-prod.instructure.com/assets/google_drive_icon-ba12a17e3e3d7f70f910b17f1b4c0500ff0298ad087a93a6c133ca623c40f0f8.png\n","not_selectable":false,"version":"1.1","unified_tool_id":null,"deployment_id":"354:f39913480cdd695e6f983b96ae1b66d1134205d9"},{"id":"690","domain":"office365-iad-prod.instructure.com","url":"https://office365-iad-prod.instructure.com/lti/course-navigation","consumer_key":"6e338f98-9a73-4d23-af9e-1ef347f9e2fc","name":"Office 365","description":"\nAllows you to pull in documents from Office 365 to Canvas\n","created_at":"2017-07-31T07:20:12-05:00","updated_at":"2018-03-20T16:58:27-05:00","privacy_level":"name_only","custom_fields":{"account_id":"$Canvas.account.id","assignment_title":"$Canvas.assignment.title","base_url":"$Canvas.api.baseUrl","collaboration_members_url":"$Canvas.api.collaborationMembers.url","course_id":"$Canvas.course.id","domain":"$Canvas.api.domain","group_context_ids":"$Canvas.group.contextIds","masquerading_user_id":"$Canvas.masqueradingUser.userId","membership_service_url":"$ToolProxyBinding.memberships.url","time_zone":"$Person.address.timezone","user_id":"$Canvas.user.id","previous_context_ids":"$Canvas.course.previousContextIds","previous_context_ids_recursive":"$Canvas.course.previousContextIds.recursive"},"workflow_state":"name_only","vendor_help_link":null,"account_navigation":null,"assignment_edit":null,"assignment_group_menu":null,"assignment_index_menu":null,"assignment_menu":null,"assignment_selection":{"enabled":true,"message_type":"ContentItemSelectionRequest","text":"Office 365 Cloud Assignment","url":"https://office365-iad-prod.instructure.com/lti/cloud-assignment-template","label":"Office 365 Cloud Assignment","selection_width":800,"selection_height":400},"assignment_view":null,"collaboration":{"enabled":true,"canvas_icon_class":"icon-lti","icon_url":"https://office365-iad-prod.instructure.com/images/office365_icon.png","message_type":"ContentItemSelectionRequest","text":"Office 365","url":"https://office365-iad-prod.instructure.com/lti/collaboration-content-item","label":"Office 365","selection_width":800,"selection_height":400},"course_assignments_menu":null,"course_home_sub_navigation":null,"course_navigation":{"enabled":"true","default":"disabled","text":"Office 365","url":"https://office365-iad-prod.instructure.com/lti/course-navigation","label":"Office 365","selection_width":800,"selection_height":400},"course_settings_sub_navigation":null,"discussion_topic_index_menu":null,"discussion_topic_menu":null,"file_index_menu":null,"file_menu":null,"global_navigation":null,"homework_submission":{"enabled":true,"canvas_icon_class":"icon-lti","icon_url":"https://office365-iad-prod.instructure.com/images/office365_icon.png","message_type":"ContentItemSelectionRequest","text":"Office 365","url":"https://office365-iad-prod.instructure.com/lti/homework-submission-content-item","label":"Office 365","selection_width":800,"selection_height":400},"link_selection":{"enabled":"true","message_type":"ContentItemSelectionRequest","selection_height":600,"selection_width":900,"text":"Office 365","url":"https://office365-iad-prod.instructure.com/lti/module-content-item","label":"Office 365"},"migration_selection":null,"module_group_menu":null,"module_index_menu":null,"module_index_menu_modal":null,"module_menu_modal":null,"module_menu":null,"post_grades":null,"quiz_index_menu":null,"quiz_menu":null,"resource_selection":null,"similarity_detection":null,"student_context_card":null,"submission_type_selection":null,"tool_configuration":null,"top_navigation":null,"user_navigation":null,"wiki_index_menu":null,"wiki_page_menu":null,"editor_button":{"enabled":true,"icon_url":"https://office365-iad-prod.instructure.com/images/office365_icon.png","message_type":"ContentItemSelectionRequest","selection_height":600,"selection_width":900,"url":"https://office365-iad-prod.instructure.com/lti/rce-content-item","label":"Office 365"},"is_rce_favorite":false,"icon_url":"\nhttps://office365-iad-prod.instructure.com/images/office365_icon.png\n","not_selectable":false,"version":"1.1","unified_tool_id":null,"deployment_id":"690:f39913480cdd695e6f983b96ae1b66d1134205d9"}],"PERMISSIONS":{"context":{"read_as_admin":false,"manage_assignments":false,"manage_assignments_edit":false},"assignment":{"update":false,"submit":true},"can_manage_groups":true},"SIMILARITY_PLEDGE":null,"CONFETTI_ENABLED":false,"EMOJIS_ENABLED":false,"EMOJI_DENY_LIST":null,"USER_ASSET_STRING":"user_210042","OUTCOMES_NEW_DECAYING_AVERAGE_CALCULATION":true,"CONDITIONAL_RELEASE_SERVICE_ENABLED":true,"CONDITIONAL_RELEASE_ENV":{"assignment":{"id":"2301447","title":"P2: Adding syscalls to xv6","description":"\u003ch3\u003eAnnouncement:\u003c/h3\u003e\n\u003cp\u003eTests have been released. You should be able to run tests by running \u003ccode\u003e~cs537-1/tests/p2/runtests\u003c/code\u003e from within the xv6 source directory.\u003cbr\u003eAlso, we will not be testing coding style, i.e., we will \u003cstrong\u003enot\u003c/strong\u003e be using linter or valgrind.\u003c/p\u003e\n\u003ch3\u003eOverview:\u003c/h3\u003e\n\u003cp\u003eIn this assignment, you will add new system calls to a toy operating system called xv6. You will implement 2 system calls:\u003c/p\u003e\n\u003col style=\"list-style-type: decimal;\"\u003e\n\u003cli\u003e\u003ccode\u003efsetoff(int fd, int pos)\u003c/code\u003e: This syscall changes the position indicator (offset) of the file as per the user input.\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003efgetoff(int fd)\u003c/code\u003e: This syscall returns the current value of the position indicator (offset) of the specified file.\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eAdditionally, you will learn (and demonstrate) using gdb debugger with xv6.\u003c/p\u003e\n\u003ch3\u003eLearning objectives:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eGain experience using more substantial code bases written by others in which you do not need to understand every line\u003c/li\u003e\n\u003cli\u003eFamiliarize with the xv6 code base in particular\u003c/li\u003e\n\u003cli\u003eLearn how to add a system call to xv6\u0026nbsp;\u003c/li\u003e\n\u003cli\u003eAdd a user-level application that can be used within xv6\u003c/li\u003e\n\u003cli\u003eBecome familiar with a few of the data structures in xv6 (e.g., process table and file)\u003c/li\u003e\n\u003cli\u003eUse the gdb debugger on xv6\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eAdministrivia:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eThis project is to be performed alone.\u003c/li\u003e\n\u003cli\u003e\u003cstrong data-sourcepos=\"8:3-8:14\"\u003eDue Date\u003c/strong\u003e: June 17th, at 11:59pm (4 slip days throughout course, use wisely)\u003c/li\u003e\n\u003cli\u003eThis project is to be done on the\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ca class=\"inline_disabled\" href=\"https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/\" target=\"_blank\"\u003elab machines\u003c/a\u003e, so you can learn more about programming in C on a typical UNIX-based platform (Linux).\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eDetails:\u003c/h3\u003e\n\u003ch4\u003eSystem call:\u003c/h4\u003e\n\u003cp\u003eHere are the details about the systems calls you will be adding:\u003c/p\u003e\n\u003cpre\u003eint fsetoff(int fd, int pos)\u003cspan style=\"text-decoration: underline;\"\u003e\u003cbr\u003e\u003c/span\u003e\u003c/pre\u003e\n\u003cul\u003e\n\u003cli\u003efsetoff() syscall will take 2 arguments: open file descriptor and the position value to which the file offset should be changed.\u003c/li\u003e\n\u003cli\u003eIf fd and pos are valid, fsetoff will update the offset position parameter of the file corresponding to the input file descriptor.\u003c/li\u003e\n\u003cli\u003efsetoff() will return 0 on success, -1 if the file is not open, -2 if the \u003cstrong\u003epos\u003c/strong\u003e parameter is invalid; position parameter can be invalid if it is not a number or less than 0 or greater than the size of the file.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003eint fgetoff(int fd)\u003cspan style=\"text-decoration: underline;\"\u003e\u003cbr\u003e\u003c/span\u003e\u003c/pre\u003e\n\u003cul\u003e\n\u003cli\u003efgetoff() syscall will take 1 argument: open file descriptor.\u003c/li\u003e\n\u003cli\u003efgetoff() will return -1 if the file is not open.\u003c/li\u003e\n\u003cli\u003eIf file is open, fgetoff() will return the current position indicator (offset) value corresponding to the file descriptor.\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch4\u003eDebugging with GDB\u003c/h4\u003e\n\u003cp\u003eYour second task is to demonstrate that you can use gdb to debug xv6 code.\u0026nbsp; You should show the integer value that fdalloc returns the first time it is called after a process has been completely initialized.\u0026nbsp;\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eTo do this, you can follow these steps:\u003c/p\u003e\n\u003cp\u003eIn one window, start up \u003cstrong\u003eqemu-nox-gdb\u003c/strong\u003e.\u0026nbsp; In another window on the same machine, start up \u003cstrong\u003egdb\u003c/strong\u003e (it will attach to the qemu process) and \u003cstrong\u003econtinue\u003c/strong\u003e it until xv6 finishes its bootup process and gives you a prompt.\u0026nbsp; Now, interrupt gdb and set a \u003cstrong\u003ebreakpoint\u003c/strong\u003e in the \u003cstrong\u003efdalloc()\u003c/strong\u003e routine.\u0026nbsp; Continue gdb.\u0026nbsp; Then, run the \u003cstrong\u003estressfs\u003c/strong\u003e user application at the xv6 prompt.\u0026nbsp; \u0026nbsp;Your gdb process should now stop in fdalloc.\u0026nbsp; Now, \u003cstrong\u003estep\u003c/strong\u003e (or, probably \u003cstrong\u003enext\u003c/strong\u003e) through the C code until gdb reaches the point just before fdalloc() returns and \u003cstrong\u003eprint\u0026nbsp;\u003c/strong\u003ethe value that will be returned (i.e., the value of fd).\u0026nbsp; Now immediately quit gdb and run \u003cstrong\u003ewhoami\u003c/strong\u003e to display your login name.\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eTo sanity check your results, you should think about the value you expect fdalloc() to return in these circumstances to make sure you are looking at the right information.\u0026nbsp; What is the first fd number returned after stdin, stdout, and stderr have been set up?\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eIf gdb gives you the error message that fd has been optimized out and cannot be displayed, make sure that your Makefile uses the flag \"-Og\" instead of \"-O2\". Debugging is also a lot easier with a single CPU, so if you didn't do this already: in your \u003cstrong\u003eMakefile\u003c/strong\u003e find where the number of CPUS is set and change this to be 1.\u003c/p\u003e\n\u003cp\u003eTake a screenshot showing your gdb session with the returned value of fd printed and your login name displayed.\u0026nbsp; \u003cstrong\u003eSubmit this screenshot to Canvas.\u003c/strong\u003e\u003c/p\u003e\n\u003chr\u003e\n\u003ch3\u003eHints\u003c/h3\u003e\n\u003cp\u003eThis project is very similar to a prior \u003ca class=\"inline_disabled\" href=\"https://github.com/remzi-arpacidusseau/ostep-projects/tree/master/initial-xv6\" target=\"_blank\"\u003eOSTEP project\u003c/a\u003e. You can refer to some of the hints and documentation included there.\u003c/p\u003e\n\u003ch4\u003eGetting started with xv6\u003c/h4\u003e\n\u003cp\u003eThe source code for xv6 (and associated README) can be found in\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003cstrong\u003e~cs537-1/public/xv6.tgz\u003c/strong\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003e. Everything you need to build and run and even debug the kernel is in there. The way to make your own version is to do the following:\u003c/p\u003e\n\u003cpre\u003eprompt\u0026gt; cd $PROJ\nprompt\u0026gt; cp ~cs537-1/public/xv6.tgz .\u003cbr\u003eprompt\u0026gt; tar xvzf ~cs537-1/public/xv6.tgz\n\u003c/pre\u003e\n\u003cp\u003eThis will create an xv6-public directory in the $PROJ directory. You can then cd into that and begin working.\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eIf, for development and testing, you would like to run xv6 in an environment other than the CSL instructional Linux cluster, you may need to set up additional software. You can read these\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ca class=\"external\" href=\"https://github.com/remzi-arpacidusseau/ostep-projects/blob/master/INSTALL-xv6.md\" target=\"_blank\"\u003e\u003cspan\u003einstructions for the MacOS build environment.\u003c/span\u003e\u003cspan class=\"external_link_icon\" role=\"presentation\"\u003e\u003cspan class=\"screenreader-only\"\u003eLinks to an external site.\u003c/span\u003e\u003c/span\u003e\u003c/a\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003eNote that we will run all of our tests and do our grading on the instructional Linux cluster so you should always ensure that the final code you handin works on those machines.\u003c/p\u003e\n\u003cp\u003eAfter you have obtained the source files, you can run\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003emake qemu-nox\u003c/code\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003eto compile all the code and run it using the QEMU emulator. Test out the unmodified code by running a few of the existing user-level applications, like\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003els\u003c/code\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003eand\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003eforktest\u003c/code\u003e. With\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003els\u003c/code\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003einside the emulator, you'll be able to see a few other applications that are available (as well as files that have been created within the xv6 environment).\u003c/p\u003e\n\u003cp\u003eTo quit the emulator, type\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003eCtl-a x\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eYou will want to be familiar with the\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003cstrong\u003eMakefile\u003c/strong\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003eand comfortable modifying it. In particular, see the list of existing\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003eUPROGS\u003c/code\u003e. See the different ways of running the environment through make (e.g.,\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003eqemu-nox\u003c/code\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003eor\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003eqemu-nox-gdb\u003c/code\u003e).\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eFind where the number of\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003eCPUS\u003c/code\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003eis set and change this to be 1.\u003c/p\u003e\n\u003cp\u003eFor additional information about xv6, we strongly encourage you to look through the code while reading this\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ca class=\"inline_disabled external\" href=\"https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf\" target=\"_blank\"\u003e\u003cspan\u003ebook\u003c/span\u003e\u003cspan class=\"external_link_icon\" style=\"display: inline-block; text-indent: initial;\" role=\"presentation\"\u003e \u003c/span\u003e\u003c/a\u003e\u0026nbsp;by the xv6 authors. \u003cspan\u003eOr, if you prefer to watch videos, this great \u003ca class=\"inline_disabled\" href=\"https://www.youtube.com/watch?v=vR6z2QGcoo8\" target=\"_blank\"\u003etutorial\u003c/a\u003e on xv6 by Prof. Remzi\u003c/span\u003e \u003cspan\u003edescribe some of the relevant files. Note that the code and project in the videos do not exactly match what you are doing. We always recommend that you look at the actual code yourself while either reading or watching (perhaps pausing the video as needed).\u003c/span\u003e\u003c/p\u003e\n\u003ch4\u003e\u003cspan\u003eImplementing the syscalls\u003c/span\u003e\u003c/h4\u003e\n\u003cp\u003eThe primary files you will want to examine in detail include\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003esyscall.c\u003c/code\u003e,\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003esysproc.c\u003c/code\u003e, \u003ccode\u003esysfile.c\u003c/code\u003e, and\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003efile.c\u003c/code\u003e. You might also want to take a look at\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003eusys.S\u003c/code\u003e, which (unfortunately) is written in\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003cspan\u003eassembly.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eTo add a system call, find some other very simple system call that also set an value to a pointer-based parameter, like\u003cspan\u003e\u0026nbsp;\u003ccode\u003esys_fstat\u003c/code\u003e\u003c/span\u003e, copy it in all the ways you think are needed, and modify it so it doesn't do anything and has the new name. Compile the code to see if you found everything you need to copy and change. You probably won't find everything the first time you try.\u003c/p\u003e\n\u003cp\u003eA file descriptor is a simple number that a computer's operating system uses to keep track of open files. When a program opens a file, the operating system assigns it a unique file descriptor. This number is then used by the program to read from, write to, or manipulate the file in other ways. Think of it like a ticket you get at a coat check – it doesn’t contain all the information about your coat, but as long as you have that ticket, you can use it to retrieve or modify your coat. Similarly, programs use file descriptors as references to perform operations on the actual files.\u003c/p\u003e\n\u003cp\u003eOperating systems maintain a position offset variable per open file to keep track of the current position within the file for read and write operations. This position offset is initialized to 0 when a file is opened. When user processes issue read or write system calls, the operation commences at the file offset, and the file offset is incremented by the number of bytes read/written. In this project, you will be implementing system calls to update and read this file offset.\u003c/p\u003e\n\u003cp\u003e\u003cspan\u003eConsider the modifications needed to make your system calls behave as expected:\u003c/span\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eTake a look at sys_read() to understand how to access file structure using the input file descriptor. You will have to implement similar code to obtain file struct from input fd.\u003c/li\u003e\n\u003cli\u003e\u003cspan\u003eNotice how fileread() uses locks (we will learn more about this later in this course) to ensure mutual exclusion while updating the offset. Consider using locks while reading or writing to the position offset.\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003cspan\u003eCompare the input pos value to the file size (see filestat() to learn how to obtain file size).\u003c/span\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4\u003e\u003cspan\u003eTesting your syscalls\u003c/span\u003e\u003c/h4\u003e\n\u003cp\u003e\u003cspan\u003eWe suggest you write an example user application (submission not required) that tests your system call. Again, we suggest copying one of the straight-forward utilities that already exist, such as cat.c.\u0026nbsp; Modify the application to open a file and invoke your newly implemented syscalls. To compile the user application, you will have to make changes to the Makefile. Look for \u003ccode\u003eUPROGS\u003c/code\u003e to add your test user application.\u003cbr\u003e\u003cbr\u003eSimilar to your first project, some tests will be provided at \u003cem\u003e~cs537-1/tests/p2.\u003c/em\u003e Details will be provided once the tests are released.\u003cbr\u003e\u003c/span\u003e\u003c/p\u003e\n\u003chr\u003e\n\u003ch3\u003eHanding It In\u003c/h3\u003e\n\u003cp\u003eRemember there are two handin steps.\u003c/p\u003e\n\u003cp\u003eFor your xv6 code, your handin directory is\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003e~cs537-1/handin/LOGIN/p2\u003c/code\u003e\u003cspan\u003e where \u003c/span\u003e\u003ccode\u003eLOGIN \u003c/code\u003eis your CS login. \u003cspan style=\"color: #ff0000;\"\u003ePlease create a subdirectory called 'src': \u003ccode\u003e~cs537-1/handin/LOGIN/p2/src.\u003c/code\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eCopy all of your source files (but not .o files, please, or binaries!) into this directory. A simple way to do this is to copy everything into the destination directory, then type\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003emake\u003c/code\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003eto make sure it builds, and then type\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003emake clean\u003c/code\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003eto remove unneeded files.\u003c/p\u003e\n\u003cblockquote\u003e\n\u003cpre\u003eshell% mkdir ~cs537-1/handin/LOGIN/p2\u003cspan style=\"color: #ff0000;\"\u003e/src\u003c/span\u003e \u003cbr\u003eshell% cd ~cs537-1/handin/LOGIN/p2\u003cspan style=\"color: #ff0000;\"\u003e/src\u003c/span\u003e\nshell% make\nshell% make clean\n\u003c/pre\u003e\n\u003c/blockquote\u003e\n\u003cp\u003eSecond, for your screenshot of your debugging session, upload your image here in Canvas.\u003c/p\u003e","points_possible":100.0,"grading_type":"points","submission_types":"online_upload","grading_scheme":{"A":0.94,"A-":0.9,"B+":0.87,"B":0.84,"B-":0.8,"C+":0.77,"C":0.74,"C-":0.7,"D+":0.67,"D":0.64,"D-":0.61,"F":0.0}},"course_id":"402226","stats_url":"/api/v1/courses/402226/mastery_paths/stats","rule":null},"SUBMIT_ASSIGNMENT":{"ALLOWED_EXTENSIONS":[],"ID":"2301447","GROUP_ID_FOR_USER":null},"badge_counts":{"submissions":12},"notices":[],"active_context_tab":"assignments"};
+    BRANDABLE_CSS_HANDLEBARS_INDEX = [["new_styles_normal_contrast","new_styles_high_contrast","new_styles_normal_contrast_rtl","new_styles_high_contrast_rtl"],{"10":["908ffbc673",0,"d5c9044c6e",2],"15":["c8540c43a4",0,"0a2196be1d",2],"19":["df5777ed9c"],"61":["1fb36890db","b83a603352","4bcf82f85a","0b171e092c"],"67":["700335fb7b",0,"1cc2485e2c",2],"71":["9cb09ce3d6","9f81099c5a","e1c5edae20","b1fb18d547"],"06":["ba28819778",0,"96b99aafe5",2],"f0":["b349f31f5e",0,0,0],"c8":["718c8509f5","33cd4c40e3","03d0fbcbe8","ec23096f0d"],"1e":["6eb4ecac8e","4100cb65ce","0faf4716c8","bed54fd75e"],"b3":["e5da23fb43","0911fc8ed3","05b2bb5a6f","ba2585de5c"],"0c":["4dae5befd2",0,"c18876be89",2],"da":["b5a7f9cd8f","a4e5066985","773390ae11","8e9071910c"],"1d":["2128789890",0,"e568085637",2],"08":["64bff5a97d"],"e2":["11429f119a"],"9f":["d39b291ba6",0,0,0],"2b":["c491abf31e","b11dc54da6","b58622671f","6bb4a7ae9e"],"2c":["8a926fc28b",0,0,0],"c2":["6f2721ae01"],"9c":["c31821c764",0,"1693aba1da",2],"c5":["44c6024769","31150a4a27","53dd277fa9","5fe61c91c2"],"f2":["51574f9b13"]}]
+    REMOTES = {};
+  </script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/en_US-80a0ce259b.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/react-entry-c8c7bdb5b4feb9bd.js" crossorigin="anonymous" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/main-entry-b73a86a7e23e9536.js" crossorigin="anonymous" defer="defer"></script>
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('assignment_show');
+(window.bundles || (window.bundles = [])).push('submit_assignment');
+(window.bundles || (window.bundles = [])).push('edit_rubric');
+(window.bundles || (window.bundles = [])).push('navigation_header');
+//]]>
+</script>
+  
+  <script type="text/javascript">
+    window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+    heap.load("3001039959");
+    heap.clearEventProperties();
+    heap.addEventProperties({'Base.appName': 'Canvas'});
+    setTimeout(() => {
+      if (ENV.current_user_heap_id && ENV.current_user_heap_id !== heap.identity) {
+        heap.identify(ENV.current_user_heap_id);
+      }
+      props = {}
+      if (ENV.current_user_roles) {
+        props['role'] = ENV.current_user_roles[ENV.current_user_roles.length - 1]
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_UUID) {
+        props['Canvas.accountId'] = ENV.DOMAIN_ROOT_ACCOUNT_UUID
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_SFID) {
+        props['Canvas.salesforceAccountId'] = ENV.DOMAIN_ROOT_ACCOUNT_SFID
+      }
+      if (Object.keys(props).length > 0) {
+        heap.addUserProperties(props);
+      }
+    }, 1000);
+  </script>
+  
+</head>
+
+<body class="with-left-side course-menu-expanded with-right-side assignments primary-nav-transitions full-width context-course_402226 responsive_student_grades_page">
+
+<noscript>
+  <div role="alert" class="ic-flash-static ic-flash-error">
+    <div class="ic-flash__icon" aria-hidden="true">
+      <i class="icon-warning"></i>
+    </div>
+    <h1>You need to have JavaScript enabled in order to access this site.</h1>
+  </div>
+</noscript>
+
+
+
+
+<div id="flash_message_holder"></div>
+<div id="flash_screenreader_holder"></div>
+
+<div id="application" class="ic-app">
+  
+
+
+
+
+<header id="mobile-header" class="no-print">
+  <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-hamburger">
+    <i class="icon-solid icon-hamburger"></i>
+    <span id="mobileHeaderInboxUnreadBadge" class="menu-item__badge" style="min-width: 0; top: 12px; height: 12px; right: 6px; display:none;"></span>
+    <span class="screenreader-only">Dashboard</span>
+  </button>
+  <div class="mobile-header-space"></div>
+    <a class="mobile-header-title expandable" href="/courses/402226" role="button" aria-controls="mobileContextNavContainer">
+      <div>SU24 COMPSCI 537 001 AKK</div>
+        <div>P2: Adding syscalls to xv6</div>
+    </a>
+    <div class="mobile-header-space"></div>
+    <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-arrow" aria-label="Navigation Menu">
+      <i class="icon-arrow-open-down" id="mobileHeaderArrowIcon"></i>
+    </button>
+</header>
+<nav id="mobileContextNavContainer"></nav>
+
+<header id="header" class="ic-app-header no-print ">
+  <a href="#content" id="skip_navigation_link">Skip To Content</a>
+  <div role="region" class="ic-app-header__main-navigation" aria-label="Global Navigation">
+      <div class="ic-app-header__logomark-container">
+        <a href="https://canvas.wisc.edu/" class="ic-app-header__logomark">
+          <span class="screenreader-only">Dashboard</span>
+        </a>
+      </div>
+    <ul id="menu" class="ic-app-header__menu-list">
+        <li class="menu-item ic-app-header__menu-list-item ">
+          <a id="global_nav_profile_link" role="button" href="/profile/settings" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container">
+              <div aria-hidden="true" class="fs-exclude ic-avatar ">
+                <img src="https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128&amp;d=identicon" alt="Yongzhi Lai" />
+              </div>
+              <span class="menu-item__badge"></span>
+            </div>
+            <div class="menu-item__text">
+              Account
+            </div>
+          </a>
+        </li>
+      <li class="ic-app-header__menu-list-item ">
+        <a id="global_nav_dashboard_link" href="https://canvas.wisc.edu/" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--dashboard" version="1.1" x="0" y="0" viewBox="0 0 280 200" enable-background="new 0 0 280 200" xml:space="preserve"><path d="M273.09,180.75H197.47V164.47h62.62A122.16,122.16,0,1,0,17.85,142a124,124,0,0,0,2,22.51H90.18v16.29H6.89l-1.5-6.22A138.51,138.51,0,0,1,1.57,142C1.57,65.64,63.67,3.53,140,3.53S278.43,65.64,278.43,142a137.67,137.67,0,0,1-3.84,32.57ZM66.49,87.63,50.24,71.38,61.75,59.86,78,76.12Zm147,0L202,76.12l16.25-16.25,11.51,11.51ZM131.85,53.82v-23h16.29v23Zm15.63,142.3a31.71,31.71,0,0,1-28-16.81c-6.4-12.08-15.73-72.29-17.54-84.25a8.15,8.15,0,0,1,13.58-7.2c8.88,8.21,53.48,49.72,59.88,61.81a31.61,31.61,0,0,1-27.9,46.45ZM121.81,116.2c4.17,24.56,9.23,50.21,12,55.49A15.35,15.35,0,1,0,161,157.3C158.18,152,139.79,133.44,121.81,116.2Z" /></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Dashboard
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item ic-app-header__menu-list-item--active">
+          <a id="global_nav_courses_link" role="button" href="/courses" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--courses" version="1.1" x="0" y="0" viewBox="0 0 280 259" enable-background="new 0 0 280 259" xml:space="preserve"><path d="M73.31,198c-11.93,0-22.22,8-24,18.73a26.67,26.67,0,0,0-.3,3.63v.3a22,22,0,0,0,5.44,14.65,22.47,22.47,0,0,0,17.22,8H200V228.19h-134V213.08H200V198Zm21-105.74h90.64V62H94.3ZM79.19,107.34V46.92H200v60.42Zm7.55,30.21V122.45H192.49v15.11ZM71.65,16.71A22.72,22.72,0,0,0,49,39.36V190.88a41.12,41.12,0,0,1,24.32-8h157V16.71ZM33.88,39.36A37.78,37.78,0,0,1,71.65,1.6H245.36V198H215.15v45.32h22.66V258.4H71.65a37.85,37.85,0,0,1-37.76-37.76Z"/></svg>
+
+            </div>
+            <div class="menu-item__text">
+              Courses
+            </div>
+          </a>
+        </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+        <a id="global_nav_calendar_link" href="/calendar" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--calendar" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M197.07,213.38h16.31V197.07H197.07Zm-16.31,16.31V180.76h48.92v48.92Zm-48.92-16.31h16.31V197.07H131.85Zm-16.31,16.31V180.76h48.92v48.92ZM66.62,213.38H82.93V197.07H66.62ZM50.32,229.68V180.76H99.24v48.92Zm146.75-81.53h16.31V131.85H197.07Zm-16.31,16.31V115.54h48.92v48.92Zm-48.92-16.31h16.31V131.85H131.85Zm-16.31,16.31V115.54h48.92v48.92ZM66.62,148.15H82.93V131.85H66.62ZM50.32,164.46V115.54H99.24v48.92ZM34,262.29H246V82.93H34ZM246,66.62V42.16A8.17,8.17,0,0,0,237.84,34H213.38v8.15a8.15,8.15,0,1,1-16.31,0V34H82.93v8.15a8.15,8.15,0,0,1-16.31,0V34H42.16A8.17,8.17,0,0,0,34,42.16V66.62Zm-8.15-48.92a24.49,24.49,0,0,1,24.46,24.46V278.6H17.71V42.16A24.49,24.49,0,0,1,42.16,17.71H66.62V9.55a8.15,8.15,0,0,1,16.31,0v8.15H197.07V9.55a8.15,8.15,0,1,1,16.31,0v8.15Z"/></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Calendar
+          </div>
+        </a>
+      </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+      <!-- TODO: Add back global search when available -->
+        <a id="global_nav_conversations_link" href="/conversations" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container">
+            <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--inbox" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M91.72,120.75h96.56V104.65H91.72Zm0,48.28h80.47V152.94H91.72Zm0-96.56h80.47V56.37H91.72Zm160.94,34.88H228.52V10.78h-177v96.56H27.34A24.17,24.17,0,0,0,3.2,131.48V244.14a24.17,24.17,0,0,0,24.14,24.14H252.66a24.17,24.17,0,0,0,24.14-24.14V131.48A24.17,24.17,0,0,0,252.66,107.34Zm0,16.09a8.06,8.06,0,0,1,8,8v51.77l-32.19,19.31V123.44ZM67.58,203.91v-177H212.42v177ZM27.34,123.44H51.48v79.13L19.29,183.26V131.48A8.06,8.06,0,0,1,27.34,123.44ZM252.66,252.19H27.34a8.06,8.06,0,0,1-8-8V202l30,18H230.75l30-18v42.12A8.06,8.06,0,0,1,252.66,252.19Z"/></svg>
+</span>
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Inbox
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item" >
+          <a id="global_nav_history_link" role="button" href="#" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg viewBox="0 0 1920 1920" class="ic-icon-svg menu-item__icon svg-icon-history" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path d="M960 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.125 379.934 847.059 847.059 847.059 467.125 0 847.059-379.934 847.059-847.059 0-467.125-379.934-847.059-847.059-847.059M960 1920C430.645 1920 0 1489.355 0 960S430.645 0 960 0s960 430.645 960 960-430.645 960-960 960m417.905-575.955L903.552 988.28V395.34h112.941v536.47l429.177 321.77-67.765 90.465z" stroke="none" stroke-width="1" fill-rule="evenodd"/>
+</svg>
+            </div>
+            <div class="menu-item__text">
+              History
+            </div>
+          </a>
+        </li>
+        
+
+      <li class="ic-app-header__menu-list-item">
+        <a id="global_nav_help_link" role="button" class="ic-app-header__menu-list-link" data-track-category="help system" data-track-label="help button" href="https://help.instructure.com">
+          <div class="menu-item-icon-container" role="presentation">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg menu-item__icon svg-icon-help" version="1.1" x="0" y="0" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve" fill="currentColor"><path d="M100,127.88A11.15,11.15,0,1,0,111.16,139,11.16,11.16,0,0,0,100,127.88Zm8.82-88.08a33.19,33.19,0,0,1,23.5,23.5,33.54,33.54,0,0,1-24,41.23,3.4,3.4,0,0,0-2.74,3.15v9.06H94.42v-9.06a14.57,14.57,0,0,1,11.13-14,22.43,22.43,0,0,0,13.66-10.27,22.73,22.73,0,0,0,2.31-17.37A21.92,21.92,0,0,0,106,50.59a22.67,22.67,0,0,0-19.68,3.88,22.18,22.18,0,0,0-8.65,17.64H66.54a33.25,33.25,0,0,1,13-26.47A33.72,33.72,0,0,1,108.82,39.8ZM100,5.2A94.8,94.8,0,1,0,194.8,100,94.91,94.91,0,0,0,100,5.2m0,178.45A83.65,83.65,0,1,1,183.65,100,83.73,83.73,0,0,1,100,183.65" transform="translate(-5.2 -5.2)"/></svg>
+
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Help
+          </div>
+</a>      </li>
+    </ul>
+  </div>
+  <div class="ic-app-header__secondary-navigation">
+    <ul class="ic-app-header__menu-list">
+      <li class="menu-item ic-app-header__menu-list-item">
+        <a
+          id="primaryNavToggle"
+          role="button"
+          href="#"
+          class="ic-app-header__menu-list-link ic-app-header__menu-list-link--nav-toggle"
+          aria-label="Expand global navigation
+                "
+          title="Expand global navigation
+                "
+        >
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--navtoggle" version="1.1" x="0" y="0" width="40" height="32" viewBox="0 0 40 32" xml:space="preserve">
+  <path d="M39.5,30.28V2.48H37.18v27.8Zm-4.93-13.9L22.17,4,20.53,5.61l9.61,9.61H.5v2.31H30.14l-9.61,9.61,1.64,1.64Z"/>
+</svg>
+
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div id="global_nav_tray_container"></div>
+  <div id="global_nav_tour"></div>
+</header>
+
+
+  <div id="instructure_ajax_error_box">
+    <div style="text-align: right; background-color: #fff;"><a href="#" class="close_instructure_ajax_error_box_link">Close</a></div>
+    <iframe id="instructure_ajax_error_result" src="about:blank" style="border: 0;" title="Error"></iframe>
+  </div>
+
+  <div id="wrapper" class="ic-Layout-wrapper">
+        <div class="ic-app-nav-toggle-and-crumbs no-print">
+            <button type="button" id="courseMenuToggle" class="Button Button--link ic-app-course-nav-toggle" aria-live="polite" aria-label="Hide Courses Navigation Menu">
+              <i class="icon-hamburger" aria-hidden="true"></i>
+            </button>
+
+          <div class="ic-app-crumbs ">
+              <nav id="breadcrumbs" role="navigation" aria-label="breadcrumbs"><ul><li class="home"><a href="/"><span class="ellipsible"><i class="icon-home"
+   title="My Dashboard">
+  <span class="screenreader-only">My Dashboard</span>
+</i>
+</span></a></li><li><a href="/courses/402226"><span class="ellipsible">SU24 COMPSCI 537 001 AKK</span></a></li><li><a href="/courses/402226/assignments"><span class="ellipsible">Assignments</span></a></li><li><a href="https://canvas.wisc.edu/courses/402226/assignments/2301447"><span class="ellipsible">P2: Adding syscalls to xv6</span></a></li></ul></nav>
+          </div>
+
+
+          <div class="right-of-crumbs">
+              <div class="TutorialToggleHolder"></div>
+          </div>
+
+        </div>
+    <div id="main" class="ic-Layout-columns">
+        <div class="ic-Layout-watermark"></div>
+        <div id="left-side"
+          class="ic-app-course-menu ic-sticky-on list-view"
+          style="display: block"
+          >
+          <div id="sticky-container" class="ic-sticky-frame">
+              <span id="section-tabs-header-subtitle" class="ellipsis">Summer 2024</span>
+            <nav role="navigation" aria-label="Courses Navigation Menu"><ul id="section-tabs"><li class="section"><a href="/courses/402226" class="home">Home</a></li><li class="section"><a href="/courses/402226/announcements" class="announcements">Announcements</a></li><li class="section"><a href="/courses/402226/assignments" aria-current="page" class="assignments active">Assignments</a></li><li class="section"><a href="/courses/402226/external_tools/20073" class="context_external_tool_20073">Piazza</a></li><li class="section"><a href="/courses/402226/grades" class="grades">Grades</a></li><li class="section"><a href="/courses/402226/users" class="people">People</a></li><li class="section"><a href="/courses/402226/wiki" class="pages">Pages</a></li><li class="section"><a href="/courses/402226/files" class="files">Files</a></li><li class="section"><a href="/courses/402226/assignments/syllabus" class="syllabus">Syllabus</a></li><li class="section"><a href="/courses/402226/quizzes" class="quizzes">Quizzes</a></li><li class="section"><a href="/courses/402226/external_tools/14065" class="context_external_tool_14065">Zoom</a></li><li class="section"><a href="/courses/402226/external_tools/21691" class="context_external_tool_21691">NameCoach Roster</a></li><li class="section"><a href="/courses/402226/external_tools/9199" class="context_external_tool_9199">Kaltura Gallery</a></li><li class="section"><a href="/courses/402226/external_tools/8408" class="context_external_tool_8408">Kaltura My Media</a></li><li class="section"><a href="/courses/402226/external_tools/6536" class="context_external_tool_6536">New Analytics</a></li></ul></nav>
+          </div>
+        </div>
+      <div id="not_right_side" class="ic-app-main-content">
+        <div id="content-wrapper" class="ic-Layout-contentWrapper">
+          
+          <div id="content" class="ic-Layout-contentMain" role="main">
+            
+<style>
+  #right-side-wrapper {
+    height: 100%;
+  }
+
+  .assignment_header {
+    border-bottom: 1px solid #a4a4a4;
+    overflow: hidden;
+  }
+
+  #assignment_head {
+    margin-top: 0;
+    font-weight: bold;
+  }
+
+  .lock_explanation {
+    text-align: left;
+    margin-top: 20px;
+  }
+</style>
+
+
+
+<div id="assignment_show" class="assignment content_underline_links" data-lti-page-content="true">
+    <!--Student View-->
+    <div class='assignment-title'>
+      <div class='title-content'>
+        <h1 class="title">
+          P2: Adding syscalls to xv6
+        </h1>
+      </div>
+      <div class='assignment-buttons'>
+        
+
+        <button type="button" class="Button Button--primary submit_assignment_link ">Start Assignment</button>
+      </div>
+    </div>
+    
+<ul class='student-assignment-overview'>
+  <li>
+    <span class='title'>Due</span>
+    <span class='value'>
+          <span class="date_text">
+                <span class="display_date">Jun 17</span> by 
+                <span class="display_time">11:59pm</span>
+          </span><!--
+        --></span>
+  </li>
+    <li>
+      <span class='title'>Points</span>
+      <span class='value'>100</span>
+    </li>
+    <li>
+      <span class='title'>Submitting</span>
+      <span class='value'>a file upload</span>
+    </li>
+  
+  <li>
+    <span class="title">Available</span>
+    <span class="value">
+        after Jun 10 at 9am
+    </span>
+  </li>
+
+  <div class="clear"></div>
+</ul>
+
+  <div class="clear"></div>
+
+
+  <div class="clear"></div>
+
+
+
+
+  <div class="description user_content " data-resource-type="assignment.body" data-resource-id=2301447><h3>Announcement:</h3>
+<p>Tests have been released. You should be able to run tests by running <code>~cs537-1/tests/p2/runtests</code> from within the xv6 source directory.<br>Also, we will not be testing coding style, i.e., we will <strong>not</strong> be using linter or valgrind.</p>
+<h3>Overview:</h3>
+<p>In this assignment, you will add new system calls to a toy operating system called xv6. You will implement 2 system calls:</p>
+<ol style="list-style-type: decimal;">
+<li><code>fsetoff(int fd, int pos)</code>: This syscall changes the position indicator (offset) of the file as per the user input.</li>
+<li><code>fgetoff(int fd)</code>: This syscall returns the current value of the position indicator (offset) of the specified file.</li>
+</ol>
+<p>Additionally, you will learn (and demonstrate) using gdb debugger with xv6.</p>
+<h3>Learning objectives:</h3>
+<ul>
+<li>Gain experience using more substantial code bases written by others in which you do not need to understand every line</li>
+<li>Familiarize with the xv6 code base in particular</li>
+<li>Learn how to add a system call to xv6&nbsp;</li>
+<li>Add a user-level application that can be used within xv6</li>
+<li>Become familiar with a few of the data structures in xv6 (e.g., process table and file)</li>
+<li>Use the gdb debugger on xv6</li>
+</ul>
+<h3>Administrivia:</h3>
+<ul>
+<li>This project is to be performed alone.</li>
+<li><strong data-sourcepos="8:3-8:14">Due Date</strong>: June 17th, at 11:59pm (4 slip days throughout course, use wisely)</li>
+<li>This project is to be done on the<span>&nbsp;</span><a class="inline_disabled" href="https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/" target="_blank">lab machines</a>, so you can learn more about programming in C on a typical UNIX-based platform (Linux).</li>
+</ul>
+<h3>Details:</h3>
+<h4>System call:</h4>
+<p>Here are the details about the systems calls you will be adding:</p>
+<pre>int fsetoff(int fd, int pos)<span style="text-decoration: underline;"><br></span></pre>
+<ul>
+<li>fsetoff() syscall will take 2 arguments: open file descriptor and the position value to which the file offset should be changed.</li>
+<li>If fd and pos are valid, fsetoff will update the offset position parameter of the file corresponding to the input file descriptor.</li>
+<li>fsetoff() will return 0 on success, -1 if the file is not open, -2 if the <strong>pos</strong> parameter is invalid; position parameter can be invalid if it is not a number or less than 0 or greater than the size of the file.</li>
+</ul>
+<pre>int fgetoff(int fd)<span style="text-decoration: underline;"><br></span></pre>
+<ul>
+<li>fgetoff() syscall will take 1 argument: open file descriptor.</li>
+<li>fgetoff() will return -1 if the file is not open.</li>
+<li>If file is open, fgetoff() will return the current position indicator (offset) value corresponding to the file descriptor.</li>
+</ul>
+<hr>
+<h4>Debugging with GDB</h4>
+<p>Your second task is to demonstrate that you can use gdb to debug xv6 code.&nbsp; You should show the integer value that fdalloc returns the first time it is called after a process has been completely initialized.&nbsp;&nbsp;</p>
+<p>To do this, you can follow these steps:</p>
+<p>In one window, start up <strong>qemu-nox-gdb</strong>.&nbsp; In another window on the same machine, start up <strong>gdb</strong> (it will attach to the qemu process) and <strong>continue</strong> it until xv6 finishes its bootup process and gives you a prompt.&nbsp; Now, interrupt gdb and set a <strong>breakpoint</strong> in the <strong>fdalloc()</strong> routine.&nbsp; Continue gdb.&nbsp; Then, run the <strong>stressfs</strong> user application at the xv6 prompt.&nbsp; &nbsp;Your gdb process should now stop in fdalloc.&nbsp; Now, <strong>step</strong> (or, probably <strong>next</strong>) through the C code until gdb reaches the point just before fdalloc() returns and <strong>print&nbsp;</strong>the value that will be returned (i.e., the value of fd).&nbsp; Now immediately quit gdb and run <strong>whoami</strong> to display your login name.&nbsp;</p>
+<p>To sanity check your results, you should think about the value you expect fdalloc() to return in these circumstances to make sure you are looking at the right information.&nbsp; What is the first fd number returned after stdin, stdout, and stderr have been set up?&nbsp;</p>
+<p>If gdb gives you the error message that fd has been optimized out and cannot be displayed, make sure that your Makefile uses the flag "-Og" instead of "-O2". Debugging is also a lot easier with a single CPU, so if you didn't do this already: in your <strong>Makefile</strong> find where the number of CPUS is set and change this to be 1.</p>
+<p>Take a screenshot showing your gdb session with the returned value of fd printed and your login name displayed.&nbsp; <strong>Submit this screenshot to Canvas.</strong></p>
+<hr>
+<h3>Hints</h3>
+<p>This project is very similar to a prior <a class="inline_disabled" href="https://github.com/remzi-arpacidusseau/ostep-projects/tree/master/initial-xv6" target="_blank">OSTEP project</a>. You can refer to some of the hints and documentation included there.</p>
+<h4>Getting started with xv6</h4>
+<p>The source code for xv6 (and associated README) can be found in<span>&nbsp;</span><strong>~cs537-1/public/xv6.tgz</strong><span>&nbsp;</span>. Everything you need to build and run and even debug the kernel is in there. The way to make your own version is to do the following:</p>
+<pre>prompt&gt; cd $PROJ
+prompt&gt; cp ~cs537-1/public/xv6.tgz .<br>prompt&gt; tar xvzf ~cs537-1/public/xv6.tgz
+</pre>
+<p>This will create an xv6-public directory in the $PROJ directory. You can then cd into that and begin working.&nbsp;</p>
+<p>If, for development and testing, you would like to run xv6 in an environment other than the CSL instructional Linux cluster, you may need to set up additional software. You can read these<span>&nbsp;</span><a class="external" href="https://github.com/remzi-arpacidusseau/ostep-projects/blob/master/INSTALL-xv6.md" target="_blank"><span>instructions for the MacOS build environment.</span><span class="external_link_icon" role="presentation"><span class="screenreader-only">Links to an external site.</span></span></a><span>&nbsp;</span>Note that we will run all of our tests and do our grading on the instructional Linux cluster so you should always ensure that the final code you handin works on those machines.</p>
+<p>After you have obtained the source files, you can run<span>&nbsp;</span><code>make qemu-nox</code><span>&nbsp;</span>to compile all the code and run it using the QEMU emulator. Test out the unmodified code by running a few of the existing user-level applications, like<span>&nbsp;</span><code>ls</code><span>&nbsp;</span>and<span>&nbsp;</span><code>forktest</code>. With<span>&nbsp;</span><code>ls</code><span>&nbsp;</span>inside the emulator, you'll be able to see a few other applications that are available (as well as files that have been created within the xv6 environment).</p>
+<p>To quit the emulator, type<span>&nbsp;</span><code>Ctl-a x</code>.</p>
+<p>You will want to be familiar with the<span>&nbsp;</span><strong>Makefile</strong><span>&nbsp;</span>and comfortable modifying it. In particular, see the list of existing<span>&nbsp;</span><code>UPROGS</code>. See the different ways of running the environment through make (e.g.,<span>&nbsp;</span><code>qemu-nox</code><span>&nbsp;</span>or<span>&nbsp;</span><code>qemu-nox-gdb</code>).&nbsp;</p>
+<p>Find where the number of<span>&nbsp;</span><code>CPUS</code><span>&nbsp;</span>is set and change this to be 1.</p>
+<p>For additional information about xv6, we strongly encourage you to look through the code while reading this<span>&nbsp;</span><a class="inline_disabled external" href="https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf" target="_blank"><span>book</span><span class="external_link_icon" style="display: inline-block; text-indent: initial;" role="presentation"> </span></a>&nbsp;by the xv6 authors. <span>Or, if you prefer to watch videos, this great <a class="inline_disabled" href="https://www.youtube.com/watch?v=vR6z2QGcoo8" target="_blank">tutorial</a> on xv6 by Prof. Remzi</span> <span>describe some of the relevant files. Note that the code and project in the videos do not exactly match what you are doing. We always recommend that you look at the actual code yourself while either reading or watching (perhaps pausing the video as needed).</span></p>
+<h4><span>Implementing the syscalls</span></h4>
+<p>The primary files you will want to examine in detail include<span>&nbsp;</span><code>syscall.c</code>,<span>&nbsp;</span><code>sysproc.c</code>, <code>sysfile.c</code>, and<span>&nbsp;</span><code>file.c</code>. You might also want to take a look at<span>&nbsp;</span><code>usys.S</code>, which (unfortunately) is written in<span>&nbsp;</span><span>assembly.</span></p>
+<p>To add a system call, find some other very simple system call that also set an value to a pointer-based parameter, like<span>&nbsp;<code>sys_fstat</code></span>, copy it in all the ways you think are needed, and modify it so it doesn't do anything and has the new name. Compile the code to see if you found everything you need to copy and change. You probably won't find everything the first time you try.</p>
+<p>A file descriptor is a simple number that a computer's operating system uses to keep track of open files. When a program opens a file, the operating system assigns it a unique file descriptor. This number is then used by the program to read from, write to, or manipulate the file in other ways. Think of it like a ticket you get at a coat check – it doesn’t contain all the information about your coat, but as long as you have that ticket, you can use it to retrieve or modify your coat. Similarly, programs use file descriptors as references to perform operations on the actual files.</p>
+<p>Operating systems maintain a position offset variable per open file to keep track of the current position within the file for read and write operations. This position offset is initialized to 0 when a file is opened. When user processes issue read or write system calls, the operation commences at the file offset, and the file offset is incremented by the number of bytes read/written. In this project, you will be implementing system calls to update and read this file offset.</p>
+<p><span>Consider the modifications needed to make your system calls behave as expected:</span></p>
+<ul>
+<li>Take a look at sys_read() to understand how to access file structure using the input file descriptor. You will have to implement similar code to obtain file struct from input fd.</li>
+<li><span>Notice how fileread() uses locks (we will learn more about this later in this course) to ensure mutual exclusion while updating the offset. Consider using locks while reading or writing to the position offset.</span></li>
+<li><span>Compare the input pos value to the file size (see filestat() to learn how to obtain file size).</span></li>
+</ul>
+<h4><span>Testing your syscalls</span></h4>
+<p><span>We suggest you write an example user application (submission not required) that tests your system call. Again, we suggest copying one of the straight-forward utilities that already exist, such as cat.c.&nbsp; Modify the application to open a file and invoke your newly implemented syscalls. To compile the user application, you will have to make changes to the Makefile. Look for <code>UPROGS</code> to add your test user application.<br><br>Similar to your first project, some tests will be provided at <em>~cs537-1/tests/p2.</em> Details will be provided once the tests are released.<br></span></p>
+<hr>
+<h3>Handing It In</h3>
+<p>Remember there are two handin steps.</p>
+<p>For your xv6 code, your handin directory is<span>&nbsp;</span><code>~cs537-1/handin/LOGIN/p2</code><span> where </span><code>LOGIN </code>is your CS login. <span style="color: #ff0000;">Please create a subdirectory called 'src': <code>~cs537-1/handin/LOGIN/p2/src.</code></span></p>
+<p>Copy all of your source files (but not .o files, please, or binaries!) into this directory. A simple way to do this is to copy everything into the destination directory, then type<span>&nbsp;</span><code>make</code><span>&nbsp;</span>to make sure it builds, and then type<span>&nbsp;</span><code>make clean</code><span>&nbsp;</span>to remove unneeded files.</p>
+<blockquote>
+<pre>shell% mkdir ~cs537-1/handin/LOGIN/p2<span style="color: #ff0000;">/src</span> <br>shell% cd ~cs537-1/handin/LOGIN/p2<span style="color: #ff0000;">/src</span>
+shell% make
+shell% make clean
+</pre>
+</blockquote>
+<p>Second, for your screenshot of your debugging session, upload your image here in Canvas.</p></div>
+
+
+  <div style="display: none;">
+    <span class="timestamp">1718686799</span>
+    <span class="due_date_string">06/17/2024</span>
+    <span class="due_time_string">11:59pm</span>
+  </div>
+</div>
+
+
+  
+<div style="display: none;" id="submit_assignment" data-context_code="course_402226" data-asset_string="assignment_2301447">
+  <div class="content" id="submit_assignment_tabs">
+    <ul>
+        <li><a href="#submit_online_upload_form" class="submit_online_upload_option">File Upload</a></li>
+        <li><a href="#submit_from_external_tool_form_691"
+          class="external-tool"
+          data-id="691"
+          data-name="BOX">BOX</a></li>
+        <li><a href="#submit_from_external_tool_form_354"
+          class="external-tool"
+          data-id="354"
+          data-name="GoogleApps">Google Drive</a></li>
+        <li><a href="#submit_from_external_tool_form_690"
+          class="external-tool"
+          data-id="690"
+          data-name="Office 365">Office 365</a></li>
+    </ul>
+      
+<form id="submit_online_upload_form" class="submit_assignment_form" enctype="multipart/form-data" action="/courses/402226/assignments/2301447/submissions" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" autocomplete="off" /><input type="hidden" name="authenticity_token" value="GDFjd/QV6ISB3RA9DnmlK2XGpoaYHieioUOISGB6nbVJYTsH2yC+yNKHdlxeDe1fC/STse9QXc7KCOkeFgPq3Q==" autocomplete="off" />
+    <input value="online_upload" autocomplete="off" type="hidden" name="submission[submission_type]" id="submission_submission_type" />
+    <input value="" id="submission_attachment_ids" autocomplete="off" type="hidden" name="submission[attachment_ids]" />
+    <input id="eula_agreement_timestamp" autocomplete="off" type="hidden" name="submission[eula_agreement_timestamp]" />
+    <table class="formtable" style="width: 100%;">
+      <tr>
+        <td colspan="2">
+          Upload a file, or choose a file you&#39;ve already uploaded.
+          
+        </td>
+      </tr><tr>
+        <td colspan="2">
+          <span style="visibility: hidden"><label id="attachmentLabel" for="attachment_uploaded_data">File:</label></span>
+          <button class="Button Button--link add_another_file_link">
+            <i class="icon-add" aria-hidden="true"></i>
+            Add Another File
+          </button>
+          <div id="submission_attachment_blank" class="submission_attachment" style="display: none; margin-bottom: 1em;">
+              <div class="attachment_wrapper" style="display: inline-block;"></div>
+            <a href="#" class="remove_attachment_link no-hover" style="display: none;"><i class="icon-end" aria-hidden="true"></i><span class="screenreader-only">remove empty attachment</span></a>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td style="font-size: 0.8em;">
+          <button class="Button Button--link toggle_uploaded_files_link">Click here to find a file you&#39;ve already uploaded</button><br/>
+          <div id="uploaded_files" style="display: none;" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="textarea-emoji-container">
+            <div class="textarea-container">
+              <textarea class="submission_comment_textarea" placeholder="Comments..." title="Additional comments" name="submission[comment]" id="submission_comment">
+</textarea>
+              <span class="emoji-picker-container" style="display: none;"></span>
+            </div>
+            <div class="emoji-quick-picker-container" style="display: none;"></div>
+          </div>
+        </td>
+      </tr>
+      
+
+      
+
+      <tr>
+        <td colspan="2" class='button-container'>
+          <button type="button" class='cancel_button btn'>Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submit_file_button">Submit Assignment</button>
+          <span id="progress_indicator"></span>
+        </td>
+      </tr>
+    </table>
+</form>
+
+
+
+
+    <style>
+    #google_docs_tree li.folder {
+      cursor: pointer;
+    }
+    #google_docs_tree li.file {
+      cursor: pointer;
+      -moz-border-radius: 3px;
+      width: 80%;
+      padding-right: 20px;
+    }
+    #google_docs_tree li.file:hover {
+      background-color: #eee;
+    }
+    ul.instTree li span.active {
+      background: none;
+    }
+    #google_docs_tree li.file.leaf.active {
+      background-color: #ddd;
+    }
+    #google_docs_tree li.file .filename {
+      float: left;
+      max-width: 98%;
+    }
+    #google_docs_tree li.file .popout {
+      float: right;
+    }
+    </style>
+
+
+      <div id="submit_from_external_tool_form_691" style="padding: 5px 5px 0 5px;"></div>
+      <div id="submit_from_external_tool_form_354" style="padding: 5px 5px 0 5px;"></div>
+      <div id="submit_from_external_tool_form_690" style="padding: 5px 5px 0 5px;"></div>
+  </div>
+</div>
+
+
+
+
+
+  <div id="rubrics" class="mathjax_ignore" style="margin-bottom: 10px;">
+      
+<div
+  class="rubric_container rubric  "
+  id="rubric_175671"
+  style=""
+>
+  <div class="screenreader-only"><h2>Rubric</h2></div>
+  <div class="rubric_title">
+    <div style="display: none;" class="links displaying pull-right">
+      <a
+        href="/courses/402226/rubrics/175671?rubric_association_id=361915"
+        class="copy_edit edit_rubric_link no-print no-hover"
+        style="display: none;"
+        title="Edit Rubric"
+        aria-label="Edit Rubric"
+        role="button"
+      ><i class="icon-edit standalone-icon"></i></a>
+      <a
+        href="https://canvas.wisc.edu/search/rubrics?q="
+        class="find_rubric_link no-print no-hover"
+        style="display: none;"
+        title="Find Another Rubric"
+        aria-label="Find Another Rubric"
+        role="button"
+      ><i class="icon-search standalone-icon"></i></a>
+        <a
+          href="/courses/402226/rubric_associations/361915"
+          class="delete_rubric_link no-print no-hover"
+          style="display: none;"
+          title="Delete Rubric"
+          aria-label="Delete Rubric"
+          role="button"
+        ><i class="icon-trash standalone-icon"></i></a>
+      <div style="display: none;">
+        <div class="use_for_grading">&nbsp;</div>
+        <div class="free_form_criterion_comments">&nbsp;</div>
+        <div class="hide_score_total">&nbsp;</div>
+        <div class="hide_outcome_results">&nbsp;</div>
+        <div class="hide_points">&nbsp;</div>
+        <div class="rubric_association_id">361915</div>
+          <div class="user_id">&nbsp;</div>
+        <div class="assessment_type"></div>
+        <a href="/courses/402226/rubric_associations/361915/assessments/%7B%7B%20assessment_id%20%7D%7D" rel="nofollow" class="edit_assessment_link">&nbsp;</a>
+        <a href="/courses/402226/rubrics/%7B%7B%20rubric_id%20%7D%7D" class="edit_rubric_url">&nbsp;</a>
+          <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url">&nbsp;</a>
+      </div>
+    </div>
+    <div style="float: right; font-size: 0.8em; display: none;" class="links displaying locked">
+      <span style="">Can&#39;t change a rubric once you&#39;ve started using it.</span>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url" style="display: none;">&nbsp;</a>
+    </div>
+
+    <div class="editing" style="float: right;">
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" class="find_rubric_link icon-search" style="display: none;" title="Find Existing Rubric">Find a Rubric</a>
+    </div>
+    <div class="editing" style="text-align: left">
+      <label for="rubric-title">Title:</label>
+      <input id="rubric-title" type="text" class="no-margin-bottom" name="title" value="Some Rubric" style="width: 200px;" maxlength="255" aria-label="Title:"/>
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" style="display: none;"><img alt="" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/find-6164443e2a.png" /> Find Rubric</a>
+    </div>
+    <div class="displaying">
+      <span class="title" tabindex="-1">Some Rubric</span>
+    </div>
+    <div class="has-assessments-warning" style="display: none;">
+      You&#39;ve already rated students with this rubric. Any major changes could affect their assessment results.
+    </div>
+  </div>
+<table class="rubric_table">
+<caption>
+  <div class="screenreader-only">
+    <span class="title">Some Rubric</span>
+  </div>
+</caption>
+<thead>
+  <tr>
+    <th scope="col">Criteria</th>
+    <th scope="col">Ratings</th>
+    <th scope="col" class="toggle_for_hide_points ">
+      Pts
+    </th>
+  </tr>
+</thead>
+<tbody>
+      
+<tr id="criterion__1067" class="criterion   " style="">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">Test cases</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;">_1067</span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" checked/></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points"></span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">80</span>
+                  <span class="range_rating" style="">to ><span class="min_points">0.0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="80"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">80</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+      
+<tr id="criterion__2180" class="criterion   " style="">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">GDB screenshot</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;">_2180</span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" checked/></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points"></span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">20</span>
+                  <span class="range_rating" style="">to ><span class="min_points">0.0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_1225</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_321</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="20"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">20</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  
+<tr id="criterion_blank" class="criterion blank  " style="display: none;">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+          <a href="#" class="delete_criterion_link" role="button"><i class="icon-trash standalone-icon"></i><span class="screenreader-only">Delete criterion row</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">Description of criterion</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;"></span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points">5</span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  <tr class="summary">
+    <td colspan="4">
+      <div class="total_points_holder toggle_for_hide_points "
+        style="float: right; ">
+        <span>Total Points:
+            <span class="rubric_total">
+              100
+            </span>
+ <span class="assessing">out of 100</span>        </span>
+      </div>
+      <div class="editing pull-left">
+        <span id="add_criterion_holder" class="criterion_link"></span>
+      </div>
+      <div class="clear"></div>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<table style="display: none;">
+  <tr id="edit_rubric">
+    <td colspan="4">
+      <form id="edit_rubric_form" class="edit-rubric-form no-margin-bottom">
+        <div class="rubric_custom_ratings" style="">
+          <input type="checkbox" id="rubric_custom_rating" class="rubric_custom_rating" />
+          <label for="rubric_custom_rating">I&#39;ll write free-form comments when assessing students</label>
+        </div>
+          <div class="hide_points" style="">
+            <input type="checkbox" id="hide_points" class="hide_points_checkbox" />
+            <label for="hide_points">Remove points from rubric</label>
+          </div>
+          <div class="hide_outcome_results" style="">
+            <input type="checkbox" id="hide_outcome_results" class="hide_outcome_results_checkbox" />
+            <label for="hide_outcome_results">Don&#39;t post Outcomes results to Learning Mastery Gradebook</label>
+          </div>
+          <div class="rubric_grading" style="">
+            <input type="checkbox" id="grading_rubric" class="grading_rubric_checkbox" />
+            <label for="grading_rubric">Use this rubric for assignment grading</label>
+          </div>
+        <div class="totalling_rubric" style="">
+          <input type="checkbox" id="totalling_rubric" class="totalling_rubric_checkbox" />
+          <label for="totalling_rubric">Hide score total for assessment results</label>
+        </div>
+        <div class="ic-Action-header ic-Action-header--half-margin">
+          <div class="ic-Action-header__Primary">
+            <button type="button" class="Button cancel_button">Cancel</button>
+            <button type="submit" class="Button Button--primary save_button">Create Rubric</button>
+          </div>
+        </div>
+      </form>
+    </td>
+  </tr>
+</table>
+
+    <div style="display: none;" id="rubric_parameters">
+      <input type="hidden" name="rubric_association[association_type]" value="Assignment"/>
+      <input type="hidden" name="rubric_association[association_id]" value="2301447"/>
+      <input type="hidden" name="rubric_association[purpose]" value="grading"/>
+    </div>
+    
+<div id="rubric_long_description_dialog" style="display: none;">
+  <div class="editing">
+    <form id="edit_criterion_form" class="no-margin-bottom">
+      <div>
+        <label class="rating_form_label">Description
+          <textarea class="description" rows="1" name="description"></textarea>
+        </label>
+      </div>
+      <div>
+        <label class="rating_form_label">Long Description
+          <textarea class="long_description" rows="4" name="long_description"></textarea>
+        </label>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn save_button btn-primary">Update Criterion</button>
+      </div>
+    </form>
+  </div>
+  <div class="displaying">
+    <div class="long_description">
+    </div>
+  </div>
+</div>
+<div id="rubric_criterion_comments_dialog" style="display: none;">
+  <div
+    class="criterion_description"
+    style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;"
+    tabindex="-1"
+  ></div>
+  <div class="editing">
+    <label for="criterion_comments_textarea">
+      Additional Comments:
+    </label>
+    <textarea
+      id="criterion_comments_textarea"
+      class="criterion_comments"
+      name="criterion_comments"
+      style="width: 370px;"></textarea>
+    <div class="button-container">
+      <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+      <button type="button" class="btn save_button">Update Comments</button>
+    </div>
+  </div>
+  <div class="displaying">
+    Additional Comments:
+    <div class="criterion_comments" style="margin-top: 10px;">
+    </div>
+  </div>
+</div>
+<div id="rubric_rating_dialog" style="display: none;">
+  <div class="description" style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">
+    <span id="edit_rating_form_criterion_description"></span>
+  </div>
+  <div class="editing">
+    <form id="edit_rating_form" class="no-margin-bottom">
+      <div class="toggle_for_hide_points">
+        <div><label id='rating_form_score_label' class="rating_form_label">Rating Score</label></div>
+        <span id='rating_form_max_score_label' hidden>Rating max score</span>
+        <input id="points" aria-labelledby="rating_form_score_label" type="text" size="2" name="points" class="no-margin-bottom span1" />
+        <span class="range_rating">to >
+          <input aria-label="Rating min score" type="text" size="2" name="min_points" class="no-margin-bottom span1 min_points" placeholder="min"/>
+        </span>pts
+      </div>
+      <div>
+        <label for="rating_form_title" class="rating_form_label">Rating Title</label>
+        <input id="rating_form_title" type="text" class="rating_description" style="width: 90%;" name="description"/>
+      </div>
+      <div>
+        <label for="rating_form_description" class="rating_form_label">Rating Description</label>
+        <textarea id="rating_form_description" rows="4" style="width: 90%;" class="rating_long_description" name="rating_long_description" form="edit_rating_form"></textarea>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn btn-primary save_button ok_button">Update Rating</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  </div>
+  
+<div
+  class="rubric_container rubric  "
+  id="default_rubric"
+  style="display: none;"
+>
+  <div class="screenreader-only"><h2>Rubric</h2></div>
+  <div class="rubric_title">
+    <div style="display: none;" class="links displaying pull-right">
+      <a
+        href="/courses/402226/rubrics/%7B%7B%20id%20%7D%7D"
+        class=" edit_rubric_link no-print no-hover"
+        style=""
+        title="Edit Rubric"
+        aria-label="Edit Rubric"
+        role="button"
+      ><i class="icon-edit standalone-icon"></i></a>
+      <a
+        href="https://canvas.wisc.edu/search/rubrics?q="
+        class="find_rubric_link no-print no-hover"
+        style=""
+        title="Find Another Rubric"
+        aria-label="Find Another Rubric"
+        role="button"
+      ><i class="icon-search standalone-icon"></i></a>
+        <a
+          href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D"
+          class="delete_rubric_link no-print no-hover"
+          style=""
+          title="Delete Rubric"
+          aria-label="Delete Rubric"
+          role="button"
+        ><i class="icon-trash standalone-icon"></i></a>
+      <div style="display: none;">
+        <div class="use_for_grading">&nbsp;</div>
+        <div class="free_form_criterion_comments">&nbsp;</div>
+        <div class="hide_score_total">&nbsp;</div>
+        <div class="hide_outcome_results">&nbsp;</div>
+        <div class="hide_points">&nbsp;</div>
+        <div class="rubric_association_id">&nbsp;</div>
+          <div class="user_id">&nbsp;</div>
+        <div class="assessment_type"></div>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D/assessments/%7B%7B%20assessment_id%20%7D%7D" rel="nofollow" class="edit_assessment_link">&nbsp;</a>
+        <a href="/courses/402226/rubrics/%7B%7B%20rubric_id%20%7D%7D" class="edit_rubric_url">&nbsp;</a>
+          <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url">&nbsp;</a>
+      </div>
+    </div>
+    <div style="float: right; font-size: 0.8em; display: none;" class="links displaying locked">
+      <span style="">Can&#39;t change a rubric once you&#39;ve started using it.</span>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url" style="display: none;">&nbsp;</a>
+    </div>
+
+    <div class="editing" style="float: right;">
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" class="find_rubric_link icon-search" style="" title="Find Existing Rubric">Find a Rubric</a>
+    </div>
+    <div class="editing" style="text-align: left">
+      <label for="rubric-title">Title:</label>
+      <input id="rubric-title" type="text" class="no-margin-bottom" name="title" value="Some Rubric" style="width: 200px;" maxlength="255" aria-label="Title:"/>
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" style="display: none;"><img alt="" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/find-6164443e2a.png" /> Find Rubric</a>
+    </div>
+    <div class="displaying">
+      <span class="title" tabindex="-1">Title</span>
+    </div>
+    <div class="has-assessments-warning" style="display: none;">
+      You&#39;ve already rated students with this rubric. Any major changes could affect their assessment results.
+    </div>
+  </div>
+<table class="rubric_table">
+<caption>
+  <div class="screenreader-only">
+    <span class="title">Title</span>
+  </div>
+</caption>
+<thead>
+  <tr>
+    <th scope="col">Criteria</th>
+    <th scope="col">Ratings</th>
+    <th scope="col" class="toggle_for_hide_points ">
+      Pts
+    </th>
+  </tr>
+</thead>
+<tbody>
+  
+<tr id="criterion_blank" class="criterion blank  " style="display: none;">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+          <a href="#" class="delete_criterion_link" role="button"><i class="icon-trash standalone-icon"></i><span class="screenreader-only">Delete criterion row</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">Description of criterion</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;"></span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points">5</span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  <tr class="summary">
+    <td colspan="4">
+      <div class="total_points_holder toggle_for_hide_points "
+        style="float: right; ">
+        <span>Total Points:
+            <span class="rubric_total">
+              5
+            </span>
+ <span class="assessing">out of 5</span>        </span>
+      </div>
+      <div class="editing pull-left">
+        <span id="add_criterion_holder" class="criterion_link"></span>
+      </div>
+      <div class="clear"></div>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<table style="display: none;">
+  <tr id="edit_rubric">
+    <td colspan="4">
+      <form id="edit_rubric_form" class="edit-rubric-form no-margin-bottom">
+        <div class="rubric_custom_ratings" style="">
+          <input type="checkbox" id="rubric_custom_rating" class="rubric_custom_rating" />
+          <label for="rubric_custom_rating">I&#39;ll write free-form comments when assessing students</label>
+        </div>
+          <div class="hide_points" style="">
+            <input type="checkbox" id="hide_points" class="hide_points_checkbox" />
+            <label for="hide_points">Remove points from rubric</label>
+          </div>
+          <div class="hide_outcome_results" style="">
+            <input type="checkbox" id="hide_outcome_results" class="hide_outcome_results_checkbox" />
+            <label for="hide_outcome_results">Don&#39;t post Outcomes results to Learning Mastery Gradebook</label>
+          </div>
+          <div class="rubric_grading" style="">
+            <input type="checkbox" id="grading_rubric" class="grading_rubric_checkbox" />
+            <label for="grading_rubric">Use this rubric for assignment grading</label>
+          </div>
+        <div class="totalling_rubric" style="">
+          <input type="checkbox" id="totalling_rubric" class="totalling_rubric_checkbox" />
+          <label for="totalling_rubric">Hide score total for assessment results</label>
+        </div>
+        <div class="ic-Action-header ic-Action-header--half-margin">
+          <div class="ic-Action-header__Primary">
+            <button type="button" class="Button cancel_button">Cancel</button>
+            <button type="submit" class="Button Button--primary save_button">Create Rubric</button>
+          </div>
+        </div>
+      </form>
+    </td>
+  </tr>
+</table>
+
+
+  <div id="assignment_external_tools"></div>
+
+  
+
+
+          </div>
+        </div>
+        <div id="right-side-wrapper" class="ic-app-main-content__secondary">
+          <aside id="right-side" role="complementary">
+            
+<div id="sidebar_content">
+
+    
+<div class="details">
+  <h2>Submission</h2>
+    <div class="header">
+        <i class="icon-x" aria-hidden="true"></i>
+        Not Submitted!
+    </div>
+  <div class="content">
+    <span class="">
+        
+    </span>
+
+    <div>
+      <a href="/courses/402226/assignments/2301447/submissions/210042">
+        Submission Details
+      </a>
+    </div>
+
+
+    <div class="module">
+          <div>Grade: 80 <span style="font-size: 0.8em;">(100 pts possible)</span></div>
+          <div>Graded Anonymously: no</div>
+
+    </div>
+
+
+    <div class="comments module">
+        <h3>Comments: </h3>
+
+        No Comments
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <div style="display:none;"><!-- Everything inside of this should always stay hidden -->
+        <div id="page_view_id">dc0cb30e-6f09-4b43-adc8-50e334f8f643</div>
+    </div>
+  <div id='aria_alerts' class='hide-text affix' role="alert" aria-live="assertive"></div>
+  <div id='StudentTray__Container'></div>
+    <div class="NewUserTutorialTray__Container"></div>
+  <div id="react-router-portals"></div>
+  
+
+  <iframe src="https://sso.canvaslms.com/post_message_forwarding?rev=59677caad5-de8233d392aa15f4&amp;token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJwYXJlbnRfZG9tYWluIjoiY2FudmFzLndpc2MuZWR1In0.Vn8_7bMNTbXrR91PBjKlQirgswiqpPUPf9FKxmafm8AhCw4ZfBrA7WOraGeDcLgBsrk4TM_k0DZMTAXtmA5J-A" name="post_message_forwarding" title="post_message_forwarding" id="post_message_forwarding" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
+
+
+  <script>
+    Object.assign(
+      ENV,
+      {}
+    )
+  </script>
+
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('inst_fs_service_worker');
+//]]>
+</script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/39713295/madison_changes_july2024_.js" defer="defer"></script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js" defer="defer"></script>
+
+</div> <!-- #application -->
+</body>
+</html>

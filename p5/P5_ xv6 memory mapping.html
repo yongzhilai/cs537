@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#990000">
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="apple-itunes-app" content="app-id=480883488">
+<link rel="manifest" href="/web-app-manifest/manifest.json">
+  <meta name="sentry-trace" content="bcb5e48dc483467d8e4b3176433df44e-5e679311cd7945d4-0"/>
+  <title>P5: xv6 memory mapping</title>
+
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Regular-bd03a2cc27.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Bold-cccb897485.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Italic-4eb103b4d1.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/common-3851139992.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/assignments-adde4b105e.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/learning_outcomes-0ef38391dc.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/new_user_tutorials-6b15f87caf.css" media="screen" />
+  <link rel="apple-touch-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/apple-touch-icon-585e5d997d.png" />
+  <link rel="icon" type="image/x-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" />
+
+  <link rel="stylesheet" href="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/38736063/Madison_041624.css" media="all" />
+  
+  <script>if (navigator.userAgent.match(/(MSIE|Trident\/)/)) location.replace('/ie-is-not-supported.html')</script>
+  <script>
+    INST = {"environment":"production","allowMediaComments":true,"kalturaSettings":{"domain":"nv.instructuremedia.com","resource_domain":"nv.instructuremedia.com","rtmp_domain":"iad.rtmp.instructuremedia.com","partner_id":"9","subpartner_id":"0","player_ui_conf":"0","kcw_ui_conf":"0","upload_ui_conf":"0","max_file_size_bytes":534773760,"do_analytics":false,"hide_rte_button":false,"js_uploader":true},"logPageViews":true,"editorButtons":[{"name":"YouTube","id":63,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=youtube","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/youtube_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSearch publicly available YouTube videos. A new icon will show up in your course rich editor letting you search YouTube and click to embed videos in your course material.\u003c/p\u003e\n"},{"name":"Vimeo","id":64,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=vimeo","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/vimeo_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eVimeo is a video sharing website on which users can upload, share, and view videos. The community of Vimeo includes indie, professional, and novice filmmakers.\u003c/p\u003e\n"},{"name":"GoogleApps","id":354,"favorite":false,"url":"https://google-drive-lti-iad-prod.instructure.com/lti/rce-content-selection","icon_url":"https://google-drive-lti-iad-prod.instructure.com/icon.png","canvas_icon_class":null,"width":700,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Google Drive to Canvas\u003c/p\u003e\n"},{"name":"Office 365","id":690,"favorite":false,"url":"https://office365-iad-prod.instructure.com/lti/rce-content-item","icon_url":"https://office365-iad-prod.instructure.com/images/office365_icon.png","canvas_icon_class":null,"width":900,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Office 365 to Canvas\u003c/p\u003e\n"},{"name":"BOX","id":691,"favorite":false,"url":"https://www.edu-apps.org/box/","icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png","canvas_icon_class":null,"width":430,"height":200,"use_tray":false,"always_on":false,"description":"\u003cp\u003eEmbed files from Box\u003c/p\u003e\n"},{"name":"Commons Favorites","id":4963,"favorite":false,"url":"https://lor.instructure.com/api/lti/favorite-resources","icon_url":"https://lor.instructure.com/img/icon_commons.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":true,"always_on":false,"description":"\u003cp\u003eFind and share course content\u003c/p\u003e\n"},{"name":"Embed Kaltura Media","id":9199,"favorite":true,"url":"https://1660902-6.kaf.kaltura.com/browseandembed/index/browseandembed","icon_url":"https://cdnsecakmi.kaltura.com/content/static/kalturalogo.png","canvas_icon_class":null,"width":1100,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eMedia Gallery and Embed\u003c/p\u003e\n"},{"name":"SAGE Vantage LTI 1.3 - editor_button","id":16667,"favorite":false,"url":"https://vantage.sagepub.com/lti1p3/tool/F2qexkPLRCSA0Qgi","icon_url":"https://vantage.sagepub.com/images/sagent/Bird-blue-right.svg","canvas_icon_class":null,"width":1000,"height":1000,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSAGE Vantage 1.3 Tool\u003c/p\u003e\n"},{"name":"myBusinessCourse Resource Selection","id":20058,"favorite":false,"url":"https://mybusinesscourse.com/platform/local/integrations/lti.php","icon_url":"https://mybusinesscourse.com/ublish/client/cpb/images/link_logo.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003emyBusinessCourse LTI 1.3\u003c/p\u003e\n"},{"name":"Pearson Links","id":21056,"favorite":false,"url":"https://interop.pearson.com/launch","icon_url":"https://www.pearson.com/us/content/dam/one-dot-com/one-dot-com/us/en/images/PearsonThumbprint-RGB-127x138.png/_jcr_content/renditions/cq5dam.web.1600.9600.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAccess Pearson\u003c/p\u003e\n"}]};
+    ENV = {"ASSET_HOST":"https://du11hjcvx0uqb.cloudfront.net","active_brand_config_json_url":"https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.json","active_brand_config":{"md5":"61f7e559cc87fd00c64673f40997d6a9","variables":{},"share":false,"name":null,"created_at":"2024-07-10T16:20:14-05:00","js_overrides":"https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js","css_overrides":"","mobile_js_overrides":"","mobile_css_overrides":"","parent_md5":"8f6dd81031a173a2b291239d3ac3f2b7"},"confetti_branding_enabled":false,"url_to_what_gets_loaded_inside_the_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-90e5ad1077.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"url_for_high_contrast_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/default/variables-high_contrast-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-795277483f.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"current_user_id":"210042","current_user_global_id":"83960000000210042","current_user_heap_id":"uu-2-b8e0df225888f508350f05f630b51a9475afbaccbb1f7ff370bb169fbe3d4d5d-0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","current_user_roles":["user","student"],"current_user_is_student":true,"current_user_types":[],"current_user_disabled_inbox":false,"current_user_visited_tabs":null,"discussions_reporting":true,"files_domain":"cluster77.canvas-user-content.com","group_information":null,"DOMAIN_ROOT_ACCOUNT_ID":"83960000000000001","DOMAIN_ROOT_ACCOUNT_UUID":"0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","k12":false,"help_link_name":"Help","help_link_icon":"help","use_high_contrast":false,"auto_show_cc":false,"disable_celebrations":false,"disable_keyboard_shortcuts":false,"LTI_LAUNCH_FRAME_ALLOWANCES":["geolocation *","microphone *","camera *","midi *","encrypted-media *","autoplay *","clipboard-write *","display-capture *"],"DEEP_LINKING_POST_MESSAGE_ORIGIN":"https://canvas.wisc.edu","comment_library_suggestions_enabled":false,"SETTINGS":{"open_registration":false,"collapse_global_nav":true,"release_notes_badge_disabled":false,"can_add_pronouns":true,"filter_speed_grader_by_student_group":false},"RAILS_ENVIRONMENT":"Production","IN_PACED_COURSE":false,"SENTRY_FRONTEND":{"dsn":"https://355a1d96717e4038ac25aa852fa79a8f@relay-iad.sentry.insops.net/388","org_slug":"instructure","base_url":"https://sentry.insops.net","normalized_route":"/courses/{course_id}/assignments/{id}","errors_sample_rate":"0.005","traces_sample_rate":"0.005","url_deny_pattern":"instructure-uploads.*amazonaws.com","revision":"canvas-lms@20240731.238"},"DATA_COLLECTION_ENDPOINT":"https://canvas-frontend-data-iad-prod.inscloudgate.net/submit","DOMAIN_ROOT_ACCOUNT_SFID":"001A000000ZQLzgIAH","DIRECT_SHARE_ENABLED":false,"CAN_VIEW_CONTENT_SHARES":false,"FEATURES":{"featured_help_links":true,"account_level_blackout_dates":false,"render_both_to_do_lists":false,"commons_new_quizzes":false,"course_paces_redesign":true,"course_paces_for_students":true,"explicit_latex_typesetting":false,"media_links_use_attachment_id":true,"permanent_page_links":true,"selective_release_backend":true,"selective_release_ui_api":true,"selective_release_optimized_tray":true,"enhanced_course_creation_account_fetching":false,"instui_for_import_page":false,"multiselect_gradebook_filters":true,"assignment_edit_placement_not_on_announcements":false,"platform_service_speedgrader":false,"instui_header":false,"rce_find_replace":true,"courses_popout_sisid":true,"dashboard_graphql_integration":false,"discussion_checkpoints":false,"speedgrader_studio_media_capture":true,"product_tours":false,"usage_rights_discussion_topics":true,"granular_permissions_manage_users":true,"create_course_subaccount_picker":true,"file_verifiers_for_quiz_links":true,"lti_deep_linking_module_index_menu_modal":true,"lti_dynamic_registration":true,"lti_multiple_assignment_deep_linking":true,"lti_overwrite_user_url_input_select_content_dialog":true,"buttons_and_icons_root_account":false,"extended_submission_state":false,"scheduled_page_publication":true,"send_usage_metrics":true,"rce_transform_loaded_content":false,"mobile_offline_mode":false,"react_discussions_post":true,"instui_nav":false,"enhanced_developer_keys_tables":true,"lti_registrations_discover_page":false,"enhanced_rubrics":false,"account_level_mastery_scales":false,"non_scoring_rubrics":true,"top_navigation_placement":false,"embedded_release_notes":true,"canvas_k6_theme":false,"new_math_equation_handling":true},"current_user":{"id":"210042","anonymous_id":"4i2i","display_name":"Yongzhi Lai","avatar_image_url":"https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128\u0026d=identicon","html_url":"https://canvas.wisc.edu/about/210042","pronouns":null,"avatar_is_fallback":false,"email":"LAI38@WISC.EDU"},"current_user_is_admin":false,"page_view_update_url":"/page_views/5c9c83f5-176f-462a-ac3d-4e3b5c3183bd?page_view_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpIjoiNWM5YzgzZjUtMTc2Zi00NjJhLWFjM2QtNGUzYjVjMzE4M2JkIiwidSI6ODM5NjAwMDAwMDAyMTAwNDIsImMiOiIyMDI0LTA4LTEyVDIwOjM5OjE0LjM1WiJ9.9E63f69ALkMDqYTNXkG-9vyQSCR-8bRhs658GcgRY5A","context_asset_string":"course_402226","ping_url":"https://canvas.wisc.edu/api/v1/courses/402226/ping","TIMEZONE":"America/Chicago","CONTEXT_TIMEZONE":"America/Chicago","LOCALES":["en"],"BIGEASY_LOCALE":"en_US","FULLCALENDAR_LOCALE":"en","MOMENT_LOCALE":"en","rce_auto_save_max_age_ms":86400000,"K5_USER":false,"USE_CLASSIC_FONT":false,"K5_HOMEROOM_COURSE":false,"K5_SUBJECT_COURSE":false,"LOCALE_TRANSLATION_FILE":"/dist/javascripts/translations/en-67c25a6858.json","ACCOUNT_ID":"123","user_cache_key":"dHBhYkxONnRSMlIyazBpMVdoUXNQTUxPZFJINGYwa01HSjVSSG13enZ5Zlc9\nO1twLTA/OntQXz1IVXBncmFxZTtuamFsa2hwdm9pdWxraW1tYXFld2c=\n","current_context":{"id":"402226","name":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","type":"Course","url":"https://canvas.wisc.edu/courses/402226"},"ASSIGNMENT_POINTS_POSSIBLE":null,"media_comment_asset_string":"user_210042","COURSE_ID":"402226","ROOT_OUTCOME_GROUP":{"id":"129584","title":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","vendor_guid":null,"url":"/api/v1/courses/402226/outcome_groups/129584","subgroups_url":"/api/v1/courses/402226/outcome_groups/129584/subgroups","outcomes_url":"/api/v1/courses/402226/outcome_groups/129584/outcomes","can_edit":false,"import_url":"/api/v1/courses/402226/outcome_groups/129584/import","context_id":"402226","context_type":"Course","description":null},"SUBMISSION_ID":"142518768","FIRST_ANNOTATION_SUBMISSION":false,"RICH_CONTENT_APP_HOST":"rich-content-iad.inscloudgate.net","JWT":"ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJSME5OSWl3aWNtVm5hVzl1SWpvaWRYTXRaV0Z6ZEMweElpd2laVzUyYVhKdmJtMWxiblFpT2lKUWNtOWtkV04wYVc5dUluMC4uOU1wVUc0aC1ZUGFzYjBndy5MOVZIUDhPc2xsNzBMdV9SMVhka1puRnllWlIxMVhkT0ZSbm1SNHVkVmZvak5tQmJsbTIySEtOaFNORWpaN3pxRFRGRGl0YnExLS1FdXZ6NEpaNHdtRHVDSjQ3OWFzNlRib05JekxBTE1MY1dUUHdlTFVLM21DTHROcUVsS0RtVUJyZlRybUZnNGNuNHpqYjFyNjBYbjRtc2tOYkJBZ2FtcVdmc01Cd3JsTzBoQmE3UDlGZDVPQ3dOMDJ0N0tIUmc4d1JSY3RaNzI3U3FRdXgzbnYtY243R3dqT1BkZFhMbmwtUGhXQk5GYkNqWEg3MVdYal9fS2VySkZ5QU9QNkM2cUhmOUxNcGRqQ2dkNUFSRm5fR0t4c0hMdzJFZlpwazN3bEJRSmlTZEtHU2FaeVROMU1fODJXSXVyVWxXUHVpVWFIaGhMYjdJM2R0UVJnZGhNbWFpN2xmU2F4djRVOGRMdzlpdHRxTEx0REMtN1p4NW9JWWl0LVVyNjdtVTRxSUdKTE9sVkx2WHFVS3pDREZYdXlvWVlzS3VPVjNwNTRiTTNpV1VDbksxaC11WmZ1aXZVclBwUEVfNi1XcjhTdXRWaGhfNW1wRUNZcVlHYl9YZzU3UnRjekdDQVNrMzRMUVUwNFAwQXlQMzh3ZWZwRGpHUDE4RHVWbzNUd0tpazZZRE9PamZfZUYwT0lXM3dyUnZxV043SW5HSE11Q2tTV2pTamNaaTNLVkhieW95VmdNZmFJR19CNGhHNVJrTE5pRlg2RGJ3M18yaV9PZkktUi1vV1NmQzZGYnlKZkxFUldzcGh3UVBRZWd6UjhraFhNYmR1WGNVNHFfUWlSbEFuajNwM01seDRveHQ5Rm9rRm1VZHRvTU54QWZZcTBtUmhGRW9CLUUzQUZhT1hiZEFIWjAwVVB4TGcwUmo4ZjVmYUJrT0FSdWxISVVDQ016M1I0dDlCZlFpVUxxUHN6dVRINGlPRlZNMERkblJQYnUtTzlDWjRNT0R3Q0Z3TTRQRWJmVkc5cVo2LVZJeGluOC11SjZoTktiREtMT2djbUlUZXhxR1NBLmpRekY2dzRVa01PRTdILTYwY3I1TkE=","RICH_CONTENT_CAN_UPLOAD_FILES":false,"RICH_CONTENT_CAN_EDIT_FILES":false,"RICH_CONTENT_FILES_TAB_DISABLED":false,"RICH_CONTENT_INST_RECORD_TAB_DISABLED":false,"RICH_CONTENT_AI_TEXT_TOOLS":false,"ASSIGNMENT_ID":"2301450","PREREQS":{},"EULA_URL":null,"EXTERNAL_TOOLS":[],"PERMISSIONS":{"context":{"read_as_admin":false,"manage_assignments":false,"manage_assignments_edit":false},"assignment":{"update":false,"submit":false},"can_manage_groups":true},"SIMILARITY_PLEDGE":null,"CONFETTI_ENABLED":false,"EMOJIS_ENABLED":false,"EMOJI_DENY_LIST":null,"USER_ASSET_STRING":"user_210042","OUTCOMES_NEW_DECAYING_AVERAGE_CALCULATION":true,"CONDITIONAL_RELEASE_SERVICE_ENABLED":true,"CONDITIONAL_RELEASE_ENV":{"assignment":{"id":"2301450","title":"P5: xv6 memory mapping","description":"\u003ch3\u003eOverview:\u003c/h3\u003e\n\u003cp\u003eIn this assignment, you're going to implement \u003cem\u003ememory mapping\u003c/em\u003e in xv6. Memory mapping is the process of mapping memory from a process's \u003cem\u003evirtual\u003c/em\u003e address space to some physical memory. You will add support for memory mapping in xv6 by implementing 2 system calls: \u003ccode\u003ewmap()\u003c/code\u003e and \u003ccode\u003ewunmap()\u003c/code\u003e which are similar to \u003ccode\u003emmap()\u003c/code\u003e and \u003ccode\u003emunmap()\u003c/code\u003e system calls in Linux\u003ccode\u003e.\u003c/code\u003e\u003cbr\u003eYou will implement two additional system calls, \u003ccode\u003egetwmapinfo()\u003c/code\u003e and \u003ccode\u003egetpgdirinfo()\u003c/code\u003e for debugging and testing purposes.\u0026nbsp;\u003c/p\u003e\n\u003ch3\u003eLearning objectives:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eUnderstand how memory mapping works in modern systems.\u003c/li\u003e\n\u003cli\u003eLearn about xv6 memory layout.\u003c/li\u003e\n\u003cli\u003eUnderstand the relation between virtual and physical addresses\u003c/li\u003e\n\u003cli\u003eUnderstand the use of the page fault handler for memory management\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eAdministrivia:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eThis project can be performed in groups of 2.\u003c/li\u003e\n\u003cli\u003eDue Date: July 29th at 11:59PM (slip day policy will apply to both people in the the group)\u003c/li\u003e\n\u003cli\u003eThe final submission will be tested on\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ca class=\"inline_disabled\" href=\"https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/\" target=\"_blank\"\u003elab machines\u003c/a\u003e, so make sure to test your code on these machines.\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch3\u003eDetails\u003c/h3\u003e\n\u003ch4\u003e1) Background\u003c/h4\u003e\n\u003cp\u003eMemory mapping or \u003cem\u003emmap\u003c/em\u003e is a technique used in operating systems to create new mappings in the virtual address space of the calling process.\u0026nbsp;\u003cbr\u003eIt has two modes of operation: anonymous and file-backed. Anonymous memory mapping is used to allocate memory without file backing, similar to \u003ccode\u003emalloc()\u003c/code\u003e\u0026nbsp;and \u003ccode\u003efree()\u003c/code\u003e, but is more powerful. In fact, in most systems today, \u003ccode\u003emalloc()\u003c/code\u003e and \u003ccode\u003efree()\u003c/code\u003e invoke memory mapping system calls such as \u003ccode\u003emmap()\u003c/code\u003e and \u003ccode\u003emunmap()\u003c/code\u003e. File-backed memory mapping is commonly used to map a file or a portion of a file into memory. This is an efficient way to access large files.\u003c/p\u003e\n\u003cp\u003eIn this assignment, you will implement support for \u003cem\u003eanomyous memory mapping\u003c/em\u003e in xv6. User processes can request the OS to create/delete memory mappings in its address space using system calls \u003ccode\u003ewmap()\u003c/code\u003e and \u003ccode\u003ewunmap()\u003c/code\u003e. Anonymous memory mappings created using this approach offers more control to the users than malloc() through the use of \u003ccode\u003eflags\u003c/code\u003e. Following are some details about this.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eIn malloc, when you allocate some memory, it returns the virtual address of the allocated memory. However, through mmap, you can specify the virtual address where the memory should be, using \u003ccode\u003eMAP_FIXED\u003c/code\u003e flag.\u003c/li\u003e\n\u003cli\u003eIt supports demand paging. It means, when you need to allocate \u003ccode\u003en\u003c/code\u003e bytes of memory, a virtual memory region of \u003ccode\u003en\u003c/code\u003e bytes is reserved, but the actual physical memory pages are not allocated until they are accessed. Later, when the process tries to access that memory for the first time, a page fault occurs. The OS then allocates a physical page of memory and maps it to the corresponding virtual address. This process allows efficient use of memory by allocating pages only as they are needed, thereby reducing the initial memory footprint and avoiding unnecessary memory allocation. In this assignment, demand paging should be enabled by default and can\u0026nbsp; be disabled using \u003ccode\u003eMAP_POPULATE\u003c/code\u003e flag.\u003c/li\u003e\n\u003cli\u003eWhen a process with a memory-mapping creates child processes, those child processes have the same mappings as the parent process. If there are any data in those mappings at the time of fork, the child should be able to read the same data after the fork through the mappings.\u0026nbsp;\n\u003cul\u003e\n\u003cli\u003eUsing the \u003ccode\u003eMAP_SHARED\u003c/code\u003e flag, these memory regions can be shared, which means parent and child processes all have the same virtual mappings, and those mappings maps the same physical addresses. This allows processes to communicate and share data seamlessly, as any changes made to the memory are visible to all processes.\u003c/li\u003e\n\u003cli\u003eAlternatively, with the \u003ccode\u003eMAP_PRIVATE\u003c/code\u003e flag, parent and child will still have the same virtual mapping, but each process gets it own physical copy of the memory. At the time of the fork, the parent and child process will see the same data in the mappings, but later they can modify those data independently, so changes are \u003cstrong\u003enot\u003c/strong\u003e visible to each other. In original mmap(), an optimization strategy called copy-on-write (CoW) is used wherein the actual copying of physical pages is deferred until a write operation occurs. In this assignment, you \u003cstrong\u003edon't\u003c/strong\u003e need to implement CoW.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch4\u003e2) Setup\u003c/h4\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003eDefine a macro \u003ccode\u003eMAPBASE\u003c/code\u003e \u003c/span\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003einside \u003ccode\u003ememlayout.h\u003c/code\u003e file.\u003c/span\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre style=\"padding-left: 40px;\"\u003e#define MAPBASE 0x60000000 \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; // First mmap virtual address\u003c/pre\u003e\n\u003cul\u003e\n\u003cli style=\"list-style-type: none;\"\u003e\n\u003cul\u003e\n\u003cli\u003eNotice that\u0026nbsp;\u003ccode\u003ememlayout.h\u003c/code\u003e already has another macro \u003ccode\u003eKERNBASE\u003c/code\u003e\u003cspan style=\"font-family: monospace;\"\u003e\u003ccode\u003e(0x80000000)\u003c/code\u003e\u003c/span\u003e, that is used to separate the user space from the kernel space. The lower part of the virtual address space (0x00000000 to \u003ccode\u003eKERNBASE - 1\u003c/code\u003e) is used for user space (where user code, data, heap and stack reside), and the upper part (\u003ccode\u003eKERNBASE\u003c/code\u003e to 0xFFFFFFFF) is used for kernel space (where the OS code and data reside).\u003c/li\u003e\n\u003cli\u003eWe will use a predefined starting address (\u003ccode\u003eMAPBASE\u003c/code\u003e) for \u003ccode\u003emmap\u003c/code\u003e regions. This helps to organize and separate the \u003ccode\u003emmap\u003c/code\u003e regions from other parts of the process’s memory. By placing \u003ccode\u003eMAPBASE\u003c/code\u003e near the top of the user address space, it allows the rest of the user space (from \u003ccode\u003e0x00000000\u003c/code\u003e to \u003ccode\u003e0x5FFFFFFF\u003c/code\u003e) to be used for other allocations such as stack, heap, and code segments. Here’s a simplified view of how the address space will look like (Figure 2-2 \u003cspan\u003ein the\u0026nbsp;\u003c/span\u003e\u003ca class=\"instructure_file_link inline_disabled external\" href=\"https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf\" target=\"_blank\"\u003e\u003cspan\u003exv6 book\u003c/span\u003e\u003c/a\u003e will give a detailed view):\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre style=\"padding-left: 40px;\"\u003e+--------------------------+ 0xFFFFFFFF (Top of virtual address space)\u003cbr\u003e| \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp;Kernel Space \u0026nbsp; \u0026nbsp; \u0026nbsp;|\u003cbr\u003e| \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp;|\u003cbr\u003e| \u0026nbsp; \u0026nbsp; \u0026nbsp; (Kernel code, \u0026nbsp; \u0026nbsp; \u0026nbsp;|\u003cbr\u003e| \u0026nbsp; \u0026nbsp; \u0026nbsp; data, etc.) \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp;|\u003cbr\u003e+--------------------------+ 0x80000000 (KERNBASE)\u003cbr\u003e| \u0026nbsp; \u0026nbsp; \u0026nbsp;User Space \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp;|\u003cbr\u003e| \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp;|\u003cbr\u003e| \u0026nbsp; \u0026nbsp; (Memory mapped \u0026nbsp; \u0026nbsp; \u0026nbsp; |\u003cbr\u003e| \u0026nbsp; \u0026nbsp; regions start here) \u0026nbsp;|\u003cbr\u003e+--------------------------+ 0x60000000 (MAPBASE)\u003cbr\u003e| \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp;|\u003cbr\u003e| \u0026nbsp; \u0026nbsp; (User heap, code, \u0026nbsp; \u0026nbsp;|\u003cbr\u003e| \u0026nbsp; \u0026nbsp; stack, etc.) \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; |\u003cbr\u003e| \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp;|\u003cbr\u003e+--------------------------+ 0x00000000 (Start of user address space)\u003c/pre\u003e\n\u003cul\u003e\n\u003cli style=\"list-style-type: none;\"\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode\u003eallocuvm()\u003c/code\u003e grows process from oldsz to newsz. Do not let a process grow beyond \u003ccode\u003eMAPBASE\u003c/code\u003e.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003eCreate a file named \u003ccode\u003ewmap.h\u003c/code\u003e\u0026nbsp;with the following contents\u003c/span\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003e\u0026nbsp;inside your xv6 folder.\u003c/span\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre class=\"code highlight\" style=\"padding-left: 40px;\" lang=\"c\"\u003e\u003cspan\u003e\u003cspan class=\"c1\"\u003e// Flags for wmap\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"cp\"\u003e#define MAP_PRIVATE 0x0001\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"cp\"\u003e#define MAP_SHARED 0x0002\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"cp\"\u003e#define MAP_POPULATE 0x0004\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"cp\"\u003e#define MAP_FIXED 0x0008\u003cbr\u003e\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"c1\"\u003e// for `getpgdirinfo`\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"cp\"\u003e#define MAX_UPAGE_INFO 32\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"k\"\u003estruct\u003c/span\u003e \u003cspan class=\"n\"\u003epgdirinfo\u003c/span\u003e \u003cspan class=\"p\"\u003e{\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e    \u003cspan class=\"n\"\u003euint\u003c/span\u003e \u003cspan class=\"n\"\u003en_upages\u003c/span\u003e\u003cspan class=\"p\"\u003e;\u003c/span\u003e           \u003cspan class=\"c1\"\u003e// the number of allocated physical pages in the process's user address space\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e    \u003cspan class=\"n\"\u003euint\u003c/span\u003e \u003cspan class=\"n\"\u003eva\u003c/span\u003e\u003cspan class=\"p\"\u003e[\u003c/span\u003e\u003cspan class=\"n\"\u003eMAX_UPAGE_INFO\u003c/span\u003e\u003cspan class=\"p\"\u003e];\u003c/span\u003e \u003cspan class=\"c1\"\u003e// the virtual addresses of the allocated physical pages in the process's user address space\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e    \u003cspan class=\"n\"\u003euint\u003c/span\u003e \u003cspan class=\"n\"\u003epa\u003c/span\u003e\u003cspan class=\"p\"\u003e[\u003c/span\u003e\u003cspan class=\"n\"\u003eMAX_UPAGE_INFO\u003c/span\u003e\u003cspan class=\"p\"\u003e];\u003c/span\u003e \u003cspan class=\"c1\"\u003e// the physical addresses of the allocated physical pages in the process's user address space\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"p\"\u003e};\u003cbr\u003e\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"c1\"\u003e// for `getwmapinfo`\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"cp\"\u003e#define MAX_WMMAP_INFO 16\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"k\"\u003estruct\u003c/span\u003e \u003cspan class=\"n\"\u003ewmapinfo\u003c/span\u003e \u003cspan class=\"p\"\u003e{\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e    \u003cspan class=\"kt\"\u003eint\u003c/span\u003e \u003cspan class=\"n\"\u003etotal_mmaps\u003c/span\u003e\u003cspan class=\"p\"\u003e;\u003c/span\u003e                    \u003cspan class=\"c1\"\u003e// Total number of wmap regions\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e    \u003cspan class=\"kt\"\u003eint\u003c/span\u003e \u003cspan class=\"n\"\u003eaddr\u003c/span\u003e\u003cspan class=\"p\"\u003e[\u003c/span\u003e\u003cspan class=\"n\"\u003eMAX_WMMAP_INFO\u003c/span\u003e\u003cspan class=\"p\"\u003e];\u003c/span\u003e           \u003cspan class=\"c1\"\u003e// Starting address of mapping\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e    \u003cspan class=\"kt\"\u003eint\u003c/span\u003e \u003cspan class=\"n\"\u003elength\u003c/span\u003e\u003cspan class=\"p\"\u003e[\u003c/span\u003e\u003cspan class=\"n\"\u003eMAX_WMMAP_INFO\u003c/span\u003e\u003cspan class=\"p\"\u003e];\u003c/span\u003e         \u003cspan class=\"c1\"\u003e// Size of mapping\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e    \u003cspan class=\"kt\"\u003eint\u003c/span\u003e \u003cspan class=\"n\"\u003en_loaded_pages\u003c/span\u003e\u003cspan class=\"p\"\u003e[\u003c/span\u003e\u003cspan class=\"n\"\u003eMAX_WMMAP_INFO\u003c/span\u003e\u003cspan class=\"p\"\u003e];\u003c/span\u003e \u003cspan class=\"c1\"\u003e// Number of pages physically loaded into memory\u003c/span\u003e\u003c/span\u003e\n\u003cspan\u003e\u003cspan class=\"p\"\u003e};\u003cbr\u003e\u003cbr\u003e\u003c/span\u003e\u003c/span\u003e\u003c/pre\u003e\n\u003ch4\u003e3) System Calls\u003c/h4\u003e\n\u003cp\u003eYou have to implement four system calls for this assignment.\u003c/p\u003e\n\u003ch4\u003e3.1. wmap\u003c/h4\u003e\n\u003cpre\u003e\u003ccode\u003eint wmap(uint addr, int length, int flags)\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003e\u003ccode\u003ewmap\u003c/code\u003e is similar to mmap(). It creates a new mapping in the virtual address space of the calling process. Creating memory mappings involve 3 steps: 1) allocating region in the virtual address space, 2) allocating physical memory, and 3) creating mappings (page tables) between the allocated virtual address region and the allocated physical pages.\u003cbr\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003e\u003ccode\u003ewmap\u003c/code\u003e allocates \u003ccode\u003elength\u003c/code\u003e \u003c/span\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003ebytes of memory and \u003cstrong\u003ereturns\u003c/strong\u003e the virtual address of the allocated memory. The returned address should be page-aligned. You \u003cstrong\u003emust\u003c/strong\u003e use virtual addresses only between \u003ccode\u003eMAPBASE\u003c/code\u003e and\u0026nbsp;\u003ccode\u003eKERNBASE-1\u003c/code\u003e. If the provided length is not page-aligned, the length \u003cspan\u003eshould be rounded off to next multiple of pagesize (4096 bytes).\u003c/span\u003e\u003cbr\u003e\u003c/span\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003eYour implementation of \u003ccode\u003ewmap\u003c/code\u003e should have demand paging enabled by default, which means that physical memory should not be allocated during the system call. Instead, physical memory should be allocated during page faults. Also, when forking, the child process should have the same mappings as the parent process. You should \u003cstrong\u003ereturn\u003c/strong\u003e \u003ccode\u003e-1\u003c/code\u003e for any type of error (e.g., the provided addr or length is not valid).\u0026nbsp;\u003cbr\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ccode\u003elength\u003c/code\u003e: The length of the mapping in bytes. It must be greater than 0\u003cstrong\u003e.\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eaddr\u003c/code\u003e: The \u003cem\u003evirtual\u003c/em\u003e address that wmap must use for the mapping, if \u003ccode\u003eMAP_FIXED\u003c/code\u003e flag is on. Otherwise, ignore this value. This address should be page-aligned and within \u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003e\u003ccode\u003eMAPBASE\u003c/code\u003e and\u0026nbsp;\u003ccode\u003eKERNBASE-1\u003c/code\u003e\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eflags\u003c/code\u003e: enables or disables some features of \u003ccode\u003ewmap\u003c/code\u003e. Flags can be \u003cem\u003eOR\u003c/em\u003eed together (e.g., MAP_PRIVATE | MAP_FIXED | MAP_POPULATE). These flags should be defined as constants in \u003ccode\u003e\u003cem\u003ewmap.h\u003c/em\u003e\u003c/code\u003e header file. You have to implement four flags as explained in the following:\u0026nbsp;\n\u003cul\u003e\n\u003cli\u003e\u003ccode\u003eMAP_FIXED\u003c/code\u003e: If this is set, then the mapping \u003cstrong\u003emust\u003c/strong\u003e be placed at exactly \u003ccode\u003eaddr\u003c/code\u003e. If this flag is not used, you can ignore \u003ccode\u003eaddr\u003c/code\u003e. Also,\u003cem\u003e \u003c/em\u003ea \u003cem\u003evalid\u003c/em\u003e \u003ccode\u003eaddr\u003c/code\u003e\u003cem\u003e \u003c/em\u003eis a multiple of page size and within\u003cem\u003e \u003c/em\u003e\u003ccode\u003eMAPBASE\u003c/code\u003e (0x60000000) and \u003ccode\u003eKERNBASE\u003c/code\u003e-1 (0x80000000-0x1).\u0026nbsp;\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eMAP_POPULATE\u003c/code\u003e: Demand paging is enabled by default. If this flag is set, disable demand paging, which means that the physical memory will be allocated immediately during the system call.\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eMAP_SHARED\u003c/code\u003e: This flag tells wmap that the mapping is shared. Memory mappings are copied from the parent to the child across the \u003ccode\u003efork\u003c/code\u003e\u0026nbsp;system call. If the mapping is \u003ccode\u003eMAP_SHARED\u003c/code\u003e, then changes made by the child will be visible to the parent and vice versa.\u0026nbsp;\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eMAP_PRIVATE\u003c/code\u003e: If this flag is set, then the mapping is \u003cstrong\u003enot\u003c/strong\u003e shared. You still need to copy the mappings from parent to child, but these mappings should use \u003cem\u003edifferent\u003c/em\u003e physical pages. In other words, the same virtual addresses are mapped in child, but to a different set of physical pages. Note that between the flags \u003ccode\u003eMAP_SHARED\u003c/code\u003e and \u003ccode\u003eMAP_PRIVATE\u003c/code\u003e, one of them must be specified in flags. These two flags \u003cstrong\u003ecannot\u003c/strong\u003e be used together.\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eEnabling demand paging means that you don't actually allocate any physical pages when \u003ccode\u003ewmap\u003c/code\u003e is called. You just track the allocated virtual address region using some structure. Later, when the process tries to access that memory, a \u003cem\u003epage fault\u003c/em\u003e is generated which is handled by the kernel. In the kernel, you can now allocate a physical page and let the user resume execution.\u003c/p\u003e\n\u003cp\u003eTo set up the page fault handler, you'll add something like this to the \u003ccode\u003etrap()\u003c/code\u003e function in \u003ccode\u003etrap.c\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003ecase T_PGFLT: // T_PGFLT = 14\u003c/code\u003e\u003cbr\u003e\u003ccode\u003e\u0026nbsp; \u0026nbsp; if page fault addr is part of a mapping: // demand paging\u003c/code\u003e\u003cbr\u003e\u003ccode\u003e\u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; // handle it\u003c/code\u003e\u003cbr\u003e\u003ccode\u003e\u0026nbsp; \u0026nbsp; else:\u003c/code\u003e\u003cbr\u003e\u003ccode\u003e\u0026nbsp; \u0026nbsp; \u0026nbsp; \u0026nbsp; cprintf(\"Segmentation Fault\\n\");\u003c/code\u003e\u003cbr\u003e\u003ccode\u003e  \u0026nbsp; \u0026nbsp; \u0026nbsp; // kill the process\u003c/code\u003e\u003c/pre\u003e\n\u003ch4\u003e3.2. wunmap\u003c/h4\u003e\n\u003cpre\u003e\u003ccode\u003eint wunmap(uint addr);\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003ccode\u003ewunmap\u003c/code\u003e removes the memory mapped region that starts at \u003ccode\u003eaddr\u003c/code\u003e in the process virtual address space. \u003ccode\u003eaddr\u003c/code\u003e\u003cem\u003e \u003c/em\u003emust be page-aligned and the start address of some existing wmap. It returns \u003ccode\u003e0 \u003c/code\u003eif the memory map is removed successfully, otherwise \u003ccode\u003e-1\u003c/code\u003e (e.g.: addr is not the start of any memory mapped region).\u003c/p\u003e\n\u003cp\u003eWhile removing a memory map, if it is \u003ccode\u003eMAP_SHARED\u003c/code\u003e and it was inherited from the parent, then be careful not to free the physical pages, because the parent process might still be using it. Note that when a child process calls \u003ccode\u003eexit()\u003c/code\u003e, the \u003ccode\u003ewait()\u003c/code\u003e called by the parent process frees the memory (from address \u003ccode\u003e0x0\u003c/code\u003e to \u003ccode\u003eKERNBASE)\u003c/code\u003e used by the child process by calling \u003ccode\u003efreevm(p-\u0026gt;pgdir)\u003c/code\u003e\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003e, which will free the shared mmap physical pages. You need to modify the code a little bit to avoid this.\u003c/span\u003e\u003c/p\u003e\n\u003ch4\u003e3.3. getpgdirinfo\u003c/h4\u003e\n\u003cpre\u003eint getpgdirinfo(struct pgdirinfo *pdinfo);\u003c/pre\u003e\n\u003cp\u003e\u003ccode\u003egetpgdirinfo\u003c/code\u003e retrieves information about the process address space by populating \u003ccode\u003estruct pgdirinfo\u003c/code\u003e. It returns \u003ccode\u003e0 \u003c/code\u003ein case of successful retrieval of information, otherwise \u003ccode\u003e-1\u003c/code\u003e. This system call should calculate how many physical pages are currently allocated to the current process and store it in \u003ccode\u003en_upages\u003c/code\u003e. It should also populate \u003ccode\u003eva[MAX_UPAGE_INFO]\u003c/code\u003e and \u003ccode\u003epa[MAX_UPAGE_INFO]\u003c/code\u003e with the first 32 virtual page addresses and corresponding physical addresses, ordered by the virtual addresses. (Hint: You should only gather information (either for calculating \u003ccode\u003en_upages\u003c/code\u003e or returning \u003ccode\u003eva\u003c/code\u003e/\u003ccode\u003epa\u003c/code\u003e pairs) on pages with PTE_U set (i.e. user pages). The only way to do that is to directly consult the page table for the process.)\u003c/p\u003e\n\u003ch4\u003e3.4. getwmapinfo\u003c/h4\u003e\n\u003cpre\u003eint getwmapinfo(struct wmapinfo *wminfo);\u003c/pre\u003e\n\u003cp\u003e\u003ccode\u003egetwmapinfo\u003c/code\u003e retrieves information about the process address space by populating \u003ccode\u003estruct wmapinfo\u003c/code\u003e. This system call should calculate the current number of memory mapped regions in the process's address space and store the result in \u003ccode\u003etotal_mmaps\u003c/code\u003e. It should also populate \u003ccode\u003eaddr[MAX_WMMAP_INFO]\u003c/code\u003e and \u003ccode\u003elength[MAX_WMAP_INFO]\u003c/code\u003e with the address and length of each memory map. as mentioned earlier,\u003cspan style=\"color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;\"\u003e\u0026nbsp;If an mmap's provided length is not page-aligned, the length \u003cspan\u003eshould be rounded off to next multiple of pagesize (4096 bytes).\u003c/span\u003e\u003c/span\u003e You can assume that the number of memory maps for any process will not exceed \u003ccode\u003eMAX_UPAGE_INFO\u003c/code\u003e. The \u003ccode\u003en_loaded_pages[MAX_WMAP_INFO]\u003c/code\u003e should store how many pages have been physically allocated for each wmap. This field should reflect demand paging. For example, the length of a memory mapped region could be 8192 but the number of physical pages allocated for this region (n_loaded_pages) might be 0 because of demand paging.\u003c/p\u003e\n\u003ch4\u003e3.5. Some simplifying assumptions\u003c/h4\u003e\n\u003cp\u003eYou can make the following simplifying assumptions:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eAll mapped memory is readable/writable.\u003c/li\u003e\n\u003cli\u003eThe maximum number of memory maps is 16.\u003c/li\u003e\n\u003cli\u003eThe parent process will always exit after the child process.\u0026nbsp;\u003c/li\u003e\n\u003cli\u003eBecause of demand paging, there might be some pages that are not yet physically allocated when calling \u003ccode\u003efork()\u003c/code\u003e. We'll make sure to use MAP_POPULATE flag for all mmaps before calling \u003ccode\u003efork()\u003c/code\u003e, so you need not worry about this case.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch4\u003e4) A simple example of \u003ccode\u003ewmap\u003c/code\u003e and \u003ccode\u003ewunmap\u003c/code\u003e\u003c/h4\u003e\n\u003cp\u003eHere, we walk you through a simple end-to-end example of a call to \u003ccode\u003ewmap\u003c/code\u003e. You may want to take a look at the helper functions referenced in this example - you'll most likely need to use most of them in your implementation.\u003cbr\u003eSuppose that we make the following call to `wmap`:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003euint address = wmap(0x60000000, 8192, MAP_FIXED | MAP_SHARED | MAP_POPULATE);\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis is the simplest combination of flags - we're requesting a shared (\u003ccode\u003eMAP_SHARED\u003c/code\u003e) mapping having a length of two pages and starting at virtual address 0x60000000 (\u003ccode\u003eMAP_FIXED\u003c/code\u003e). In xv6, 1 page is 4096 bytes and 4096=0x1000. Let's assume no memory mappings exist at the virtual address range 0x60000000 to 0x60002000 (8192 = 0x2000). So we can use create the requested memory mapping at virtual address 0x60000000 extending until 0x60002000. You should keep track of these mappings per process so you know what ranges of virtual addresses are free. You can create a \u003ccode\u003estruct\u003c/code\u003e that stores information relevant to a memory map, and store an array/list of such structs in the Process Control Block (\u003ccode\u003estruct proc\u003c/code\u003e). You might want to keep this array sorted by virtual address, which will make it easy to verify whether another memory mappings already exists in an address range or not.\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eSo far we only talked about virtual address - there also needs to be some corresponding physical pages that are allocated for this mapped region. Since we use the MAP_POPULATE flag, physical memory needs to be allocated immediately. Physical addresses are managed at the granularity of a page, which is 4096 bytes long in xv6. You'll just need to call existing functions (i.e., \u003ccode\u003ekalloc()\u003c/code\u003e, \u003ccode\u003ekfree()\u003c/code\u003e in \u003ccode\u003ekalloc.c\u003c/code\u003e) in the kernel to get free physical addresses. \u003ccode\u003ekalloc()\u003c/code\u003e and \u003ccode\u003ekfree()\u003c/code\u003e work at the granularity of a page (4096 bytes). So if you need 8192 bytes of physical memory, you need to call \u003ccode\u003ekalloc()\u003c/code\u003e twice, each time it will give you the starting address of a physical page that is 4096 bytes long. Needless to say that the physical addresses returned by the kernel are not necessarily contiguous in the physical address space.\u003c/p\u003e\n\u003cp\u003eSo in our implementation, we would have to call\u003c/p\u003e\n\u003cpre\u003echar *mem = kalloc();\u003c/pre\u003e\n\u003cp\u003ewhere \u003ccode\u003emem\u003c/code\u003e is the starting physical address of a free page we can use.\u003c/p\u003e\n\u003cp\u003eNote that we haven't created mapping (page tables) between virtual addresses and physical adresses. We have just allocated virtual and physical regions/pages. To create such mappings, we need to create and place entries in the page table. The \u003ccode\u003emappages\u003c/code\u003e function does exactly that. In this case, the call to \u003ccode\u003emappages\u003c/code\u003e\u0026nbsp;would be something like the following:\u003c/p\u003e\n\u003cpre\u003emappages(page_directory, 0x60000000, 4096, V2P(mem), PTE_W | PTE_U);\u003c/pre\u003e\n\u003cp\u003eThe first argument is the page table of the process to place the mapping for. Each process has a page table as defined in \u003ccode\u003estruct proc\u003c/code\u003e in \u003ccode\u003eproc.h\u003c/code\u003e. The last argument is the protection bits for this page. \u003ccode\u003ePTE_U\u003c/code\u003e means the page is user-accessible and \u003ccode\u003ePTE_W\u003c/code\u003e means it's writable. There's no flag for readable, because pages are always readable at least. For this project, you can always pass \u003ccode\u003ePTE_W|PTE_U\u003c/code\u003e\u0026nbsp;as the last argument.\u003cbr\u003eYou should always apply the \u003ccode\u003eV2P\u003c/code\u003e\u0026nbsp;(converts a virtual to physical address in the kernel) macro to the address that you get from \u003ccode\u003ekalloc\u003c/code\u003e. This is because of the way xv6 manages physical memory. The address returned by \u003ccode\u003ekalloc\u003c/code\u003e\u0026nbsp;is not an actual physical address, it's the virtual address that the kernel uses to access each physical page. Yes, all physical pages are also mapped in the kernel. To get more details on this, refer to the second chapter in the xv6 manual on page tables.\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eThe above mappages() call will create page table mappings between virtual address 0x60000000 and the physical page returned by kalloc().\u003c/p\u003e\n\u003cp\u003eSo, after the call to \u003ccode\u003emappages\u003c/code\u003e, did we successfully map 8192 bytes of memory at 0x60000000? No! it maps only a single page. In xv6, we have to map one page at a time, each time requesting a new physical page from \u003ccode\u003ekalloc.\u003c/code\u003e\u0026nbsp;So we may complete our mapping by doing a second call:\u003c/p\u003e\n\u003cpre\u003emem = kalloc();\u003cbr\u003emappages(page_directory, 0x60001000, 4096, V2P(mem), PTE_W | PTE_U);\u003c/pre\u003e\n\u003cp\u003eNotice how we advanced the virtual address by one page (0x60001000 = 0x60000000 + 0x1000). Now you can quickly build up on this example and create mappings in a loop, getting as many pages as necessary from \u003ccode\u003ekalloc\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eNow let's see how to remove a mapping. Suppose the user accesses the pages we allocated at 0x60000000 for a while, and does a call to `wunmap`:\u003c/p\u003e\n\u003cpre\u003ewunmap(0x60000000);\u003c/pre\u003e\n\u003cp\u003eFirst we need to find any metadata that we maintain in the Process Control Block for the mmap starting at 0x60000000. Before removing the metadata of the mmap, we need to keep a note of the length of the mapped region. This will help us determine how many how many page table entries need to be deleted and how many physical pages need to be freed.\u003c/p\u003e\n\u003cp\u003eNext, the page table must be modified so that the user can no longer access those pages. \u003ccode\u003ewalkpgdir\u003c/code\u003e function can be used for that purpose. A typical call to \u003ccode\u003ewalkpgdir\u003c/code\u003e\u0026nbsp;may look like this:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003epte_t *pte = walkpgdir(page_directory, 0x60000000, 0);\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eIt returns the page table entry that maps 0x60000000. We'll eventually need to do \u003ccode\u003e*pte = 0\u003c/code\u003e, which will cause any future reference to that virtual address to fail. Before that, we need to free the physical page we received from \u003ccode\u003ekalloc\u003c/code\u003e. Each \u003ccode\u003epte\u003c/code\u003e stores a set of flags (e.g. R/W) and a physical page address, called \u003cem\u003ePage Frame Number\u003c/em\u003e or \u003cem\u003ePFN\u003c/em\u003e for short. Using a simple mask operation, you can extract the physical address from the \u003ccode\u003epte\u003c/code\u003e. Look at the macros defined in \u003ccode\u003emmu.h\u003c/code\u003e. The final piece of the code will look like this:\u003c/p\u003e\n\u003cpre\u003ephysical_address = PTE_ADDR(*pte);\u003cbr\u003ekfree(P2V(physical_address));\u003cbr\u003e*pte = 0;\u003c/pre\u003e\n\u003cp\u003eWe need to apply \u003ccode\u003eP2V\u003c/code\u003e (converts a physical to virtual address in the kernel) because \u003ccode\u003ekfree\u003c/code\u003e (and \u003ccode\u003ekalloc\u003c/code\u003e, as explained before) only work with kernel virtual addresses. Only one page has been freed so far. You'll need to do the exact same calls, but this time passing a virtual address of 0x60001000 to free the second page:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003epte_t *pte = walkpgdir(page_directory, 0x60001000, 0);\u003c/code\u003e\u003cbr\u003e\u003ccode\u003ephysical_address = PTE_ADDR(*pte);\u003c/code\u003e\u003cbr\u003e\u003ccode\u003ekfree(P2V(physical_address));\u003c/code\u003e\u003cbr\u003e*pte = 0;\u003c/pre\u003e\n\u003cp\u003eMemory mappings should be inherited by the child. To do this, you'll need to modify the \u003ccode\u003efork()\u003c/code\u003e system call or the internal logic of \u003ccode\u003ecopyuvm()\u003c/code\u003e to copy the mappings from the parent process to the child across fork().\u0026nbsp;\u003c/p\u003e\n\u003chr\u003e\n\u003ch3\u003eHints\u003c/h3\u003e\n\u003cp\u003eLike prior projects, start by making small additions to xv6. Make sure you provide the support for a basic allocation, then add more complex functionality. At each step, make sure you have not broken your code that was previously working -- if so, stop and take time to see how the introduced changes caused the problem. The best way to achieve this is to use a version control system like \u003cstrong\u003egit\u003c/strong\u003e. This way, you can later refer to previous versions of your code if you break something.\u003c/p\u003e\n\u003cp\u003eFollowing these steps should help you with your implementation:\u003c/p\u003e\n\u003col style=\"list-style-type: decimal;\"\u003e\n\u003cli\u003eFirst of all, make sure you understand how xv6 does memory management. The second chapter of \u003ca class=\"instructure_file_link inline_disabled external\" href=\"https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf\" target=\"_blank\"\u003e\u003cspan\u003exv6 book\u003c/span\u003e\u003c/a\u003e gives a good insight of the memory layout in xv6. Furthermore, it references some related source files. Looking at those sources should help you understand how mapping happens. You'll need to use those routines while implementing \u003ccode\u003ewmap\u003c/code\u003e. You will appreciate the time you spent on this step later.\u003c/li\u003e\n\u003cli\u003eTry to implement a basic \u003ccode\u003ewmap\u003c/code\u003e that supports\u0026nbsp;\u003ccode\u003eMAP_FIXED|MAP_SHARED|MAP_POPULATE\u003c/code\u003e. It should just check if that particular region asked by the user is available or not. If it is, you should map the pages in that range.\u003c/li\u003e\n\u003cli\u003eImplement \u003ccode\u003ewunmap\u003c/code\u003e. For now, just remove the mappings.\u003c/li\u003e\n\u003cli\u003eImplement \u003ccode\u003egetwmapinfo\u003c/code\u003e and \u003ccode\u003egetpgdirinfo\u003c/code\u003e. Most of the tests depend on these two system calls to work.\u003c/li\u003e\n\u003cli\u003eImplement demand paging.\u003c/li\u003e\n\u003cli\u003eModify your \u003ccode\u003ewmap\u003c/code\u003e such that it's able to search for an available region in the process address space. This should make your \u003ccode\u003ewmap\u003c/code\u003e\u0026nbsp;work without \u003ccode\u003eMAP_FIXED\u003c/code\u003e.\u003c/li\u003e\n\u003cli\u003eCopy mappings from parent to child across the \u003ccode\u003efork()\u003c/code\u003e system call.\u003c/li\u003e\n\u003cli\u003eImplement \u003ccode\u003eMAP_PRIVATE\u003c/code\u003e. You'll need to change \u003ccode\u003efork()\u003c/code\u003e to behave differently if the mapping is private.\u003c/li\u003e\n\u003c/ol\u003e\n\u003chr\u003e\n\u003ch3\u003eTesting and handin instructions\u003c/h3\u003e\n\u003cp\u003eTest cases will be released later.\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003eThe handin directory will be \u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003e~cs537-1/handin/LOGIN/p5\u003c/code\u003e\u003cspan\u003ewhere \u003c/span\u003e\u003ccode\u003eLOGIN \u003c/code\u003eis your CS login. Similar to P2 and P4, \u003cspan style=\"color: #ff0000;\"\u003eplease create a subdirectory called 'src': \u003ccode\u003e~cs537-1/handin/LOGIN/p5/src.\u003c/code\u003e\u003c/span\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eCopy all of your xv6 source files (but not .o files, please, or binaries!) into this directory.\u003c/p\u003e\n\u003cp\u003e\u003cspan\u003e\u003cstrong\u003eEach project partner should turn in their joint code to each of their handin directories.\u003c/strong\u003e E\u003c/span\u003each person should place a file named \u003cstrong\u003epartners.txt\u003c/strong\u003e in their \u003cem\u003ehandin/p4\u003c/em\u003e directory, so that we can tell who worked together on this project.\u0026nbsp; The format of \u003cstrong\u003epartners.txt\u003c/strong\u003e should be exactly as follows:\u003c/p\u003e\n\u003cpre\u003ecslogin1 wiscNetid1 Lastname1 Firstname1\u003cbr\u003ecslogin2 wiscNetid2 Lastname2 Firstname2\u003c/pre\u003e\n\u003cp\u003eIt does not matter who is 1 and who is 2.\u0026nbsp; If you worked alone, your \u003cstrong\u003epartners.txt\u003c/strong\u003e file should have only one line.\u0026nbsp; There should be no spaces within your first or last name; just use spaces to separate fields.\u003c/p\u003e\n\u003cp\u003eTo repeat, \u003cstrong\u003eboth project partners should turn in their code and both should have a \u003cem\u003eturnin/p2a/partners.txt\u003c/em\u003e file.\u003c/strong\u003e\u003c/p\u003e","points_possible":100.0,"grading_type":"points","submission_types":"none","grading_scheme":{"A":0.94,"A-":0.9,"B+":0.87,"B":0.84,"B-":0.8,"C+":0.77,"C":0.74,"C-":0.7,"D+":0.67,"D":0.64,"D-":0.61,"F":0.0}},"course_id":"402226","stats_url":"/api/v1/courses/402226/mastery_paths/stats","rule":null},"badge_counts":{"submissions":12},"notices":[],"active_context_tab":"assignments"};
+    BRANDABLE_CSS_HANDLEBARS_INDEX = [["new_styles_normal_contrast","new_styles_high_contrast","new_styles_normal_contrast_rtl","new_styles_high_contrast_rtl"],{"10":["908ffbc673",0,"d5c9044c6e",2],"15":["c8540c43a4",0,"0a2196be1d",2],"19":["df5777ed9c"],"61":["1fb36890db","b83a603352","4bcf82f85a","0b171e092c"],"67":["700335fb7b",0,"1cc2485e2c",2],"71":["9cb09ce3d6","9f81099c5a","e1c5edae20","b1fb18d547"],"06":["ba28819778",0,"96b99aafe5",2],"f0":["b349f31f5e",0,0,0],"c8":["718c8509f5","33cd4c40e3","03d0fbcbe8","ec23096f0d"],"1e":["6eb4ecac8e","4100cb65ce","0faf4716c8","bed54fd75e"],"b3":["e5da23fb43","0911fc8ed3","05b2bb5a6f","ba2585de5c"],"0c":["4dae5befd2",0,"c18876be89",2],"da":["b5a7f9cd8f","a4e5066985","773390ae11","8e9071910c"],"1d":["2128789890",0,"e568085637",2],"08":["64bff5a97d"],"e2":["11429f119a"],"9f":["d39b291ba6",0,0,0],"2b":["c491abf31e","b11dc54da6","b58622671f","6bb4a7ae9e"],"2c":["8a926fc28b",0,0,0],"c2":["6f2721ae01"],"9c":["c31821c764",0,"1693aba1da",2],"c5":["44c6024769","31150a4a27","53dd277fa9","5fe61c91c2"],"f2":["51574f9b13"]}]
+    REMOTES = {};
+  </script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/en_US-80a0ce259b.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/react-entry-c8c7bdb5b4feb9bd.js" crossorigin="anonymous" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/main-entry-b73a86a7e23e9536.js" crossorigin="anonymous" defer="defer"></script>
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('assignment_show');
+(window.bundles || (window.bundles = [])).push('edit_rubric');
+(window.bundles || (window.bundles = [])).push('navigation_header');
+//]]>
+</script>
+  
+  <script type="text/javascript">
+    window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+    heap.load("3001039959");
+    heap.clearEventProperties();
+    heap.addEventProperties({'Base.appName': 'Canvas'});
+    setTimeout(() => {
+      if (ENV.current_user_heap_id && ENV.current_user_heap_id !== heap.identity) {
+        heap.identify(ENV.current_user_heap_id);
+      }
+      props = {}
+      if (ENV.current_user_roles) {
+        props['role'] = ENV.current_user_roles[ENV.current_user_roles.length - 1]
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_UUID) {
+        props['Canvas.accountId'] = ENV.DOMAIN_ROOT_ACCOUNT_UUID
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_SFID) {
+        props['Canvas.salesforceAccountId'] = ENV.DOMAIN_ROOT_ACCOUNT_SFID
+      }
+      if (Object.keys(props).length > 0) {
+        heap.addUserProperties(props);
+      }
+    }, 1000);
+  </script>
+  
+</head>
+
+<body class="with-left-side course-menu-expanded with-right-side assignments primary-nav-transitions full-width context-course_402226 responsive_student_grades_page">
+
+<noscript>
+  <div role="alert" class="ic-flash-static ic-flash-error">
+    <div class="ic-flash__icon" aria-hidden="true">
+      <i class="icon-warning"></i>
+    </div>
+    <h1>You need to have JavaScript enabled in order to access this site.</h1>
+  </div>
+</noscript>
+
+
+
+
+<div id="flash_message_holder"></div>
+<div id="flash_screenreader_holder"></div>
+
+<div id="application" class="ic-app">
+  
+
+
+
+
+<header id="mobile-header" class="no-print">
+  <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-hamburger">
+    <i class="icon-solid icon-hamburger"></i>
+    <span id="mobileHeaderInboxUnreadBadge" class="menu-item__badge" style="min-width: 0; top: 12px; height: 12px; right: 6px; display:none;"></span>
+    <span class="screenreader-only">Dashboard</span>
+  </button>
+  <div class="mobile-header-space"></div>
+    <a class="mobile-header-title expandable" href="/courses/402226" role="button" aria-controls="mobileContextNavContainer">
+      <div>SU24 COMPSCI 537 001 AKK</div>
+        <div>P5: xv6 memory mapping</div>
+    </a>
+    <div class="mobile-header-space"></div>
+    <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-arrow" aria-label="Navigation Menu">
+      <i class="icon-arrow-open-down" id="mobileHeaderArrowIcon"></i>
+    </button>
+</header>
+<nav id="mobileContextNavContainer"></nav>
+
+<header id="header" class="ic-app-header no-print ">
+  <a href="#content" id="skip_navigation_link">Skip To Content</a>
+  <div role="region" class="ic-app-header__main-navigation" aria-label="Global Navigation">
+      <div class="ic-app-header__logomark-container">
+        <a href="https://canvas.wisc.edu/" class="ic-app-header__logomark">
+          <span class="screenreader-only">Dashboard</span>
+        </a>
+      </div>
+    <ul id="menu" class="ic-app-header__menu-list">
+        <li class="menu-item ic-app-header__menu-list-item ">
+          <a id="global_nav_profile_link" role="button" href="/profile/settings" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container">
+              <div aria-hidden="true" class="fs-exclude ic-avatar ">
+                <img src="https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128&amp;d=identicon" alt="Yongzhi Lai" />
+              </div>
+              <span class="menu-item__badge"></span>
+            </div>
+            <div class="menu-item__text">
+              Account
+            </div>
+          </a>
+        </li>
+      <li class="ic-app-header__menu-list-item ">
+        <a id="global_nav_dashboard_link" href="https://canvas.wisc.edu/" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--dashboard" version="1.1" x="0" y="0" viewBox="0 0 280 200" enable-background="new 0 0 280 200" xml:space="preserve"><path d="M273.09,180.75H197.47V164.47h62.62A122.16,122.16,0,1,0,17.85,142a124,124,0,0,0,2,22.51H90.18v16.29H6.89l-1.5-6.22A138.51,138.51,0,0,1,1.57,142C1.57,65.64,63.67,3.53,140,3.53S278.43,65.64,278.43,142a137.67,137.67,0,0,1-3.84,32.57ZM66.49,87.63,50.24,71.38,61.75,59.86,78,76.12Zm147,0L202,76.12l16.25-16.25,11.51,11.51ZM131.85,53.82v-23h16.29v23Zm15.63,142.3a31.71,31.71,0,0,1-28-16.81c-6.4-12.08-15.73-72.29-17.54-84.25a8.15,8.15,0,0,1,13.58-7.2c8.88,8.21,53.48,49.72,59.88,61.81a31.61,31.61,0,0,1-27.9,46.45ZM121.81,116.2c4.17,24.56,9.23,50.21,12,55.49A15.35,15.35,0,1,0,161,157.3C158.18,152,139.79,133.44,121.81,116.2Z" /></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Dashboard
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item ic-app-header__menu-list-item--active">
+          <a id="global_nav_courses_link" role="button" href="/courses" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--courses" version="1.1" x="0" y="0" viewBox="0 0 280 259" enable-background="new 0 0 280 259" xml:space="preserve"><path d="M73.31,198c-11.93,0-22.22,8-24,18.73a26.67,26.67,0,0,0-.3,3.63v.3a22,22,0,0,0,5.44,14.65,22.47,22.47,0,0,0,17.22,8H200V228.19h-134V213.08H200V198Zm21-105.74h90.64V62H94.3ZM79.19,107.34V46.92H200v60.42Zm7.55,30.21V122.45H192.49v15.11ZM71.65,16.71A22.72,22.72,0,0,0,49,39.36V190.88a41.12,41.12,0,0,1,24.32-8h157V16.71ZM33.88,39.36A37.78,37.78,0,0,1,71.65,1.6H245.36V198H215.15v45.32h22.66V258.4H71.65a37.85,37.85,0,0,1-37.76-37.76Z"/></svg>
+
+            </div>
+            <div class="menu-item__text">
+              Courses
+            </div>
+          </a>
+        </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+        <a id="global_nav_calendar_link" href="/calendar" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--calendar" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M197.07,213.38h16.31V197.07H197.07Zm-16.31,16.31V180.76h48.92v48.92Zm-48.92-16.31h16.31V197.07H131.85Zm-16.31,16.31V180.76h48.92v48.92ZM66.62,213.38H82.93V197.07H66.62ZM50.32,229.68V180.76H99.24v48.92Zm146.75-81.53h16.31V131.85H197.07Zm-16.31,16.31V115.54h48.92v48.92Zm-48.92-16.31h16.31V131.85H131.85Zm-16.31,16.31V115.54h48.92v48.92ZM66.62,148.15H82.93V131.85H66.62ZM50.32,164.46V115.54H99.24v48.92ZM34,262.29H246V82.93H34ZM246,66.62V42.16A8.17,8.17,0,0,0,237.84,34H213.38v8.15a8.15,8.15,0,1,1-16.31,0V34H82.93v8.15a8.15,8.15,0,0,1-16.31,0V34H42.16A8.17,8.17,0,0,0,34,42.16V66.62Zm-8.15-48.92a24.49,24.49,0,0,1,24.46,24.46V278.6H17.71V42.16A24.49,24.49,0,0,1,42.16,17.71H66.62V9.55a8.15,8.15,0,0,1,16.31,0v8.15H197.07V9.55a8.15,8.15,0,1,1,16.31,0v8.15Z"/></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Calendar
+          </div>
+        </a>
+      </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+      <!-- TODO: Add back global search when available -->
+        <a id="global_nav_conversations_link" href="/conversations" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container">
+            <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--inbox" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M91.72,120.75h96.56V104.65H91.72Zm0,48.28h80.47V152.94H91.72Zm0-96.56h80.47V56.37H91.72Zm160.94,34.88H228.52V10.78h-177v96.56H27.34A24.17,24.17,0,0,0,3.2,131.48V244.14a24.17,24.17,0,0,0,24.14,24.14H252.66a24.17,24.17,0,0,0,24.14-24.14V131.48A24.17,24.17,0,0,0,252.66,107.34Zm0,16.09a8.06,8.06,0,0,1,8,8v51.77l-32.19,19.31V123.44ZM67.58,203.91v-177H212.42v177ZM27.34,123.44H51.48v79.13L19.29,183.26V131.48A8.06,8.06,0,0,1,27.34,123.44ZM252.66,252.19H27.34a8.06,8.06,0,0,1-8-8V202l30,18H230.75l30-18v42.12A8.06,8.06,0,0,1,252.66,252.19Z"/></svg>
+</span>
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Inbox
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item" >
+          <a id="global_nav_history_link" role="button" href="#" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg viewBox="0 0 1920 1920" class="ic-icon-svg menu-item__icon svg-icon-history" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path d="M960 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.125 379.934 847.059 847.059 847.059 467.125 0 847.059-379.934 847.059-847.059 0-467.125-379.934-847.059-847.059-847.059M960 1920C430.645 1920 0 1489.355 0 960S430.645 0 960 0s960 430.645 960 960-430.645 960-960 960m417.905-575.955L903.552 988.28V395.34h112.941v536.47l429.177 321.77-67.765 90.465z" stroke="none" stroke-width="1" fill-rule="evenodd"/>
+</svg>
+            </div>
+            <div class="menu-item__text">
+              History
+            </div>
+          </a>
+        </li>
+        
+
+      <li class="ic-app-header__menu-list-item">
+        <a id="global_nav_help_link" role="button" class="ic-app-header__menu-list-link" data-track-category="help system" data-track-label="help button" href="https://help.instructure.com">
+          <div class="menu-item-icon-container" role="presentation">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg menu-item__icon svg-icon-help" version="1.1" x="0" y="0" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve" fill="currentColor"><path d="M100,127.88A11.15,11.15,0,1,0,111.16,139,11.16,11.16,0,0,0,100,127.88Zm8.82-88.08a33.19,33.19,0,0,1,23.5,23.5,33.54,33.54,0,0,1-24,41.23,3.4,3.4,0,0,0-2.74,3.15v9.06H94.42v-9.06a14.57,14.57,0,0,1,11.13-14,22.43,22.43,0,0,0,13.66-10.27,22.73,22.73,0,0,0,2.31-17.37A21.92,21.92,0,0,0,106,50.59a22.67,22.67,0,0,0-19.68,3.88,22.18,22.18,0,0,0-8.65,17.64H66.54a33.25,33.25,0,0,1,13-26.47A33.72,33.72,0,0,1,108.82,39.8ZM100,5.2A94.8,94.8,0,1,0,194.8,100,94.91,94.91,0,0,0,100,5.2m0,178.45A83.65,83.65,0,1,1,183.65,100,83.73,83.73,0,0,1,100,183.65" transform="translate(-5.2 -5.2)"/></svg>
+
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Help
+          </div>
+</a>      </li>
+    </ul>
+  </div>
+  <div class="ic-app-header__secondary-navigation">
+    <ul class="ic-app-header__menu-list">
+      <li class="menu-item ic-app-header__menu-list-item">
+        <a
+          id="primaryNavToggle"
+          role="button"
+          href="#"
+          class="ic-app-header__menu-list-link ic-app-header__menu-list-link--nav-toggle"
+          aria-label="Expand global navigation
+                "
+          title="Expand global navigation
+                "
+        >
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--navtoggle" version="1.1" x="0" y="0" width="40" height="32" viewBox="0 0 40 32" xml:space="preserve">
+  <path d="M39.5,30.28V2.48H37.18v27.8Zm-4.93-13.9L22.17,4,20.53,5.61l9.61,9.61H.5v2.31H30.14l-9.61,9.61,1.64,1.64Z"/>
+</svg>
+
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div id="global_nav_tray_container"></div>
+  <div id="global_nav_tour"></div>
+</header>
+
+
+  <div id="instructure_ajax_error_box">
+    <div style="text-align: right; background-color: #fff;"><a href="#" class="close_instructure_ajax_error_box_link">Close</a></div>
+    <iframe id="instructure_ajax_error_result" src="about:blank" style="border: 0;" title="Error"></iframe>
+  </div>
+
+  <div id="wrapper" class="ic-Layout-wrapper">
+        <div class="ic-app-nav-toggle-and-crumbs no-print">
+            <button type="button" id="courseMenuToggle" class="Button Button--link ic-app-course-nav-toggle" aria-live="polite" aria-label="Hide Courses Navigation Menu">
+              <i class="icon-hamburger" aria-hidden="true"></i>
+            </button>
+
+          <div class="ic-app-crumbs ">
+              <nav id="breadcrumbs" role="navigation" aria-label="breadcrumbs"><ul><li class="home"><a href="/"><span class="ellipsible"><i class="icon-home"
+   title="My Dashboard">
+  <span class="screenreader-only">My Dashboard</span>
+</i>
+</span></a></li><li><a href="/courses/402226"><span class="ellipsible">SU24 COMPSCI 537 001 AKK</span></a></li><li><a href="/courses/402226/assignments"><span class="ellipsible">Assignments</span></a></li><li><a href="https://canvas.wisc.edu/courses/402226/assignments/2301450"><span class="ellipsible">P5: xv6 memory mapping</span></a></li></ul></nav>
+          </div>
+
+
+          <div class="right-of-crumbs">
+              <div class="TutorialToggleHolder"></div>
+          </div>
+
+        </div>
+    <div id="main" class="ic-Layout-columns">
+        <div class="ic-Layout-watermark"></div>
+        <div id="left-side"
+          class="ic-app-course-menu ic-sticky-on list-view"
+          style="display: block"
+          >
+          <div id="sticky-container" class="ic-sticky-frame">
+              <span id="section-tabs-header-subtitle" class="ellipsis">Summer 2024</span>
+            <nav role="navigation" aria-label="Courses Navigation Menu"><ul id="section-tabs"><li class="section"><a href="/courses/402226" class="home">Home</a></li><li class="section"><a href="/courses/402226/announcements" class="announcements">Announcements</a></li><li class="section"><a href="/courses/402226/assignments" aria-current="page" class="assignments active">Assignments</a></li><li class="section"><a href="/courses/402226/external_tools/20073" class="context_external_tool_20073">Piazza</a></li><li class="section"><a href="/courses/402226/grades" class="grades">Grades</a></li><li class="section"><a href="/courses/402226/users" class="people">People</a></li><li class="section"><a href="/courses/402226/wiki" class="pages">Pages</a></li><li class="section"><a href="/courses/402226/files" class="files">Files</a></li><li class="section"><a href="/courses/402226/assignments/syllabus" class="syllabus">Syllabus</a></li><li class="section"><a href="/courses/402226/quizzes" class="quizzes">Quizzes</a></li><li class="section"><a href="/courses/402226/external_tools/14065" class="context_external_tool_14065">Zoom</a></li><li class="section"><a href="/courses/402226/external_tools/21691" class="context_external_tool_21691">NameCoach Roster</a></li><li class="section"><a href="/courses/402226/external_tools/9199" class="context_external_tool_9199">Kaltura Gallery</a></li><li class="section"><a href="/courses/402226/external_tools/8408" class="context_external_tool_8408">Kaltura My Media</a></li><li class="section"><a href="/courses/402226/external_tools/6536" class="context_external_tool_6536">New Analytics</a></li></ul></nav>
+          </div>
+        </div>
+      <div id="not_right_side" class="ic-app-main-content">
+        <div id="content-wrapper" class="ic-Layout-contentWrapper">
+          
+          <div id="content" class="ic-Layout-contentMain" role="main">
+            
+<style>
+  #right-side-wrapper {
+    height: 100%;
+  }
+
+  .assignment_header {
+    border-bottom: 1px solid #a4a4a4;
+    overflow: hidden;
+  }
+
+  #assignment_head {
+    margin-top: 0;
+    font-weight: bold;
+  }
+
+  .lock_explanation {
+    text-align: left;
+    margin-top: 20px;
+  }
+</style>
+
+
+
+<div id="assignment_show" class="assignment content_underline_links" data-lti-page-content="true">
+    <!--Student View-->
+    <div class='assignment-title'>
+      <div class='title-content'>
+        <h1 class="title">
+          P5: xv6 memory mapping
+        </h1>
+      </div>
+      <div class='assignment-buttons'>
+        
+
+        
+      </div>
+    </div>
+    
+<ul class='student-assignment-overview'>
+  <li>
+    <span class='title'>Due</span>
+    <span class='value'>
+          <span class="date_text">
+                <span class="display_date">Jul 29</span> by 
+                <span class="display_time">11:59pm</span>
+          </span><!--
+        --></span>
+  </li>
+    <li>
+      <span class='title'>Points</span>
+      <span class='value'>100</span>
+    </li>
+  
+  <li>
+    <span class="title">Available</span>
+    <span class="value">
+        after Jul 15 at 10am
+    </span>
+  </li>
+
+  <div class="clear"></div>
+</ul>
+
+  <div class="clear"></div>
+
+
+  <div class="clear"></div>
+
+
+
+
+  <div class="description user_content " data-resource-type="assignment.body" data-resource-id=2301450><h3>Overview:</h3>
+<p>In this assignment, you're going to implement <em>memory mapping</em> in xv6. Memory mapping is the process of mapping memory from a process's <em>virtual</em> address space to some physical memory. You will add support for memory mapping in xv6 by implementing 2 system calls: <code>wmap()</code> and <code>wunmap()</code> which are similar to <code>mmap()</code> and <code>munmap()</code> system calls in Linux<code>.</code><br>You will implement two additional system calls, <code>getwmapinfo()</code> and <code>getpgdirinfo()</code> for debugging and testing purposes.&nbsp;</p>
+<h3>Learning objectives:</h3>
+<ul>
+<li>Understand how memory mapping works in modern systems.</li>
+<li>Learn about xv6 memory layout.</li>
+<li>Understand the relation between virtual and physical addresses</li>
+<li>Understand the use of the page fault handler for memory management</li>
+</ul>
+<h3>Administrivia:</h3>
+<ul>
+<li>This project can be performed in groups of 2.</li>
+<li>Due Date: July 29th at 11:59PM (slip day policy will apply to both people in the the group)</li>
+<li>The final submission will be tested on<span>&nbsp;</span><a class="inline_disabled" href="https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/" target="_blank">lab machines</a>, so make sure to test your code on these machines.</li>
+</ul>
+<hr>
+<h3>Details</h3>
+<h4>1) Background</h4>
+<p>Memory mapping or <em>mmap</em> is a technique used in operating systems to create new mappings in the virtual address space of the calling process.&nbsp;<br>It has two modes of operation: anonymous and file-backed. Anonymous memory mapping is used to allocate memory without file backing, similar to <code>malloc()</code>&nbsp;and <code>free()</code>, but is more powerful. In fact, in most systems today, <code>malloc()</code> and <code>free()</code> invoke memory mapping system calls such as <code>mmap()</code> and <code>munmap()</code>. File-backed memory mapping is commonly used to map a file or a portion of a file into memory. This is an efficient way to access large files.</p>
+<p>In this assignment, you will implement support for <em>anomyous memory mapping</em> in xv6. User processes can request the OS to create/delete memory mappings in its address space using system calls <code>wmap()</code> and <code>wunmap()</code>. Anonymous memory mappings created using this approach offers more control to the users than malloc() through the use of <code>flags</code>. Following are some details about this.</p>
+<ul>
+<li>In malloc, when you allocate some memory, it returns the virtual address of the allocated memory. However, through mmap, you can specify the virtual address where the memory should be, using <code>MAP_FIXED</code> flag.</li>
+<li>It supports demand paging. It means, when you need to allocate <code>n</code> bytes of memory, a virtual memory region of <code>n</code> bytes is reserved, but the actual physical memory pages are not allocated until they are accessed. Later, when the process tries to access that memory for the first time, a page fault occurs. The OS then allocates a physical page of memory and maps it to the corresponding virtual address. This process allows efficient use of memory by allocating pages only as they are needed, thereby reducing the initial memory footprint and avoiding unnecessary memory allocation. In this assignment, demand paging should be enabled by default and can&nbsp; be disabled using <code>MAP_POPULATE</code> flag.</li>
+<li>When a process with a memory-mapping creates child processes, those child processes have the same mappings as the parent process. If there are any data in those mappings at the time of fork, the child should be able to read the same data after the fork through the mappings.&nbsp;
+<ul>
+<li>Using the <code>MAP_SHARED</code> flag, these memory regions can be shared, which means parent and child processes all have the same virtual mappings, and those mappings maps the same physical addresses. This allows processes to communicate and share data seamlessly, as any changes made to the memory are visible to all processes.</li>
+<li>Alternatively, with the <code>MAP_PRIVATE</code> flag, parent and child will still have the same virtual mapping, but each process gets it own physical copy of the memory. At the time of the fork, the parent and child process will see the same data in the mappings, but later they can modify those data independently, so changes are <strong>not</strong> visible to each other. In original mmap(), an optimization strategy called copy-on-write (CoW) is used wherein the actual copying of physical pages is deferred until a write operation occurs. In this assignment, you <strong>don't</strong> need to implement CoW.</li>
+</ul>
+</li>
+</ul>
+<p>&nbsp;</p>
+<h4>2) Setup</h4>
+<ul>
+<li><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">Define a macro <code>MAPBASE</code> </span><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">inside <code>memlayout.h</code> file.</span></li>
+</ul>
+<pre style="padding-left: 40px;">#define MAPBASE 0x60000000 &nbsp; &nbsp; &nbsp; &nbsp; // First mmap virtual address</pre>
+<ul>
+<li style="list-style-type: none;">
+<ul>
+<li>Notice that&nbsp;<code>memlayout.h</code> already has another macro <code>KERNBASE</code><span style="font-family: monospace;"><code>(0x80000000)</code></span>, that is used to separate the user space from the kernel space. The lower part of the virtual address space (0x00000000 to <code>KERNBASE - 1</code>) is used for user space (where user code, data, heap and stack reside), and the upper part (<code>KERNBASE</code> to 0xFFFFFFFF) is used for kernel space (where the OS code and data reside).</li>
+<li>We will use a predefined starting address (<code>MAPBASE</code>) for <code>mmap</code> regions. This helps to organize and separate the <code>mmap</code> regions from other parts of the process’s memory. By placing <code>MAPBASE</code> near the top of the user address space, it allows the rest of the user space (from <code>0x00000000</code> to <code>0x5FFFFFFF</code>) to be used for other allocations such as stack, heap, and code segments. Here’s a simplified view of how the address space will look like (Figure 2-2 <span>in the&nbsp;</span><a class="instructure_file_link inline_disabled external" href="https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf" target="_blank"><span>xv6 book</span></a> will give a detailed view):</li>
+</ul>
+</li>
+</ul>
+<pre style="padding-left: 40px;">+--------------------------+ 0xFFFFFFFF (Top of virtual address space)<br>| &nbsp; &nbsp; &nbsp; &nbsp;Kernel Space &nbsp; &nbsp; &nbsp;|<br>| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|<br>| &nbsp; &nbsp; &nbsp; (Kernel code, &nbsp; &nbsp; &nbsp;|<br>| &nbsp; &nbsp; &nbsp; data, etc.) &nbsp; &nbsp; &nbsp; &nbsp;|<br>+--------------------------+ 0x80000000 (KERNBASE)<br>| &nbsp; &nbsp; &nbsp;User Space &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|<br>| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|<br>| &nbsp; &nbsp; (Memory mapped &nbsp; &nbsp; &nbsp; |<br>| &nbsp; &nbsp; regions start here) &nbsp;|<br>+--------------------------+ 0x60000000 (MAPBASE)<br>| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|<br>| &nbsp; &nbsp; (User heap, code, &nbsp; &nbsp;|<br>| &nbsp; &nbsp; stack, etc.) &nbsp; &nbsp; &nbsp; &nbsp; |<br>| &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|<br>+--------------------------+ 0x00000000 (Start of user address space)</pre>
+<ul>
+<li style="list-style-type: none;">
+<ul>
+<li><code>allocuvm()</code> grows process from oldsz to newsz. Do not let a process grow beyond <code>MAPBASE</code>.</li>
+</ul>
+</li>
+<li><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">Create a file named <code>wmap.h</code>&nbsp;with the following contents</span><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">&nbsp;inside your xv6 folder.</span></li>
+</ul>
+<pre class="code highlight" style="padding-left: 40px;" lang="c"><span><span class="c1">// Flags for wmap</span></span>
+<span><span class="cp">#define MAP_PRIVATE 0x0001</span></span>
+<span><span class="cp">#define MAP_SHARED 0x0002</span></span>
+<span><span class="cp">#define MAP_POPULATE 0x0004</span></span>
+<span><span class="cp">#define MAP_FIXED 0x0008<br></span></span>
+<span><span class="c1">// for `getpgdirinfo`</span></span>
+<span><span class="cp">#define MAX_UPAGE_INFO 32</span></span>
+<span><span class="k">struct</span> <span class="n">pgdirinfo</span> <span class="p">{</span></span>
+<span>    <span class="n">uint</span> <span class="n">n_upages</span><span class="p">;</span>           <span class="c1">// the number of allocated physical pages in the process's user address space</span></span>
+<span>    <span class="n">uint</span> <span class="n">va</span><span class="p">[</span><span class="n">MAX_UPAGE_INFO</span><span class="p">];</span> <span class="c1">// the virtual addresses of the allocated physical pages in the process's user address space</span></span>
+<span>    <span class="n">uint</span> <span class="n">pa</span><span class="p">[</span><span class="n">MAX_UPAGE_INFO</span><span class="p">];</span> <span class="c1">// the physical addresses of the allocated physical pages in the process's user address space</span></span>
+<span><span class="p">};<br></span></span>
+<span><span class="c1">// for `getwmapinfo`</span></span>
+<span><span class="cp">#define MAX_WMMAP_INFO 16</span></span>
+<span><span class="k">struct</span> <span class="n">wmapinfo</span> <span class="p">{</span></span>
+<span>    <span class="kt">int</span> <span class="n">total_mmaps</span><span class="p">;</span>                    <span class="c1">// Total number of wmap regions</span></span>
+<span>    <span class="kt">int</span> <span class="n">addr</span><span class="p">[</span><span class="n">MAX_WMMAP_INFO</span><span class="p">];</span>           <span class="c1">// Starting address of mapping</span></span>
+<span>    <span class="kt">int</span> <span class="n">length</span><span class="p">[</span><span class="n">MAX_WMMAP_INFO</span><span class="p">];</span>         <span class="c1">// Size of mapping</span></span>
+<span>    <span class="kt">int</span> <span class="n">n_loaded_pages</span><span class="p">[</span><span class="n">MAX_WMMAP_INFO</span><span class="p">];</span> <span class="c1">// Number of pages physically loaded into memory</span></span>
+<span><span class="p">};<br><br></span></span></pre>
+<h4>3) System Calls</h4>
+<p>You have to implement four system calls for this assignment.</p>
+<h4>3.1. wmap</h4>
+<pre><code>int wmap(uint addr, int length, int flags)</code></pre>
+<p><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;"><code>wmap</code> is similar to mmap(). It creates a new mapping in the virtual address space of the calling process. Creating memory mappings involve 3 steps: 1) allocating region in the virtual address space, 2) allocating physical memory, and 3) creating mappings (page tables) between the allocated virtual address region and the allocated physical pages.<br></span></p>
+<p><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;"><code>wmap</code> allocates <code>length</code> </span><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">bytes of memory and <strong>returns</strong> the virtual address of the allocated memory. The returned address should be page-aligned. You <strong>must</strong> use virtual addresses only between <code>MAPBASE</code> and&nbsp;<code>KERNBASE-1</code>. If the provided length is not page-aligned, the length <span>should be rounded off to next multiple of pagesize (4096 bytes).</span><br></span><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">Your implementation of <code>wmap</code> should have demand paging enabled by default, which means that physical memory should not be allocated during the system call. Instead, physical memory should be allocated during page faults. Also, when forking, the child process should have the same mappings as the parent process. You should <strong>return</strong> <code>-1</code> for any type of error (e.g., the provided addr or length is not valid).&nbsp;<br></span></p>
+<ul>
+<li><code>length</code>: The length of the mapping in bytes. It must be greater than 0<strong>.</strong></li>
+<li><code>addr</code>: The <em>virtual</em> address that wmap must use for the mapping, if <code>MAP_FIXED</code> flag is on. Otherwise, ignore this value. This address should be page-aligned and within <span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;"><code>MAPBASE</code> and&nbsp;<code>KERNBASE-1</code></span></li>
+<li><code>flags</code>: enables or disables some features of <code>wmap</code>. Flags can be <em>OR</em>ed together (e.g., MAP_PRIVATE | MAP_FIXED | MAP_POPULATE). These flags should be defined as constants in <code><em>wmap.h</em></code> header file. You have to implement four flags as explained in the following:&nbsp;
+<ul>
+<li><code>MAP_FIXED</code>: If this is set, then the mapping <strong>must</strong> be placed at exactly <code>addr</code>. If this flag is not used, you can ignore <code>addr</code>. Also,<em> </em>a <em>valid</em> <code>addr</code><em> </em>is a multiple of page size and within<em> </em><code>MAPBASE</code> (0x60000000) and <code>KERNBASE</code>-1 (0x80000000-0x1).&nbsp;</li>
+<li><code>MAP_POPULATE</code>: Demand paging is enabled by default. If this flag is set, disable demand paging, which means that the physical memory will be allocated immediately during the system call.</li>
+<li><code>MAP_SHARED</code>: This flag tells wmap that the mapping is shared. Memory mappings are copied from the parent to the child across the <code>fork</code>&nbsp;system call. If the mapping is <code>MAP_SHARED</code>, then changes made by the child will be visible to the parent and vice versa.&nbsp;</li>
+<li><code>MAP_PRIVATE</code>: If this flag is set, then the mapping is <strong>not</strong> shared. You still need to copy the mappings from parent to child, but these mappings should use <em>different</em> physical pages. In other words, the same virtual addresses are mapped in child, but to a different set of physical pages. Note that between the flags <code>MAP_SHARED</code> and <code>MAP_PRIVATE</code>, one of them must be specified in flags. These two flags <strong>cannot</strong> be used together.</li>
+</ul>
+</li>
+</ul>
+<p>Enabling demand paging means that you don't actually allocate any physical pages when <code>wmap</code> is called. You just track the allocated virtual address region using some structure. Later, when the process tries to access that memory, a <em>page fault</em> is generated which is handled by the kernel. In the kernel, you can now allocate a physical page and let the user resume execution.</p>
+<p>To set up the page fault handler, you'll add something like this to the <code>trap()</code> function in <code>trap.c</code>:</p>
+<pre><code>case T_PGFLT: // T_PGFLT = 14</code><br><code>&nbsp; &nbsp; if page fault addr is part of a mapping: // demand paging</code><br><code>&nbsp; &nbsp; &nbsp; &nbsp; // handle it</code><br><code>&nbsp; &nbsp; else:</code><br><code>&nbsp; &nbsp; &nbsp; &nbsp; cprintf("Segmentation Fault\n");</code><br><code>  &nbsp; &nbsp; &nbsp; // kill the process</code></pre>
+<h4>3.2. wunmap</h4>
+<pre><code>int wunmap(uint addr);</code></pre>
+<p><code>wunmap</code> removes the memory mapped region that starts at <code>addr</code> in the process virtual address space. <code>addr</code><em> </em>must be page-aligned and the start address of some existing wmap. It returns <code>0 </code>if the memory map is removed successfully, otherwise <code>-1</code> (e.g.: addr is not the start of any memory mapped region).</p>
+<p>While removing a memory map, if it is <code>MAP_SHARED</code> and it was inherited from the parent, then be careful not to free the physical pages, because the parent process might still be using it. Note that when a child process calls <code>exit()</code>, the <code>wait()</code> called by the parent process frees the memory (from address <code>0x0</code> to <code>KERNBASE)</code> used by the child process by calling <code>freevm(p-&gt;pgdir)</code><span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">, which will free the shared mmap physical pages. You need to modify the code a little bit to avoid this.</span></p>
+<h4>3.3. getpgdirinfo</h4>
+<pre>int getpgdirinfo(struct pgdirinfo *pdinfo);</pre>
+<p><code>getpgdirinfo</code> retrieves information about the process address space by populating <code>struct pgdirinfo</code>. It returns <code>0 </code>in case of successful retrieval of information, otherwise <code>-1</code>. This system call should calculate how many physical pages are currently allocated to the current process and store it in <code>n_upages</code>. It should also populate <code>va[MAX_UPAGE_INFO]</code> and <code>pa[MAX_UPAGE_INFO]</code> with the first 32 virtual page addresses and corresponding physical addresses, ordered by the virtual addresses. (Hint: You should only gather information (either for calculating <code>n_upages</code> or returning <code>va</code>/<code>pa</code> pairs) on pages with PTE_U set (i.e. user pages). The only way to do that is to directly consult the page table for the process.)</p>
+<h4>3.4. getwmapinfo</h4>
+<pre>int getwmapinfo(struct wmapinfo *wminfo);</pre>
+<p><code>getwmapinfo</code> retrieves information about the process address space by populating <code>struct wmapinfo</code>. This system call should calculate the current number of memory mapped regions in the process's address space and store the result in <code>total_mmaps</code>. It should also populate <code>addr[MAX_WMMAP_INFO]</code> and <code>length[MAX_WMAP_INFO]</code> with the address and length of each memory map. as mentioned earlier,<span style="color: var(--ic-brand-font-color-dark); font-family: inherit; font-size: 1rem;">&nbsp;If an mmap's provided length is not page-aligned, the length <span>should be rounded off to next multiple of pagesize (4096 bytes).</span></span> You can assume that the number of memory maps for any process will not exceed <code>MAX_UPAGE_INFO</code>. The <code>n_loaded_pages[MAX_WMAP_INFO]</code> should store how many pages have been physically allocated for each wmap. This field should reflect demand paging. For example, the length of a memory mapped region could be 8192 but the number of physical pages allocated for this region (n_loaded_pages) might be 0 because of demand paging.</p>
+<h4>3.5. Some simplifying assumptions</h4>
+<p>You can make the following simplifying assumptions:</p>
+<ul>
+<li>All mapped memory is readable/writable.</li>
+<li>The maximum number of memory maps is 16.</li>
+<li>The parent process will always exit after the child process.&nbsp;</li>
+<li>Because of demand paging, there might be some pages that are not yet physically allocated when calling <code>fork()</code>. We'll make sure to use MAP_POPULATE flag for all mmaps before calling <code>fork()</code>, so you need not worry about this case.</li>
+</ul>
+<p>&nbsp;</p>
+<h4>4) A simple example of <code>wmap</code> and <code>wunmap</code></h4>
+<p>Here, we walk you through a simple end-to-end example of a call to <code>wmap</code>. You may want to take a look at the helper functions referenced in this example - you'll most likely need to use most of them in your implementation.<br>Suppose that we make the following call to `wmap`:</p>
+<pre><code>uint address = wmap(0x60000000, 8192, MAP_FIXED | MAP_SHARED | MAP_POPULATE);</code></pre>
+<p>This is the simplest combination of flags - we're requesting a shared (<code>MAP_SHARED</code>) mapping having a length of two pages and starting at virtual address 0x60000000 (<code>MAP_FIXED</code>). In xv6, 1 page is 4096 bytes and 4096=0x1000. Let's assume no memory mappings exist at the virtual address range 0x60000000 to 0x60002000 (8192 = 0x2000). So we can use create the requested memory mapping at virtual address 0x60000000 extending until 0x60002000. You should keep track of these mappings per process so you know what ranges of virtual addresses are free. You can create a <code>struct</code> that stores information relevant to a memory map, and store an array/list of such structs in the Process Control Block (<code>struct proc</code>). You might want to keep this array sorted by virtual address, which will make it easy to verify whether another memory mappings already exists in an address range or not.&nbsp;</p>
+<p>So far we only talked about virtual address - there also needs to be some corresponding physical pages that are allocated for this mapped region. Since we use the MAP_POPULATE flag, physical memory needs to be allocated immediately. Physical addresses are managed at the granularity of a page, which is 4096 bytes long in xv6. You'll just need to call existing functions (i.e., <code>kalloc()</code>, <code>kfree()</code> in <code>kalloc.c</code>) in the kernel to get free physical addresses. <code>kalloc()</code> and <code>kfree()</code> work at the granularity of a page (4096 bytes). So if you need 8192 bytes of physical memory, you need to call <code>kalloc()</code> twice, each time it will give you the starting address of a physical page that is 4096 bytes long. Needless to say that the physical addresses returned by the kernel are not necessarily contiguous in the physical address space.</p>
+<p>So in our implementation, we would have to call</p>
+<pre>char *mem = kalloc();</pre>
+<p>where <code>mem</code> is the starting physical address of a free page we can use.</p>
+<p>Note that we haven't created mapping (page tables) between virtual addresses and physical adresses. We have just allocated virtual and physical regions/pages. To create such mappings, we need to create and place entries in the page table. The <code>mappages</code> function does exactly that. In this case, the call to <code>mappages</code>&nbsp;would be something like the following:</p>
+<pre>mappages(page_directory, 0x60000000, 4096, V2P(mem), PTE_W | PTE_U);</pre>
+<p>The first argument is the page table of the process to place the mapping for. Each process has a page table as defined in <code>struct proc</code> in <code>proc.h</code>. The last argument is the protection bits for this page. <code>PTE_U</code> means the page is user-accessible and <code>PTE_W</code> means it's writable. There's no flag for readable, because pages are always readable at least. For this project, you can always pass <code>PTE_W|PTE_U</code>&nbsp;as the last argument.<br>You should always apply the <code>V2P</code>&nbsp;(converts a virtual to physical address in the kernel) macro to the address that you get from <code>kalloc</code>. This is because of the way xv6 manages physical memory. The address returned by <code>kalloc</code>&nbsp;is not an actual physical address, it's the virtual address that the kernel uses to access each physical page. Yes, all physical pages are also mapped in the kernel. To get more details on this, refer to the second chapter in the xv6 manual on page tables.&nbsp;</p>
+<p>The above mappages() call will create page table mappings between virtual address 0x60000000 and the physical page returned by kalloc().</p>
+<p>So, after the call to <code>mappages</code>, did we successfully map 8192 bytes of memory at 0x60000000? No! it maps only a single page. In xv6, we have to map one page at a time, each time requesting a new physical page from <code>kalloc.</code>&nbsp;So we may complete our mapping by doing a second call:</p>
+<pre>mem = kalloc();<br>mappages(page_directory, 0x60001000, 4096, V2P(mem), PTE_W | PTE_U);</pre>
+<p>Notice how we advanced the virtual address by one page (0x60001000 = 0x60000000 + 0x1000). Now you can quickly build up on this example and create mappings in a loop, getting as many pages as necessary from <code>kalloc</code>.</p>
+<p>Now let's see how to remove a mapping. Suppose the user accesses the pages we allocated at 0x60000000 for a while, and does a call to `wunmap`:</p>
+<pre>wunmap(0x60000000);</pre>
+<p>First we need to find any metadata that we maintain in the Process Control Block for the mmap starting at 0x60000000. Before removing the metadata of the mmap, we need to keep a note of the length of the mapped region. This will help us determine how many how many page table entries need to be deleted and how many physical pages need to be freed.</p>
+<p>Next, the page table must be modified so that the user can no longer access those pages. <code>walkpgdir</code> function can be used for that purpose. A typical call to <code>walkpgdir</code>&nbsp;may look like this:</p>
+<pre><code>pte_t *pte = walkpgdir(page_directory, 0x60000000, 0);</code></pre>
+<p>It returns the page table entry that maps 0x60000000. We'll eventually need to do <code>*pte = 0</code>, which will cause any future reference to that virtual address to fail. Before that, we need to free the physical page we received from <code>kalloc</code>. Each <code>pte</code> stores a set of flags (e.g. R/W) and a physical page address, called <em>Page Frame Number</em> or <em>PFN</em> for short. Using a simple mask operation, you can extract the physical address from the <code>pte</code>. Look at the macros defined in <code>mmu.h</code>. The final piece of the code will look like this:</p>
+<pre>physical_address = PTE_ADDR(*pte);<br>kfree(P2V(physical_address));<br>*pte = 0;</pre>
+<p>We need to apply <code>P2V</code> (converts a physical to virtual address in the kernel) because <code>kfree</code> (and <code>kalloc</code>, as explained before) only work with kernel virtual addresses. Only one page has been freed so far. You'll need to do the exact same calls, but this time passing a virtual address of 0x60001000 to free the second page:</p>
+<pre><code>pte_t *pte = walkpgdir(page_directory, 0x60001000, 0);</code><br><code>physical_address = PTE_ADDR(*pte);</code><br><code>kfree(P2V(physical_address));</code><br>*pte = 0;</pre>
+<p>Memory mappings should be inherited by the child. To do this, you'll need to modify the <code>fork()</code> system call or the internal logic of <code>copyuvm()</code> to copy the mappings from the parent process to the child across fork().&nbsp;</p>
+<hr>
+<h3>Hints</h3>
+<p>Like prior projects, start by making small additions to xv6. Make sure you provide the support for a basic allocation, then add more complex functionality. At each step, make sure you have not broken your code that was previously working -- if so, stop and take time to see how the introduced changes caused the problem. The best way to achieve this is to use a version control system like <strong>git</strong>. This way, you can later refer to previous versions of your code if you break something.</p>
+<p>Following these steps should help you with your implementation:</p>
+<ol style="list-style-type: decimal;">
+<li>First of all, make sure you understand how xv6 does memory management. The second chapter of <a class="instructure_file_link inline_disabled external" href="https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf" target="_blank"><span>xv6 book</span></a> gives a good insight of the memory layout in xv6. Furthermore, it references some related source files. Looking at those sources should help you understand how mapping happens. You'll need to use those routines while implementing <code>wmap</code>. You will appreciate the time you spent on this step later.</li>
+<li>Try to implement a basic <code>wmap</code> that supports&nbsp;<code>MAP_FIXED|MAP_SHARED|MAP_POPULATE</code>. It should just check if that particular region asked by the user is available or not. If it is, you should map the pages in that range.</li>
+<li>Implement <code>wunmap</code>. For now, just remove the mappings.</li>
+<li>Implement <code>getwmapinfo</code> and <code>getpgdirinfo</code>. Most of the tests depend on these two system calls to work.</li>
+<li>Implement demand paging.</li>
+<li>Modify your <code>wmap</code> such that it's able to search for an available region in the process address space. This should make your <code>wmap</code>&nbsp;work without <code>MAP_FIXED</code>.</li>
+<li>Copy mappings from parent to child across the <code>fork()</code> system call.</li>
+<li>Implement <code>MAP_PRIVATE</code>. You'll need to change <code>fork()</code> to behave differently if the mapping is private.</li>
+</ol>
+<hr>
+<h3>Testing and handin instructions</h3>
+<p>Test cases will be released later.</p>
+<p><span style="color: #000000;">The handin directory will be <span>&nbsp;</span><code>~cs537-1/handin/LOGIN/p5</code><span>where </span><code>LOGIN </code>is your CS login. Similar to P2 and P4, <span style="color: #ff0000;">please create a subdirectory called 'src': <code>~cs537-1/handin/LOGIN/p5/src.</code></span></span></p>
+<p>Copy all of your xv6 source files (but not .o files, please, or binaries!) into this directory.</p>
+<p><span><strong>Each project partner should turn in their joint code to each of their handin directories.</strong> E</span>ach person should place a file named <strong>partners.txt</strong> in their <em>handin/p4</em> directory, so that we can tell who worked together on this project.&nbsp; The format of <strong>partners.txt</strong> should be exactly as follows:</p>
+<pre>cslogin1 wiscNetid1 Lastname1 Firstname1<br>cslogin2 wiscNetid2 Lastname2 Firstname2</pre>
+<p>It does not matter who is 1 and who is 2.&nbsp; If you worked alone, your <strong>partners.txt</strong> file should have only one line.&nbsp; There should be no spaces within your first or last name; just use spaces to separate fields.</p>
+<p>To repeat, <strong>both project partners should turn in their code and both should have a <em>turnin/p2a/partners.txt</em> file.</strong></p></div>
+
+
+  <div style="display: none;">
+    <span class="timestamp">1722315599</span>
+    <span class="due_date_string">07/29/2024</span>
+    <span class="due_time_string">11:59pm</span>
+  </div>
+</div>
+
+
+
+
+
+
+  <div id="rubrics" class="mathjax_ignore" style="margin-bottom: 10px;">
+    <div style="display: none;" id="rubric_parameters">
+      <input type="hidden" name="rubric_association[association_type]" value="Assignment"/>
+      <input type="hidden" name="rubric_association[association_id]" value="2301450"/>
+      <input type="hidden" name="rubric_association[purpose]" value="grading"/>
+    </div>
+    
+<div id="rubric_long_description_dialog" style="display: none;">
+  <div class="editing">
+    <form id="edit_criterion_form" class="no-margin-bottom">
+      <div>
+        <label class="rating_form_label">Description
+          <textarea class="description" rows="1" name="description"></textarea>
+        </label>
+      </div>
+      <div>
+        <label class="rating_form_label">Long Description
+          <textarea class="long_description" rows="4" name="long_description"></textarea>
+        </label>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn save_button btn-primary">Update Criterion</button>
+      </div>
+    </form>
+  </div>
+  <div class="displaying">
+    <div class="long_description">
+    </div>
+  </div>
+</div>
+<div id="rubric_criterion_comments_dialog" style="display: none;">
+  <div
+    class="criterion_description"
+    style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;"
+    tabindex="-1"
+  ></div>
+  <div class="editing">
+    <label for="criterion_comments_textarea">
+      Additional Comments:
+    </label>
+    <textarea
+      id="criterion_comments_textarea"
+      class="criterion_comments"
+      name="criterion_comments"
+      style="width: 370px;"></textarea>
+    <div class="button-container">
+      <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+      <button type="button" class="btn save_button">Update Comments</button>
+    </div>
+  </div>
+  <div class="displaying">
+    Additional Comments:
+    <div class="criterion_comments" style="margin-top: 10px;">
+    </div>
+  </div>
+</div>
+<div id="rubric_rating_dialog" style="display: none;">
+  <div class="description" style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">
+    <span id="edit_rating_form_criterion_description"></span>
+  </div>
+  <div class="editing">
+    <form id="edit_rating_form" class="no-margin-bottom">
+      <div class="toggle_for_hide_points">
+        <div><label id='rating_form_score_label' class="rating_form_label">Rating Score</label></div>
+        <span id='rating_form_max_score_label' hidden>Rating max score</span>
+        <input id="points" aria-labelledby="rating_form_score_label" type="text" size="2" name="points" class="no-margin-bottom span1" />
+        <span class="range_rating">to >
+          <input aria-label="Rating min score" type="text" size="2" name="min_points" class="no-margin-bottom span1 min_points" placeholder="min"/>
+        </span>pts
+      </div>
+      <div>
+        <label for="rating_form_title" class="rating_form_label">Rating Title</label>
+        <input id="rating_form_title" type="text" class="rating_description" style="width: 90%;" name="description"/>
+      </div>
+      <div>
+        <label for="rating_form_description" class="rating_form_label">Rating Description</label>
+        <textarea id="rating_form_description" rows="4" style="width: 90%;" class="rating_long_description" name="rating_long_description" form="edit_rating_form"></textarea>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn btn-primary save_button ok_button">Update Rating</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  </div>
+  
+<div
+  class="rubric_container rubric  "
+  id="default_rubric"
+  style="display: none;"
+>
+  <div class="screenreader-only"><h2>Rubric</h2></div>
+  <div class="rubric_title">
+    <div style="display: none;" class="links displaying pull-right">
+      <a
+        href="/courses/402226/rubrics/%7B%7B%20id%20%7D%7D"
+        class=" edit_rubric_link no-print no-hover"
+        style=""
+        title="Edit Rubric"
+        aria-label="Edit Rubric"
+        role="button"
+      ><i class="icon-edit standalone-icon"></i></a>
+      <a
+        href="https://canvas.wisc.edu/search/rubrics?q="
+        class="find_rubric_link no-print no-hover"
+        style=""
+        title="Find Another Rubric"
+        aria-label="Find Another Rubric"
+        role="button"
+      ><i class="icon-search standalone-icon"></i></a>
+        <a
+          href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D"
+          class="delete_rubric_link no-print no-hover"
+          style=""
+          title="Delete Rubric"
+          aria-label="Delete Rubric"
+          role="button"
+        ><i class="icon-trash standalone-icon"></i></a>
+      <div style="display: none;">
+        <div class="use_for_grading">&nbsp;</div>
+        <div class="free_form_criterion_comments">&nbsp;</div>
+        <div class="hide_score_total">&nbsp;</div>
+        <div class="hide_outcome_results">&nbsp;</div>
+        <div class="hide_points">&nbsp;</div>
+        <div class="rubric_association_id">&nbsp;</div>
+          <div class="user_id">&nbsp;</div>
+        <div class="assessment_type"></div>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D/assessments/%7B%7B%20assessment_id%20%7D%7D" rel="nofollow" class="edit_assessment_link">&nbsp;</a>
+        <a href="/courses/402226/rubrics/%7B%7B%20rubric_id%20%7D%7D" class="edit_rubric_url">&nbsp;</a>
+          <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url">&nbsp;</a>
+      </div>
+    </div>
+    <div style="float: right; font-size: 0.8em; display: none;" class="links displaying locked">
+      <span style="">Can&#39;t change a rubric once you&#39;ve started using it.</span>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url" style="display: none;">&nbsp;</a>
+    </div>
+
+    <div class="editing" style="float: right;">
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" class="find_rubric_link icon-search" style="" title="Find Existing Rubric">Find a Rubric</a>
+    </div>
+    <div class="editing" style="text-align: left">
+      <label for="rubric-title">Title:</label>
+      <input id="rubric-title" type="text" class="no-margin-bottom" name="title" value="Some Rubric" style="width: 200px;" maxlength="255" aria-label="Title:"/>
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" style="display: none;"><img alt="" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/find-6164443e2a.png" /> Find Rubric</a>
+    </div>
+    <div class="displaying">
+      <span class="title" tabindex="-1">Title</span>
+    </div>
+    <div class="has-assessments-warning" style="display: none;">
+      You&#39;ve already rated students with this rubric. Any major changes could affect their assessment results.
+    </div>
+  </div>
+<table class="rubric_table">
+<caption>
+  <div class="screenreader-only">
+    <span class="title">Title</span>
+  </div>
+</caption>
+<thead>
+  <tr>
+    <th scope="col">Criteria</th>
+    <th scope="col">Ratings</th>
+    <th scope="col" class="toggle_for_hide_points ">
+      Pts
+    </th>
+  </tr>
+</thead>
+<tbody>
+  
+<tr id="criterion_blank" class="criterion blank  " style="display: none;">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+          <a href="#" class="delete_criterion_link" role="button"><i class="icon-trash standalone-icon"></i><span class="screenreader-only">Delete criterion row</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">Description of criterion</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;"></span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points">5</span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  <tr class="summary">
+    <td colspan="4">
+      <div class="total_points_holder toggle_for_hide_points "
+        style="float: right; ">
+        <span>Total Points:
+            <span class="rubric_total">
+              5
+            </span>
+ <span class="assessing">out of 5</span>        </span>
+      </div>
+      <div class="editing pull-left">
+        <span id="add_criterion_holder" class="criterion_link"></span>
+      </div>
+      <div class="clear"></div>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<table style="display: none;">
+  <tr id="edit_rubric">
+    <td colspan="4">
+      <form id="edit_rubric_form" class="edit-rubric-form no-margin-bottom">
+        <div class="rubric_custom_ratings" style="">
+          <input type="checkbox" id="rubric_custom_rating" class="rubric_custom_rating" />
+          <label for="rubric_custom_rating">I&#39;ll write free-form comments when assessing students</label>
+        </div>
+          <div class="hide_points" style="">
+            <input type="checkbox" id="hide_points" class="hide_points_checkbox" />
+            <label for="hide_points">Remove points from rubric</label>
+          </div>
+          <div class="hide_outcome_results" style="">
+            <input type="checkbox" id="hide_outcome_results" class="hide_outcome_results_checkbox" />
+            <label for="hide_outcome_results">Don&#39;t post Outcomes results to Learning Mastery Gradebook</label>
+          </div>
+          <div class="rubric_grading" style="">
+            <input type="checkbox" id="grading_rubric" class="grading_rubric_checkbox" />
+            <label for="grading_rubric">Use this rubric for assignment grading</label>
+          </div>
+        <div class="totalling_rubric" style="">
+          <input type="checkbox" id="totalling_rubric" class="totalling_rubric_checkbox" />
+          <label for="totalling_rubric">Hide score total for assessment results</label>
+        </div>
+        <div class="ic-Action-header ic-Action-header--half-margin">
+          <div class="ic-Action-header__Primary">
+            <button type="button" class="Button cancel_button">Cancel</button>
+            <button type="submit" class="Button Button--primary save_button">Create Rubric</button>
+          </div>
+        </div>
+      </form>
+    </td>
+  </tr>
+</table>
+
+
+  <div id="assignment_external_tools"></div>
+
+  
+
+
+          </div>
+        </div>
+        <div id="right-side-wrapper" class="ic-app-main-content__secondary">
+          <aside id="right-side" role="complementary">
+            
+<div id="sidebar_content">
+
+    
+<div class="details">
+  <h2>Submission</h2>
+  <div class="content">
+    <span class="">
+        
+    </span>
+
+    <div>
+      <a href="/courses/402226/assignments/2301450/submissions/210042">
+        Submission Details
+      </a>
+    </div>
+
+
+    <div class="module">
+          <div>Grade: 55 <span style="font-size: 0.8em;">(100 pts possible)</span></div>
+          <div>Graded Anonymously: no</div>
+
+    </div>
+
+
+    <div class="comments module">
+        <h3>Comments: </h3>
+
+        No Comments
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <div style="display:none;"><!-- Everything inside of this should always stay hidden -->
+        <div id="page_view_id">5c9c83f5-176f-462a-ac3d-4e3b5c3183bd</div>
+    </div>
+  <div id='aria_alerts' class='hide-text affix' role="alert" aria-live="assertive"></div>
+  <div id='StudentTray__Container'></div>
+    <div class="NewUserTutorialTray__Container"></div>
+  <div id="react-router-portals"></div>
+  
+
+  <iframe src="https://sso.canvaslms.com/post_message_forwarding?rev=59677caad5-de8233d392aa15f4&amp;token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJwYXJlbnRfZG9tYWluIjoiY2FudmFzLndpc2MuZWR1In0.Vn8_7bMNTbXrR91PBjKlQirgswiqpPUPf9FKxmafm8AhCw4ZfBrA7WOraGeDcLgBsrk4TM_k0DZMTAXtmA5J-A" name="post_message_forwarding" title="post_message_forwarding" id="post_message_forwarding" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
+
+
+  <script>
+    Object.assign(
+      ENV,
+      {}
+    )
+  </script>
+
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('inst_fs_service_worker');
+//]]>
+</script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/39713295/madison_changes_july2024_.js" defer="defer"></script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js" defer="defer"></script>
+
+</div> <!-- #application -->
+</body>
+</html>

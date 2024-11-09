@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#990000">
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="apple-itunes-app" content="app-id=480883488">
+<link rel="manifest" href="/web-app-manifest/manifest.json">
+  <meta name="sentry-trace" content="b5cc6a122f3141fc8a3fc87a02f0ef8b-18a8f4992c674b4f-0"/>
+  <title>P6: Concurrency (Map-Reduce)</title>
+
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Regular-bd03a2cc27.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Bold-cccb897485.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Italic-4eb103b4d1.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/common-3851139992.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/assignments-adde4b105e.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/learning_outcomes-0ef38391dc.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/new_user_tutorials-6b15f87caf.css" media="screen" />
+  <link rel="apple-touch-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/apple-touch-icon-585e5d997d.png" />
+  <link rel="icon" type="image/x-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" />
+
+  <link rel="stylesheet" href="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/38736063/Madison_041624.css" media="all" />
+  
+  <script>if (navigator.userAgent.match(/(MSIE|Trident\/)/)) location.replace('/ie-is-not-supported.html')</script>
+  <script>
+    INST = {"environment":"production","allowMediaComments":true,"kalturaSettings":{"domain":"nv.instructuremedia.com","resource_domain":"nv.instructuremedia.com","rtmp_domain":"iad.rtmp.instructuremedia.com","partner_id":"9","subpartner_id":"0","player_ui_conf":"0","kcw_ui_conf":"0","upload_ui_conf":"0","max_file_size_bytes":534773760,"do_analytics":false,"hide_rte_button":false,"js_uploader":true},"logPageViews":true,"editorButtons":[{"name":"YouTube","id":63,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=youtube","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/youtube_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSearch publicly available YouTube videos. A new icon will show up in your course rich editor letting you search YouTube and click to embed videos in your course material.\u003c/p\u003e\n"},{"name":"Vimeo","id":64,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=vimeo","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/vimeo_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eVimeo is a video sharing website on which users can upload, share, and view videos. The community of Vimeo includes indie, professional, and novice filmmakers.\u003c/p\u003e\n"},{"name":"GoogleApps","id":354,"favorite":false,"url":"https://google-drive-lti-iad-prod.instructure.com/lti/rce-content-selection","icon_url":"https://google-drive-lti-iad-prod.instructure.com/icon.png","canvas_icon_class":null,"width":700,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Google Drive to Canvas\u003c/p\u003e\n"},{"name":"Office 365","id":690,"favorite":false,"url":"https://office365-iad-prod.instructure.com/lti/rce-content-item","icon_url":"https://office365-iad-prod.instructure.com/images/office365_icon.png","canvas_icon_class":null,"width":900,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Office 365 to Canvas\u003c/p\u003e\n"},{"name":"BOX","id":691,"favorite":false,"url":"https://www.edu-apps.org/box/","icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png","canvas_icon_class":null,"width":430,"height":200,"use_tray":false,"always_on":false,"description":"\u003cp\u003eEmbed files from Box\u003c/p\u003e\n"},{"name":"Commons Favorites","id":4963,"favorite":false,"url":"https://lor.instructure.com/api/lti/favorite-resources","icon_url":"https://lor.instructure.com/img/icon_commons.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":true,"always_on":false,"description":"\u003cp\u003eFind and share course content\u003c/p\u003e\n"},{"name":"Embed Kaltura Media","id":9199,"favorite":true,"url":"https://1660902-6.kaf.kaltura.com/browseandembed/index/browseandembed","icon_url":"https://cdnsecakmi.kaltura.com/content/static/kalturalogo.png","canvas_icon_class":null,"width":1100,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eMedia Gallery and Embed\u003c/p\u003e\n"},{"name":"SAGE Vantage LTI 1.3 - editor_button","id":16667,"favorite":false,"url":"https://vantage.sagepub.com/lti1p3/tool/F2qexkPLRCSA0Qgi","icon_url":"https://vantage.sagepub.com/images/sagent/Bird-blue-right.svg","canvas_icon_class":null,"width":1000,"height":1000,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSAGE Vantage 1.3 Tool\u003c/p\u003e\n"},{"name":"myBusinessCourse Resource Selection","id":20058,"favorite":false,"url":"https://mybusinesscourse.com/platform/local/integrations/lti.php","icon_url":"https://mybusinesscourse.com/ublish/client/cpb/images/link_logo.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003emyBusinessCourse LTI 1.3\u003c/p\u003e\n"},{"name":"Pearson Links","id":21056,"favorite":false,"url":"https://interop.pearson.com/launch","icon_url":"https://www.pearson.com/us/content/dam/one-dot-com/one-dot-com/us/en/images/PearsonThumbprint-RGB-127x138.png/_jcr_content/renditions/cq5dam.web.1600.9600.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAccess Pearson\u003c/p\u003e\n"}]};
+    ENV = {"ASSET_HOST":"https://du11hjcvx0uqb.cloudfront.net","active_brand_config_json_url":"https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.json","active_brand_config":{"md5":"61f7e559cc87fd00c64673f40997d6a9","variables":{},"share":false,"name":null,"created_at":"2024-07-10T16:20:14-05:00","js_overrides":"https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js","css_overrides":"","mobile_js_overrides":"","mobile_css_overrides":"","parent_md5":"8f6dd81031a173a2b291239d3ac3f2b7"},"confetti_branding_enabled":false,"url_to_what_gets_loaded_inside_the_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-90e5ad1077.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"url_for_high_contrast_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/default/variables-high_contrast-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-795277483f.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"current_user_id":"210042","current_user_global_id":"83960000000210042","current_user_heap_id":"uu-2-b8e0df225888f508350f05f630b51a9475afbaccbb1f7ff370bb169fbe3d4d5d-0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","current_user_roles":["user","student"],"current_user_is_student":true,"current_user_types":[],"current_user_disabled_inbox":false,"current_user_visited_tabs":null,"discussions_reporting":true,"files_domain":"cluster77.canvas-user-content.com","group_information":null,"DOMAIN_ROOT_ACCOUNT_ID":"83960000000000001","DOMAIN_ROOT_ACCOUNT_UUID":"0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","k12":false,"help_link_name":"Help","help_link_icon":"help","use_high_contrast":false,"auto_show_cc":false,"disable_celebrations":false,"disable_keyboard_shortcuts":false,"LTI_LAUNCH_FRAME_ALLOWANCES":["geolocation *","microphone *","camera *","midi *","encrypted-media *","autoplay *","clipboard-write *","display-capture *"],"DEEP_LINKING_POST_MESSAGE_ORIGIN":"https://canvas.wisc.edu","comment_library_suggestions_enabled":false,"SETTINGS":{"open_registration":false,"collapse_global_nav":true,"release_notes_badge_disabled":false,"can_add_pronouns":true,"filter_speed_grader_by_student_group":false},"RAILS_ENVIRONMENT":"Production","IN_PACED_COURSE":false,"SENTRY_FRONTEND":{"dsn":"https://355a1d96717e4038ac25aa852fa79a8f@relay-iad.sentry.insops.net/388","org_slug":"instructure","base_url":"https://sentry.insops.net","normalized_route":"/courses/{course_id}/assignments/{id}","errors_sample_rate":"0.005","traces_sample_rate":"0.005","url_deny_pattern":"instructure-uploads.*amazonaws.com","revision":"canvas-lms@20240731.238"},"DATA_COLLECTION_ENDPOINT":"https://canvas-frontend-data-iad-prod.inscloudgate.net/submit","DOMAIN_ROOT_ACCOUNT_SFID":"001A000000ZQLzgIAH","DIRECT_SHARE_ENABLED":false,"CAN_VIEW_CONTENT_SHARES":false,"FEATURES":{"featured_help_links":true,"account_level_blackout_dates":false,"render_both_to_do_lists":false,"commons_new_quizzes":false,"course_paces_redesign":true,"course_paces_for_students":true,"explicit_latex_typesetting":false,"media_links_use_attachment_id":true,"permanent_page_links":true,"selective_release_backend":true,"selective_release_ui_api":true,"selective_release_optimized_tray":true,"enhanced_course_creation_account_fetching":false,"instui_for_import_page":false,"multiselect_gradebook_filters":true,"assignment_edit_placement_not_on_announcements":false,"platform_service_speedgrader":false,"instui_header":false,"rce_find_replace":true,"courses_popout_sisid":true,"dashboard_graphql_integration":false,"discussion_checkpoints":false,"speedgrader_studio_media_capture":true,"product_tours":false,"usage_rights_discussion_topics":true,"granular_permissions_manage_users":true,"create_course_subaccount_picker":true,"file_verifiers_for_quiz_links":true,"lti_deep_linking_module_index_menu_modal":true,"lti_dynamic_registration":true,"lti_multiple_assignment_deep_linking":true,"lti_overwrite_user_url_input_select_content_dialog":true,"buttons_and_icons_root_account":false,"extended_submission_state":false,"scheduled_page_publication":true,"send_usage_metrics":true,"rce_transform_loaded_content":false,"mobile_offline_mode":false,"react_discussions_post":true,"instui_nav":false,"enhanced_developer_keys_tables":true,"lti_registrations_discover_page":false,"enhanced_rubrics":false,"account_level_mastery_scales":false,"non_scoring_rubrics":true,"top_navigation_placement":false,"embedded_release_notes":true,"canvas_k6_theme":false,"new_math_equation_handling":true},"current_user":{"id":"210042","anonymous_id":"4i2i","display_name":"Yongzhi Lai","avatar_image_url":"https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128\u0026d=identicon","html_url":"https://canvas.wisc.edu/about/210042","pronouns":null,"avatar_is_fallback":false,"email":"LAI38@WISC.EDU"},"current_user_is_admin":false,"page_view_update_url":"/page_views/76d4a3bb-6bb6-416f-a258-e047cfc42435?page_view_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpIjoiNzZkNGEzYmItNmJiNi00MTZmLWEyNTgtZTA0N2NmYzQyNDM1IiwidSI6ODM5NjAwMDAwMDAyMTAwNDIsImMiOiIyMDI0LTA4LTEyVDIwOjM5OjI0LjcyWiJ9.-g1cjDxQBWeI-gLGqb83zPmTuUPqN-1J_q3y995Nb38","context_asset_string":"course_402226","ping_url":"https://canvas.wisc.edu/api/v1/courses/402226/ping","TIMEZONE":"America/Chicago","CONTEXT_TIMEZONE":"America/Chicago","LOCALES":["en"],"BIGEASY_LOCALE":"en_US","FULLCALENDAR_LOCALE":"en","MOMENT_LOCALE":"en","rce_auto_save_max_age_ms":86400000,"K5_USER":false,"USE_CLASSIC_FONT":false,"K5_HOMEROOM_COURSE":false,"K5_SUBJECT_COURSE":false,"LOCALE_TRANSLATION_FILE":"/dist/javascripts/translations/en-67c25a6858.json","ACCOUNT_ID":"123","user_cache_key":"dHBhYkxONnRSMlIyazBpMVdoUXNQTUxPZFJINGYwa01HSjVSSG13enZ5Zlc9\nO1twLTA/OntQXz1IVXBncmFxZTtuamFsa2hwdm9pdWxraW1tYXFld2c=\n","current_context":{"id":"402226","name":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","type":"Course","url":"https://canvas.wisc.edu/courses/402226"},"ASSIGNMENT_POINTS_POSSIBLE":null,"media_comment_asset_string":"user_210042","COURSE_ID":"402226","ROOT_OUTCOME_GROUP":{"id":"129584","title":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","vendor_guid":null,"url":"/api/v1/courses/402226/outcome_groups/129584","subgroups_url":"/api/v1/courses/402226/outcome_groups/129584/subgroups","outcomes_url":"/api/v1/courses/402226/outcome_groups/129584/outcomes","can_edit":false,"import_url":"/api/v1/courses/402226/outcome_groups/129584/import","context_id":"402226","context_type":"Course","description":null},"SUBMISSION_ID":"142518797","FIRST_ANNOTATION_SUBMISSION":false,"RICH_CONTENT_APP_HOST":"rich-content-iad.inscloudgate.net","JWT":"ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJSME5OSWl3aWNtVm5hVzl1SWpvaWRYTXRaV0Z6ZEMweElpd2laVzUyYVhKdmJtMWxiblFpT2lKUWNtOWtkV04wYVc5dUluMC4uS0V2OFJXU2N3NHhkS3hLcS52SzVvZlBvTXZTMFd5a0JWOExkYkgzR1hlYnZPdnBFN0U1UmhNN3BhTy1lcEs5S2ZmNlEtYnJQWGJwMEswX0M0UlotSjM2Z2Q3OUoxbzJwMFZhck0tS04zMVVNSlM0eUowb2xDbzlOZ2FzdWNSVldHdTRaMmM5U0tVVWM4czB1UzVkMnFySk0wb2x2R3NDZ29LalNaS2lQTHpXem9kNldEdXpRTlhDQWFjN3NEb3JXVTItZGYxemlpYktmMnAwV0pjbEVLemotYkpKMGdTTGUxczl5VnYySzBrelVhajRfNElFRW45WXBTdmk4aHBubzJRVTExLU5iOXQxc0RVTXVUdmhrYzFpV0xhWVpVckpBYkV5VGIzckNhNXdHcE91RFZ5QjJsLUpSTmJ3eldpSXBDMWx3XzRQUzNzZW85ekpKOVJkdmtVclBkdllZa3JmUjctWDRDQS1JOUJ0ckdEYTFoajJES0FpNE4yZGo5aGwxX2M3Uk00MmprNjdmUFpOeGRCdmxTOG4tV0xEbnVqa1NTWXZoWERDRG5Od0RTYUhSTkF3Z2RvdjY2UnRSOW9ZSjg3NXkxT1NMQUk2Umk5TG00eGU4UWh2RkZJZXRqck4wQUVkQUNjSGwydmxmaDlyYXRFS2F1X0xJdmdIek9jSG9mZGtHRmJOWXUtYzZ5UlhEdXg1Qi1YaUdpYnh3NjFmblMzRDdheEVST2QzQmJ5ZVJzZDZ4ZmltUzdNSnZkVUt0R29oemYwTTNlVGd1N1ZyQkk1VXBSeXlKQ0w1a3Z2d013MjBQQXB1cGtoNzJlWWw1VHZqUVNCbExuRy1aTXB0SlZrNkY3VHozYkdHRjFKM0hhRHdMY2hHa3A5RUx4eGZ4YVV6T2ZpNVlpZ3JFaV9aVlFUSHJjNWg1WkRteVgwRW5CY1k5aURDUnpMR1FXLUxvbW5ZU05IdzdtLUVoYlRwejJYM3dwVHJFbDNmaGNtS2F6RFNqaFB1cGsxLU5TX3dWMXJtdEQ0R200alJ0dTJtbVJqazFaMUNIcm9tb2ZVMGlqb0dSNDdJeUpFTG5NV1haenBRLmdBd1JTNVliMVZiSzVtR0M3VnBEaGc=","RICH_CONTENT_CAN_UPLOAD_FILES":false,"RICH_CONTENT_CAN_EDIT_FILES":false,"RICH_CONTENT_FILES_TAB_DISABLED":false,"RICH_CONTENT_INST_RECORD_TAB_DISABLED":false,"RICH_CONTENT_AI_TEXT_TOOLS":false,"ASSIGNMENT_ID":"2301451","PREREQS":{},"EULA_URL":null,"EXTERNAL_TOOLS":[],"PERMISSIONS":{"context":{"read_as_admin":false,"manage_assignments":false,"manage_assignments_edit":false},"assignment":{"update":false,"submit":false},"can_manage_groups":true},"SIMILARITY_PLEDGE":null,"CONFETTI_ENABLED":false,"EMOJIS_ENABLED":false,"EMOJI_DENY_LIST":null,"USER_ASSET_STRING":"user_210042","OUTCOMES_NEW_DECAYING_AVERAGE_CALCULATION":true,"CONDITIONAL_RELEASE_SERVICE_ENABLED":true,"CONDITIONAL_RELEASE_ENV":{"assignment":{"id":"2301451","title":"P6: Concurrency (Map-Reduce)","description":"\u003ch3\u003eAnnouncement\u003c/h3\u003e\n\u003cp\u003eThe tests for this assignment has been released. You can run the tests using \u003ccode\u003e~cs537-1/tests/p6\u003c/code\u003e. Refer to the README in that directory for more information if necessary.\u003cbr\u003eNote that we are using time limits to test that your implementation spawns and uses multiple threads as expected.\u003c/p\u003e\n\u003ch3\u003eOverview\u003c/h3\u003e\n\u003cp\u003eIn 2004, engineers at Google introduced a new paradigm for large-scale parallel data processing known as MapReduce (the original paper is \u003ca class=\"external\" href=\"https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf\" target=\"_blank\"\u003e\u003cspan\u003ehere\u003c/span\u003e\u003c/a\u003e.\u0026nbsp; As a bonus, see that authors of the the citations at the end).\u0026nbsp; MapReduce makes developers efficiently and easily program large-scale clusters, especially for tasks with a lot of data processing.\u0026nbsp; With Map Reduce, the developer can focus on writing their task as a set of Map and Reduce functions, and let the underlying infrastructure handle parallelism/concurrency, machine crashes, and other complexities common within clusters of machines.\u003c/p\u003e\n\u003cp\u003eIn this project, you’ll be building a simplified version of MapReduce for just a single machine. While it may seem simple to build MapReduce for a single machine, you will still face numerous challenges, mostly in building the correct concurrency support. You’ll have to think about how to design your MapReduce implementation, and then build it to work efficiently and correctly.\u003c/p\u003e\n\u003cp\u003eThere are three specific objectives to this assignment:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eTo gain an understanding of the fundamentals of the MapReduce paradigm.\u003c/li\u003e\n\u003cli\u003eTo implement a correct and efficient MapReduce framework using threads and related functions.\u003c/li\u003e\n\u003cli\u003eTo gain experience designing and developing concurrent code.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eDeliverables:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eTwo files named mapreduce.c and mapreduce.h\u003c/li\u003e\n\u003cli\u003eThe files will be compiled with some test files. It should compile successfully when compiled with the -Wall and -Werror flags\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eAdministrivia:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eThis project may be performed in groups of 2.\u003c/li\u003e\n\u003cli\u003eDue Date: Aug 9th at 11:59PM (slip day policy will apply to both people in the the group)\u003c/li\u003e\n\u003cli\u003eThe final submission will be tested on\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ca class=\"inline_disabled\" href=\"https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/\" target=\"_blank\"\u003elab machines\u003c/a\u003e, so make sure to test your code on these machines.\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch1 id=\"background\"\u003eBackground\u003c/h1\u003e\n\u003cp\u003eTo understand how to make progress on any project that involves concurrency, you should understand the basics of thread creation, mutual exclusion (with locks), and signaling/waiting (with condition variables). These are described in the following book chapters:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"http://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf\"\u003eIntro to Threads\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"http://pages.cs.wisc.edu/~remzi/OSTEP/threads-api.pdf\"\u003eThreads API\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"http://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf\"\u003eLocks\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"http://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks-usage.pdf\"\u003eUsing Locks\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"http://pages.cs.wisc.edu/~remzi/OSTEP/threads-cv.pdf\"\u003eCondition Variables\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eRead these chapters carefully in order to prepare yourself for this project.\u003c/p\u003e\n\u003chr\u003e\n\u003ch1 id=\"general-idea\"\u003eGeneral Idea\u003c/h1\u003e\n\u003cp\u003eLet’s now get into the exact code you’ll have to build. The MapReduce library/infrastructure you will build should support the execution of user-defined \u003ccode\u003eMap()\u003c/code\u003e\u0026nbsp;and\u0026nbsp;\u003ccode\u003eReduce()\u003c/code\u003e\u0026nbsp;functions.\u003c/p\u003e\n\u003cp\u003eAs from the original paper: “\u003ccode\u003eMap()\u003c/code\u003e, written by the user, takes an input pair and produces a set of intermediate key/value pairs. The MapReduce library groups together all intermediate values associated with the same intermediate key K and passes them to the\u0026nbsp;\u003ccode\u003eReduce()\u003c/code\u003e\u0026nbsp;function.”\u003c/p\u003e\n\u003cp\u003e“The\u0026nbsp;\u003ccode\u003eReduce()\u003c/code\u003e\u0026nbsp;function, also written by the user, accepts an intermediate key K and a set of values for that key. It merges together these values to form a possibly smaller set of values; typically just zero or one output value is produced per\u0026nbsp;\u003ccode\u003eReduce()\u003c/code\u003e\u0026nbsp;invocation. The intermediate values are supplied to the user’s reduce function via an iterator.”\u003c/p\u003e\n\u003cp\u003eA classic example, written here in \u003cstrong\u003epseudocode\u003c/strong\u003e (note: your implementation will have different interfaces), shows how to count the number of occurrences of each word in a set of documents:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003emap(String key, String value):\n    // key: document name\n    // value: document contents\n    for each word w in value:\n        EmitIntermediateValues(w, \"1\");\n        \nreduce(String key, Iterator values):\n    // key: a word\n    // values: a list of counts\n    int result = 0;\n    for each v in values:\n        result += ParseIntermediate(v);\n    print key, result;\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe following image from \u003ca class=\"external\" href=\"https://dzone.com/articles/word-count-hello-word-program-in-mapreduce\" target=\"_blank\"\u003e\u003cspan\u003ehttps://dzone.com/articles/word-count-hello-word-program-in-mapreduce\u003c/span\u003e\u003c/a\u003e might help you understand the behavior of the MapReduce framework for this sample wordcount program.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/courses/154998/files/10175747/preview\" alt=\"111.png\" width=\"939\" height=\"548\" data-api-endpoint=\"https://canvas.wisc.edu/api/v1/courses/154998/files/10175747\" data-api-returntype=\"File\"\u003e\u003c/p\u003e\n\u003cp\u003eWhat’s fascinating about MapReduce is that so many different kinds of relevant computations can be mapped onto this framework. The original paper lists many examples, including word counting (as above), a distributed grep, a URL frequency access counters, a reverse web-link graph application, a term-vector per host analysis, and others.\u003c/p\u003e\n\u003cp\u003eWhat’s also quite interesting is how easy it is to parallelize: many mappers can be running at the same time, and later, many reducers can be running at the same time. Users don’t have to worry about how to parallelize their application; rather, they just write\u0026nbsp;\u003ccode\u003eMap()\u003c/code\u003e\u0026nbsp;and\u0026nbsp;\u003ccode\u003eReduce()\u003c/code\u003e\u0026nbsp;functions and the infrastructure does the rest.\u003c/p\u003e\n\u003ch1 id=\"code-overview\"\u003eCode Overview\u003c/h1\u003e\n\u003cp\u003eWe give you here the\u0026nbsp;\u003ccode\u003emapreduce.h\u003c/code\u003e\u0026nbsp;header file that specifies exactly what you must build in your MapReduce library:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e#ifndef __mapreduce_h__\n#define __mapreduce_h__\n\n// Different function pointer types used by MR\ntypedef char *(*Getter)(char *key, int partition_number);\u003cbr\u003etypedef unsigned long (*Partitioner)(char *key, int num_partitions);\u003cbr\u003etypedef void (*Mapper)(char *file_name);\ntypedef void (*Reducer)(char *key, Getter get_func, int partition_number);\u003cbr\u003e\u003cbr\u003eunsigned long MR_DefaultHashPartition(char *key, int num_partitions);\u003cbr\u003e\u003cbr\u003e// External functions: these are what *you must implement*\nvoid MR_Emit(char *key, char *value);\n\nvoid MR_Run(int argc, char *argv[], \n\t    Mapper map, int num_mappers, \n\t    Reducer reduce, int num_reducers, \n\t    Partitioner partition, int num_partitions);\n\n#endif // __mapreduce_h__\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003eYou must implement the \u003ccode\u003eMR_Run\u003c/code\u003e and \u003ccode\u003eMR_Emit \u003c/code\u003efunctions\u003c/strong\u003e\u003cstrong\u003e. In addition, you will have to implement a \u003ccode\u003eget_next\u003c/code\u003e function that is described in the next section.\u003c/strong\u003e\u003c/p\u003e\n\u003col style=\"list-style-type: decimal;\"\u003e\n\u003cli\u003e\u003ccode\u003eMR_Run\u003c/code\u003e: The most important function is \u003ccode\u003eMR_Run\u003c/code\u003e, which takes the command line parameters of a given program: a pointer to a Map function (type \u003ccode\u003eMapper\u003c/code\u003e, called\u0026nbsp;\u003ccode\u003emap\u003c/code\u003e), the number of mapper threads your library should create (\u003ccode\u003enum_mappers\u003c/code\u003e), a pointer to a Reduce function (type\u0026nbsp;\u003ccode\u003eReducer, called reduce\u003c/code\u003e), the number of reducers (\u003ccode\u003enum_reducers\u003c/code\u003e), a pointer to a Partition function (\u003ccode\u003epartition\u003c/code\u003e, described below), and the number of partitions. Thus, when a user is writing a MapReduce computation with your library, they will implement a Map function, implement a Reduce function, possibly implement a Partition function, and then call\u0026nbsp;\u003ccode\u003eMR_Run()\u003c/code\u003e. The infrastructure will then create threads as appropriate and run the computation.\u003cbr\u003eOne basic assumption is that the library will create \u003ccode\u003enum_mappers\u003c/code\u003e threads (in a thread pool) that perform the map task. Another is that your library will create\u0026nbsp;\u003ccode\u003enum_reducers\u003c/code\u003e threads (in a thread pool) to perform the reduction tasks. Finally, your library will create some kind of internal data structure to pass keys and values from mappers to reducers; more on this below.\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eMR_Emit\u003c/code\u003e: The\u0026nbsp;\u003ccode\u003eMR_Emit\u003c/code\u003e function is another key part of your library; it needs to take key/value pairs from the many different mappers and store them in a partition such that later reducers can access them, given constraints described below. Designing and implementing this data structure is thus a central challenge of the project.\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch1 id=\"simple-example-wordcount\"\u003eSimple Example: Wordcount\u003c/h1\u003e\n\u003cp\u003eHere is a simple (but functional) wordcount program written to use the MapReduce library:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e#include \u0026lt;assert.h\u0026gt;\n#include \u0026lt;stdio.h\u0026gt;\n#include \u0026lt;stdlib.h\u0026gt;\n#include \u0026lt;string.h\u0026gt;\n#include \"mapreduce.h\"\n\nvoid Map(char *file_name) {\n    FILE *fp = fopen(file_name, \"r\");\n    assert(fp != NULL);\n\n    char *line = NULL;\n    size_t size = 0;\n    while (getline(\u0026amp;line, \u0026amp;size, fp) != -1) {\n        char *token, *dummy = line;\n        while ((token = strsep(\u0026amp;dummy, \" \\t\\n\\r\")) != NULL) {\n            MR_Emit(token, \"1\");\n        }\n    }\n    free(line);\n    fclose(fp);\n}\n\nvoid Reduce(char *key, Getter get_next, int partition_number) {\n    int count = 0;\n    char *value;\n    while ((value = get_next(key, partition_number)) != NULL)\n        count++;\n    printf(\"%s %d\\n\", key, count);\n}\n\nint main(int argc, char *argv[]) {\n    MR_Run(argc, argv, Map, 10, Reduce, 10, MR_DefaultHashPartition, 10);\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eLet’s walk through this code, in order to see what it is doing and describe the requirements for this project.\u003c/p\u003e\n\u003cp\u003eFirst, notice that \u003ccode\u003eMap()\u003c/code\u003e\u0026nbsp;is called with a file name. In general, we assume that this type of computation is being run over many files; each invocation of\u0026nbsp;\u003ccode\u003eMap()\u003c/code\u003e\u0026nbsp;is thus handed one file name and is expected to process that file in its entirety.\u003c/p\u003e\n\u003cp\u003eIn this example, the code above just reads through the file, one line at a time, and uses\u0026nbsp;\u003ccode\u003estrsep()\u003c/code\u003e\u0026nbsp;to chop the line into tokens. Each token is then emitted using the\u0026nbsp;\u003ccode\u003eMR_Emit()\u003c/code\u003e\u0026nbsp;function, which takes two strings as input: a key and a value. The key here is the word itself, and the token is just a count, in this case, 1 (as a string). It then closes the file.\u003c/p\u003e\n\u003cp\u003eAfter the mappers are finished, your library should have stored the key/value pairs(passed to \u003ccode\u003eMR_Emit\u003c/code\u003e) in partitions such that the reducers can access later. Your implementation must ensure that partition\u003cstrong\u003e i\u003c/strong\u003e is sent to a reducer before partition\u003cstrong\u003e i+1.\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e\u003ccode\u003eReduce()\u003c/code\u003e\u003cspan style=\"font-family: sans-serif; font-size: 1rem;\"\u003e is invoked per key, and is passed the key along with a function that enables iteration over all of the values that produced that same key. To iterate, the code just calls \u003c/span\u003e\u003ccode\u003eget_next()\u003c/code\u003e\u003cspan style=\"font-family: sans-serif; font-size: 1rem;\"\u003e\u0026nbsp;repeatedly until a NULL value is returned;\u0026nbsp;\u003c/span\u003e\u003ccode\u003eget_next\u003c/code\u003e\u003cspan style=\"font-family: sans-serif; font-size: 1rem;\"\u003e\u0026nbsp;returns a pointer to the value passed in by the\u0026nbsp;\u003c/span\u003e\u003ccode\u003eMR_Emit()\u003c/code\u003e\u003cspan style=\"font-family: sans-serif; font-size: 1rem;\"\u003e\u0026nbsp;function above, or NULL when the key’s values have been processed. The output, in the example, is just a count of how many times a given word has appeared, and is just printed to standard output.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eAll of this computation is started off by a call to\u0026nbsp;\u003ccode\u003eMR_Run()\u003c/code\u003e\u0026nbsp;in the\u0026nbsp;\u003ccode\u003emain()\u003c/code\u003e\u0026nbsp;routine of the user program. This function is passed the\u0026nbsp;\u003ccode\u003eargv\u003c/code\u003e\u0026nbsp;array, and assumes that\u0026nbsp;\u003ccode\u003eargv[1]\u003c/code\u003e\u0026nbsp;…\u0026nbsp;\u003ccode\u003eargv[n-1]\u003c/code\u003e\u0026nbsp;(with\u0026nbsp;\u003ccode\u003eargc\u003c/code\u003e\u0026nbsp;equal to\u0026nbsp;\u003ccode\u003en\u003c/code\u003e) all contain file names that will be passed to the mappers.\u003c/p\u003e\n\u003cp\u003eOne interesting function that you also need to pass to\u0026nbsp;\u003ccode\u003eMR_Run()\u003c/code\u003e is the partitioning function. For simplicity, all the test programs will use the default function (\u003ccode\u003eMR_DefaultHashPartition\u003c/code\u003e), which is defined below. Copy it into your file:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eunsigned long MR_DefaultHashPartition(char *key, int num_partitions) {\n    unsigned long hash = 5381;\n    int c;\n    while ((c = *key++) != '\\0')\n        hash = hash * 33 + c;\n    return hash % num_partitions;\n}\u003cbr\u003e\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe function’s role is to take a given\u0026nbsp;\u003ccode\u003ekey\u003c/code\u003e\u0026nbsp;and map it to a number, from\u0026nbsp;\u003ccode\u003e0\u003c/code\u003e\u0026nbsp;to\u0026nbsp;\u003ccode\u003enum_partitions-1\u003c/code\u003e. Its use is internal to the MapReduce library, but critical. Specifically, your MR library should use this function to decide which partition (and hence, which reducer thread) gets a particular key/list of values to process. Note that the number of partitions can be greater (or smaller) than the number of reducers; thus, some reducers may need to handle multiple (or no) partitions.\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eFor some applications, which reducer thread processes a particular key is not important (and thus the default function above should be passed in to \u003ccode\u003eMR_Run()\u003c/code\u003e); for others, it is, and this is why the user can pass in their own partitioning function as need be.\u003c/p\u003e\n\u003cp\u003eOne last requirement:\u003cstrong\u003e For each partition, keys (and the value list associated with said keys) should be sorted in ascending key order; thus, when a particular reducer thread (and its associated partition) are working, the\u0026nbsp;\u003ccode\u003eReduce()\u003c/code\u003e function should be called on each key in order for that partition.\u0026nbsp; For this sort within a partition, the sorted order should be the lexical order provided by strcmp() over the original keys.\u003c/strong\u003e\u003c/p\u003e\n\u003chr\u003e\n\u003ch1 id=\"considerations\"\u003eConsiderations\u003c/h1\u003e\n\u003cp\u003eHere are a few things to consider in your implementation:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cstrong\u003eThread Management\u003c/strong\u003e: This part is fairly straightforward. You should create \u003ccode\u003enum_mappers\u003c/code\u003e\u0026nbsp;mapping threads, and assign a file to each\u0026nbsp;\u003ccode\u003eMap()\u003c/code\u003e invocation in some manner you think is best (e.g., Round Robin, Shortest-File-First, etc.). Think about which algorithm might lead to the best performance? You should also create \u003ccode\u003enum_reducers\u003c/code\u003e reducer threads at some point (either at the beginning or after the mappers finish), to work on the emitted key value pairs.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003ePartitioning and sorting:\u003c/strong\u003e Your central data structure should be concurrent, allowing mappers to each put values into different partitions correctly and efficiently. Once the mappers have completed, a sorting phase should order the key/value-lists. Then, finally, each reducer thread should start calling the user-defined\u0026nbsp;\u003ccode\u003eReduce()\u003c/code\u003e\u0026nbsp;function on the keys in sorted order per partition. You should think about what type of locking is needed throughout this process for correctness.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eMemory Management\u003c/strong\u003e\u0026nbsp;One last concern is memory management. The\u0026nbsp;\u003ccode\u003eMR_Emit()\u003c/code\u003e\u0026nbsp;function is passed a key/value pair; it is the responsibility of the MR library to make copies of each of these. However, avoid making too many copies of them since the goal is to design an efficient concurrent data structure. Then, when the entire mapping and reduction is complete, it is the responsibility of the MR library to free everything.\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch3\u003eTesting and handin instructions\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eTests will be provided at\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003cem\u003e~cs537-1/tests/p6.\u003c/em\u003e\u003cem\u003e\u003c/em\u003e\u003cem\u003e\u003c/em\u003e\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eHanding it in: Copy your files to \u003cem\u003e~cs537-1/handin/login/p6\u003c/em\u003e where login is your CS login.\u003c/strong\u003e Do NOT use this handin directory for your work space.\u0026nbsp; You should keep a separate copy of your project files in your own home directory and then simply copy the relevant files to this handin directory when you are done.\u0026nbsp; The permissions to this handin directory will be turned off promptly when the deadline passes and you will no longer be able to modify files in that directory.\u003cbr\u003e\n\u003cp\u003e\u003cspan\u003e\u003cstrong\u003eEach project partner should turn in their joint code to each of their handin directories.\u003c/strong\u003e E\u003c/span\u003each person should place a file named \u003cstrong\u003epartners.txt\u003c/strong\u003e in their \u003cem\u003ehandin/p6\u003c/em\u003e directory, so that we can tell who worked together on this project.\u0026nbsp; The format of \u003cstrong\u003epartners.txt\u003c/strong\u003e should be exactly as follows:\u003c/p\u003e\n\u003cpre\u003ecslogin1 wiscNetid1 Lastname1 Firstname1\u003cbr\u003ecslogin2 wiscNetid2 Lastname2 Firstname2\u003c/pre\u003e\n\u003cp\u003eIt does not matter who is 1 and who is 2.\u0026nbsp; If you worked alone, your \u003cstrong\u003epartners.txt\u003c/strong\u003e file should have only one line.\u0026nbsp; There should be no spaces within your first or last name; just use spaces to separate fields. To repeat, \u003cstrong\u003eboth project partners should turn in their code and both should have a \u003cem\u003eturnin/p2a/partners.txt\u003c/em\u003e file.\u003cbr\u003e\u003c/strong\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eGood luck!\u003c/p\u003e\n\u003ch1 id=\"testing\"\u003e\u003c/h1\u003e","points_possible":100.0,"grading_type":"points","submission_types":"none","grading_scheme":{"A":0.94,"A-":0.9,"B+":0.87,"B":0.84,"B-":0.8,"C+":0.77,"C":0.74,"C-":0.7,"D+":0.67,"D":0.64,"D-":0.61,"F":0.0}},"course_id":"402226","stats_url":"/api/v1/courses/402226/mastery_paths/stats","rule":null},"badge_counts":{"submissions":12},"notices":[],"active_context_tab":"assignments"};
+    BRANDABLE_CSS_HANDLEBARS_INDEX = [["new_styles_normal_contrast","new_styles_high_contrast","new_styles_normal_contrast_rtl","new_styles_high_contrast_rtl"],{"10":["908ffbc673",0,"d5c9044c6e",2],"15":["c8540c43a4",0,"0a2196be1d",2],"19":["df5777ed9c"],"61":["1fb36890db","b83a603352","4bcf82f85a","0b171e092c"],"67":["700335fb7b",0,"1cc2485e2c",2],"71":["9cb09ce3d6","9f81099c5a","e1c5edae20","b1fb18d547"],"06":["ba28819778",0,"96b99aafe5",2],"f0":["b349f31f5e",0,0,0],"c8":["718c8509f5","33cd4c40e3","03d0fbcbe8","ec23096f0d"],"1e":["6eb4ecac8e","4100cb65ce","0faf4716c8","bed54fd75e"],"b3":["e5da23fb43","0911fc8ed3","05b2bb5a6f","ba2585de5c"],"0c":["4dae5befd2",0,"c18876be89",2],"da":["b5a7f9cd8f","a4e5066985","773390ae11","8e9071910c"],"1d":["2128789890",0,"e568085637",2],"08":["64bff5a97d"],"e2":["11429f119a"],"9f":["d39b291ba6",0,0,0],"2b":["c491abf31e","b11dc54da6","b58622671f","6bb4a7ae9e"],"2c":["8a926fc28b",0,0,0],"c2":["6f2721ae01"],"9c":["c31821c764",0,"1693aba1da",2],"c5":["44c6024769","31150a4a27","53dd277fa9","5fe61c91c2"],"f2":["51574f9b13"]}]
+    REMOTES = {};
+  </script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/en_US-80a0ce259b.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/react-entry-c8c7bdb5b4feb9bd.js" crossorigin="anonymous" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/main-entry-b73a86a7e23e9536.js" crossorigin="anonymous" defer="defer"></script>
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('assignment_show');
+(window.bundles || (window.bundles = [])).push('edit_rubric');
+(window.bundles || (window.bundles = [])).push('navigation_header');
+//]]>
+</script>
+  
+  <script type="text/javascript">
+    window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+    heap.load("3001039959");
+    heap.clearEventProperties();
+    heap.addEventProperties({'Base.appName': 'Canvas'});
+    setTimeout(() => {
+      if (ENV.current_user_heap_id && ENV.current_user_heap_id !== heap.identity) {
+        heap.identify(ENV.current_user_heap_id);
+      }
+      props = {}
+      if (ENV.current_user_roles) {
+        props['role'] = ENV.current_user_roles[ENV.current_user_roles.length - 1]
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_UUID) {
+        props['Canvas.accountId'] = ENV.DOMAIN_ROOT_ACCOUNT_UUID
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_SFID) {
+        props['Canvas.salesforceAccountId'] = ENV.DOMAIN_ROOT_ACCOUNT_SFID
+      }
+      if (Object.keys(props).length > 0) {
+        heap.addUserProperties(props);
+      }
+    }, 1000);
+  </script>
+  
+</head>
+
+<body class="with-left-side course-menu-expanded with-right-side assignments primary-nav-transitions full-width context-course_402226 responsive_student_grades_page">
+
+<noscript>
+  <div role="alert" class="ic-flash-static ic-flash-error">
+    <div class="ic-flash__icon" aria-hidden="true">
+      <i class="icon-warning"></i>
+    </div>
+    <h1>You need to have JavaScript enabled in order to access this site.</h1>
+  </div>
+</noscript>
+
+
+
+
+<div id="flash_message_holder"></div>
+<div id="flash_screenreader_holder"></div>
+
+<div id="application" class="ic-app">
+  
+
+
+
+
+<header id="mobile-header" class="no-print">
+  <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-hamburger">
+    <i class="icon-solid icon-hamburger"></i>
+    <span id="mobileHeaderInboxUnreadBadge" class="menu-item__badge" style="min-width: 0; top: 12px; height: 12px; right: 6px; display:none;"></span>
+    <span class="screenreader-only">Dashboard</span>
+  </button>
+  <div class="mobile-header-space"></div>
+    <a class="mobile-header-title expandable" href="/courses/402226" role="button" aria-controls="mobileContextNavContainer">
+      <div>SU24 COMPSCI 537 001 AKK</div>
+        <div>P6: Concurrency (Map-Reduce)</div>
+    </a>
+    <div class="mobile-header-space"></div>
+    <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-arrow" aria-label="Navigation Menu">
+      <i class="icon-arrow-open-down" id="mobileHeaderArrowIcon"></i>
+    </button>
+</header>
+<nav id="mobileContextNavContainer"></nav>
+
+<header id="header" class="ic-app-header no-print ">
+  <a href="#content" id="skip_navigation_link">Skip To Content</a>
+  <div role="region" class="ic-app-header__main-navigation" aria-label="Global Navigation">
+      <div class="ic-app-header__logomark-container">
+        <a href="https://canvas.wisc.edu/" class="ic-app-header__logomark">
+          <span class="screenreader-only">Dashboard</span>
+        </a>
+      </div>
+    <ul id="menu" class="ic-app-header__menu-list">
+        <li class="menu-item ic-app-header__menu-list-item ">
+          <a id="global_nav_profile_link" role="button" href="/profile/settings" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container">
+              <div aria-hidden="true" class="fs-exclude ic-avatar ">
+                <img src="https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128&amp;d=identicon" alt="Yongzhi Lai" />
+              </div>
+              <span class="menu-item__badge"></span>
+            </div>
+            <div class="menu-item__text">
+              Account
+            </div>
+          </a>
+        </li>
+      <li class="ic-app-header__menu-list-item ">
+        <a id="global_nav_dashboard_link" href="https://canvas.wisc.edu/" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--dashboard" version="1.1" x="0" y="0" viewBox="0 0 280 200" enable-background="new 0 0 280 200" xml:space="preserve"><path d="M273.09,180.75H197.47V164.47h62.62A122.16,122.16,0,1,0,17.85,142a124,124,0,0,0,2,22.51H90.18v16.29H6.89l-1.5-6.22A138.51,138.51,0,0,1,1.57,142C1.57,65.64,63.67,3.53,140,3.53S278.43,65.64,278.43,142a137.67,137.67,0,0,1-3.84,32.57ZM66.49,87.63,50.24,71.38,61.75,59.86,78,76.12Zm147,0L202,76.12l16.25-16.25,11.51,11.51ZM131.85,53.82v-23h16.29v23Zm15.63,142.3a31.71,31.71,0,0,1-28-16.81c-6.4-12.08-15.73-72.29-17.54-84.25a8.15,8.15,0,0,1,13.58-7.2c8.88,8.21,53.48,49.72,59.88,61.81a31.61,31.61,0,0,1-27.9,46.45ZM121.81,116.2c4.17,24.56,9.23,50.21,12,55.49A15.35,15.35,0,1,0,161,157.3C158.18,152,139.79,133.44,121.81,116.2Z" /></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Dashboard
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item ic-app-header__menu-list-item--active">
+          <a id="global_nav_courses_link" role="button" href="/courses" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--courses" version="1.1" x="0" y="0" viewBox="0 0 280 259" enable-background="new 0 0 280 259" xml:space="preserve"><path d="M73.31,198c-11.93,0-22.22,8-24,18.73a26.67,26.67,0,0,0-.3,3.63v.3a22,22,0,0,0,5.44,14.65,22.47,22.47,0,0,0,17.22,8H200V228.19h-134V213.08H200V198Zm21-105.74h90.64V62H94.3ZM79.19,107.34V46.92H200v60.42Zm7.55,30.21V122.45H192.49v15.11ZM71.65,16.71A22.72,22.72,0,0,0,49,39.36V190.88a41.12,41.12,0,0,1,24.32-8h157V16.71ZM33.88,39.36A37.78,37.78,0,0,1,71.65,1.6H245.36V198H215.15v45.32h22.66V258.4H71.65a37.85,37.85,0,0,1-37.76-37.76Z"/></svg>
+
+            </div>
+            <div class="menu-item__text">
+              Courses
+            </div>
+          </a>
+        </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+        <a id="global_nav_calendar_link" href="/calendar" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--calendar" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M197.07,213.38h16.31V197.07H197.07Zm-16.31,16.31V180.76h48.92v48.92Zm-48.92-16.31h16.31V197.07H131.85Zm-16.31,16.31V180.76h48.92v48.92ZM66.62,213.38H82.93V197.07H66.62ZM50.32,229.68V180.76H99.24v48.92Zm146.75-81.53h16.31V131.85H197.07Zm-16.31,16.31V115.54h48.92v48.92Zm-48.92-16.31h16.31V131.85H131.85Zm-16.31,16.31V115.54h48.92v48.92ZM66.62,148.15H82.93V131.85H66.62ZM50.32,164.46V115.54H99.24v48.92ZM34,262.29H246V82.93H34ZM246,66.62V42.16A8.17,8.17,0,0,0,237.84,34H213.38v8.15a8.15,8.15,0,1,1-16.31,0V34H82.93v8.15a8.15,8.15,0,0,1-16.31,0V34H42.16A8.17,8.17,0,0,0,34,42.16V66.62Zm-8.15-48.92a24.49,24.49,0,0,1,24.46,24.46V278.6H17.71V42.16A24.49,24.49,0,0,1,42.16,17.71H66.62V9.55a8.15,8.15,0,0,1,16.31,0v8.15H197.07V9.55a8.15,8.15,0,1,1,16.31,0v8.15Z"/></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Calendar
+          </div>
+        </a>
+      </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+      <!-- TODO: Add back global search when available -->
+        <a id="global_nav_conversations_link" href="/conversations" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container">
+            <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--inbox" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M91.72,120.75h96.56V104.65H91.72Zm0,48.28h80.47V152.94H91.72Zm0-96.56h80.47V56.37H91.72Zm160.94,34.88H228.52V10.78h-177v96.56H27.34A24.17,24.17,0,0,0,3.2,131.48V244.14a24.17,24.17,0,0,0,24.14,24.14H252.66a24.17,24.17,0,0,0,24.14-24.14V131.48A24.17,24.17,0,0,0,252.66,107.34Zm0,16.09a8.06,8.06,0,0,1,8,8v51.77l-32.19,19.31V123.44ZM67.58,203.91v-177H212.42v177ZM27.34,123.44H51.48v79.13L19.29,183.26V131.48A8.06,8.06,0,0,1,27.34,123.44ZM252.66,252.19H27.34a8.06,8.06,0,0,1-8-8V202l30,18H230.75l30-18v42.12A8.06,8.06,0,0,1,252.66,252.19Z"/></svg>
+</span>
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Inbox
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item" >
+          <a id="global_nav_history_link" role="button" href="#" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg viewBox="0 0 1920 1920" class="ic-icon-svg menu-item__icon svg-icon-history" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path d="M960 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.125 379.934 847.059 847.059 847.059 467.125 0 847.059-379.934 847.059-847.059 0-467.125-379.934-847.059-847.059-847.059M960 1920C430.645 1920 0 1489.355 0 960S430.645 0 960 0s960 430.645 960 960-430.645 960-960 960m417.905-575.955L903.552 988.28V395.34h112.941v536.47l429.177 321.77-67.765 90.465z" stroke="none" stroke-width="1" fill-rule="evenodd"/>
+</svg>
+            </div>
+            <div class="menu-item__text">
+              History
+            </div>
+          </a>
+        </li>
+        
+
+      <li class="ic-app-header__menu-list-item">
+        <a id="global_nav_help_link" role="button" class="ic-app-header__menu-list-link" data-track-category="help system" data-track-label="help button" href="https://help.instructure.com">
+          <div class="menu-item-icon-container" role="presentation">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg menu-item__icon svg-icon-help" version="1.1" x="0" y="0" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve" fill="currentColor"><path d="M100,127.88A11.15,11.15,0,1,0,111.16,139,11.16,11.16,0,0,0,100,127.88Zm8.82-88.08a33.19,33.19,0,0,1,23.5,23.5,33.54,33.54,0,0,1-24,41.23,3.4,3.4,0,0,0-2.74,3.15v9.06H94.42v-9.06a14.57,14.57,0,0,1,11.13-14,22.43,22.43,0,0,0,13.66-10.27,22.73,22.73,0,0,0,2.31-17.37A21.92,21.92,0,0,0,106,50.59a22.67,22.67,0,0,0-19.68,3.88,22.18,22.18,0,0,0-8.65,17.64H66.54a33.25,33.25,0,0,1,13-26.47A33.72,33.72,0,0,1,108.82,39.8ZM100,5.2A94.8,94.8,0,1,0,194.8,100,94.91,94.91,0,0,0,100,5.2m0,178.45A83.65,83.65,0,1,1,183.65,100,83.73,83.73,0,0,1,100,183.65" transform="translate(-5.2 -5.2)"/></svg>
+
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Help
+          </div>
+</a>      </li>
+    </ul>
+  </div>
+  <div class="ic-app-header__secondary-navigation">
+    <ul class="ic-app-header__menu-list">
+      <li class="menu-item ic-app-header__menu-list-item">
+        <a
+          id="primaryNavToggle"
+          role="button"
+          href="#"
+          class="ic-app-header__menu-list-link ic-app-header__menu-list-link--nav-toggle"
+          aria-label="Expand global navigation
+                "
+          title="Expand global navigation
+                "
+        >
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--navtoggle" version="1.1" x="0" y="0" width="40" height="32" viewBox="0 0 40 32" xml:space="preserve">
+  <path d="M39.5,30.28V2.48H37.18v27.8Zm-4.93-13.9L22.17,4,20.53,5.61l9.61,9.61H.5v2.31H30.14l-9.61,9.61,1.64,1.64Z"/>
+</svg>
+
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div id="global_nav_tray_container"></div>
+  <div id="global_nav_tour"></div>
+</header>
+
+
+  <div id="instructure_ajax_error_box">
+    <div style="text-align: right; background-color: #fff;"><a href="#" class="close_instructure_ajax_error_box_link">Close</a></div>
+    <iframe id="instructure_ajax_error_result" src="about:blank" style="border: 0;" title="Error"></iframe>
+  </div>
+
+  <div id="wrapper" class="ic-Layout-wrapper">
+        <div class="ic-app-nav-toggle-and-crumbs no-print">
+            <button type="button" id="courseMenuToggle" class="Button Button--link ic-app-course-nav-toggle" aria-live="polite" aria-label="Hide Courses Navigation Menu">
+              <i class="icon-hamburger" aria-hidden="true"></i>
+            </button>
+
+          <div class="ic-app-crumbs ">
+              <nav id="breadcrumbs" role="navigation" aria-label="breadcrumbs"><ul><li class="home"><a href="/"><span class="ellipsible"><i class="icon-home"
+   title="My Dashboard">
+  <span class="screenreader-only">My Dashboard</span>
+</i>
+</span></a></li><li><a href="/courses/402226"><span class="ellipsible">SU24 COMPSCI 537 001 AKK</span></a></li><li><a href="/courses/402226/assignments"><span class="ellipsible">Assignments</span></a></li><li><a href="https://canvas.wisc.edu/courses/402226/assignments/2301451"><span class="ellipsible">P6: Concurrency (Map-Reduce)</span></a></li></ul></nav>
+          </div>
+
+
+          <div class="right-of-crumbs">
+              <div class="TutorialToggleHolder"></div>
+          </div>
+
+        </div>
+    <div id="main" class="ic-Layout-columns">
+        <div class="ic-Layout-watermark"></div>
+        <div id="left-side"
+          class="ic-app-course-menu ic-sticky-on list-view"
+          style="display: block"
+          >
+          <div id="sticky-container" class="ic-sticky-frame">
+              <span id="section-tabs-header-subtitle" class="ellipsis">Summer 2024</span>
+            <nav role="navigation" aria-label="Courses Navigation Menu"><ul id="section-tabs"><li class="section"><a href="/courses/402226" class="home">Home</a></li><li class="section"><a href="/courses/402226/announcements" class="announcements">Announcements</a></li><li class="section"><a href="/courses/402226/assignments" aria-current="page" class="assignments active">Assignments</a></li><li class="section"><a href="/courses/402226/external_tools/20073" class="context_external_tool_20073">Piazza</a></li><li class="section"><a href="/courses/402226/grades" class="grades">Grades</a></li><li class="section"><a href="/courses/402226/users" class="people">People</a></li><li class="section"><a href="/courses/402226/wiki" class="pages">Pages</a></li><li class="section"><a href="/courses/402226/files" class="files">Files</a></li><li class="section"><a href="/courses/402226/assignments/syllabus" class="syllabus">Syllabus</a></li><li class="section"><a href="/courses/402226/quizzes" class="quizzes">Quizzes</a></li><li class="section"><a href="/courses/402226/external_tools/14065" class="context_external_tool_14065">Zoom</a></li><li class="section"><a href="/courses/402226/external_tools/21691" class="context_external_tool_21691">NameCoach Roster</a></li><li class="section"><a href="/courses/402226/external_tools/9199" class="context_external_tool_9199">Kaltura Gallery</a></li><li class="section"><a href="/courses/402226/external_tools/8408" class="context_external_tool_8408">Kaltura My Media</a></li><li class="section"><a href="/courses/402226/external_tools/6536" class="context_external_tool_6536">New Analytics</a></li></ul></nav>
+          </div>
+        </div>
+      <div id="not_right_side" class="ic-app-main-content">
+        <div id="content-wrapper" class="ic-Layout-contentWrapper">
+          
+          <div id="content" class="ic-Layout-contentMain" role="main">
+            
+<style>
+  #right-side-wrapper {
+    height: 100%;
+  }
+
+  .assignment_header {
+    border-bottom: 1px solid #a4a4a4;
+    overflow: hidden;
+  }
+
+  #assignment_head {
+    margin-top: 0;
+    font-weight: bold;
+  }
+
+  .lock_explanation {
+    text-align: left;
+    margin-top: 20px;
+  }
+</style>
+
+
+
+<div id="assignment_show" class="assignment content_underline_links" data-lti-page-content="true">
+    <!--Student View-->
+    <div class='assignment-title'>
+      <div class='title-content'>
+        <h1 class="title">
+          P6: Concurrency (Map-Reduce)
+        </h1>
+      </div>
+      <div class='assignment-buttons'>
+        
+
+        
+      </div>
+    </div>
+    
+<ul class='student-assignment-overview'>
+  <li>
+    <span class='title'>Due</span>
+    <span class='value'>
+          <span class="date_text">
+                <span class="display_date">Aug 9</span> by 
+                <span class="display_time">11:59pm</span>
+          </span><!--
+        --></span>
+  </li>
+    <li>
+      <span class='title'>Points</span>
+      <span class='value'>100</span>
+    </li>
+  
+  <li>
+    <span class="title">Available</span>
+    <span class="value">
+        after Jul 29 at 10am
+    </span>
+  </li>
+
+  <div class="clear"></div>
+</ul>
+
+  <div class="clear"></div>
+
+
+  <div class="clear"></div>
+
+
+
+
+  <div class="description user_content " data-resource-type="assignment.body" data-resource-id=2301451><h3>Announcement</h3>
+<p>The tests for this assignment has been released. You can run the tests using <code>~cs537-1/tests/p6</code>. Refer to the README in that directory for more information if necessary.<br>Note that we are using time limits to test that your implementation spawns and uses multiple threads as expected.</p>
+<h3>Overview</h3>
+<p>In 2004, engineers at Google introduced a new paradigm for large-scale parallel data processing known as MapReduce (the original paper is <a class="external" href="https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf" target="_blank"><span>here</span></a>.&nbsp; As a bonus, see that authors of the the citations at the end).&nbsp; MapReduce makes developers efficiently and easily program large-scale clusters, especially for tasks with a lot of data processing.&nbsp; With Map Reduce, the developer can focus on writing their task as a set of Map and Reduce functions, and let the underlying infrastructure handle parallelism/concurrency, machine crashes, and other complexities common within clusters of machines.</p>
+<p>In this project, you’ll be building a simplified version of MapReduce for just a single machine. While it may seem simple to build MapReduce for a single machine, you will still face numerous challenges, mostly in building the correct concurrency support. You’ll have to think about how to design your MapReduce implementation, and then build it to work efficiently and correctly.</p>
+<p>There are three specific objectives to this assignment:</p>
+<ul>
+<li>To gain an understanding of the fundamentals of the MapReduce paradigm.</li>
+<li>To implement a correct and efficient MapReduce framework using threads and related functions.</li>
+<li>To gain experience designing and developing concurrent code.</li>
+</ul>
+<h3>Deliverables:</h3>
+<ul>
+<li>Two files named mapreduce.c and mapreduce.h</li>
+<li>The files will be compiled with some test files. It should compile successfully when compiled with the -Wall and -Werror flags</li>
+</ul>
+<h3>Administrivia:</h3>
+<ul>
+<li>This project may be performed in groups of 2.</li>
+<li>Due Date: Aug 9th at 11:59PM (slip day policy will apply to both people in the the group)</li>
+<li>The final submission will be tested on<span>&nbsp;</span><a class="inline_disabled" href="https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/" target="_blank">lab machines</a>, so make sure to test your code on these machines.</li>
+</ul>
+<hr>
+<h1 id="background">Background</h1>
+<p>To understand how to make progress on any project that involves concurrency, you should understand the basics of thread creation, mutual exclusion (with locks), and signaling/waiting (with condition variables). These are described in the following book chapters:</p>
+<ul>
+<li><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf">Intro to Threads</a></li>
+<li><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/threads-api.pdf">Threads API</a></li>
+<li><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks.pdf">Locks</a></li>
+<li><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/threads-locks-usage.pdf">Using Locks</a></li>
+<li><a href="http://pages.cs.wisc.edu/~remzi/OSTEP/threads-cv.pdf">Condition Variables</a></li>
+</ul>
+<p>Read these chapters carefully in order to prepare yourself for this project.</p>
+<hr>
+<h1 id="general-idea">General Idea</h1>
+<p>Let’s now get into the exact code you’ll have to build. The MapReduce library/infrastructure you will build should support the execution of user-defined <code>Map()</code>&nbsp;and&nbsp;<code>Reduce()</code>&nbsp;functions.</p>
+<p>As from the original paper: “<code>Map()</code>, written by the user, takes an input pair and produces a set of intermediate key/value pairs. The MapReduce library groups together all intermediate values associated with the same intermediate key K and passes them to the&nbsp;<code>Reduce()</code>&nbsp;function.”</p>
+<p>“The&nbsp;<code>Reduce()</code>&nbsp;function, also written by the user, accepts an intermediate key K and a set of values for that key. It merges together these values to form a possibly smaller set of values; typically just zero or one output value is produced per&nbsp;<code>Reduce()</code>&nbsp;invocation. The intermediate values are supplied to the user’s reduce function via an iterator.”</p>
+<p>A classic example, written here in <strong>pseudocode</strong> (note: your implementation will have different interfaces), shows how to count the number of occurrences of each word in a set of documents:</p>
+<pre><code>map(String key, String value):
+    // key: document name
+    // value: document contents
+    for each word w in value:
+        EmitIntermediateValues(w, "1");
+        
+reduce(String key, Iterator values):
+    // key: a word
+    // values: a list of counts
+    int result = 0;
+    for each v in values:
+        result += ParseIntermediate(v);
+    print key, result;
+</code></pre>
+<p>The following image from <a class="external" href="https://dzone.com/articles/word-count-hello-word-program-in-mapreduce" target="_blank"><span>https://dzone.com/articles/word-count-hello-word-program-in-mapreduce</span></a> might help you understand the behavior of the MapReduce framework for this sample wordcount program.</p>
+<p><img src="/courses/154998/files/10175747/preview" alt="111.png" width="939" height="548" data-api-endpoint="https://canvas.wisc.edu/api/v1/courses/154998/files/10175747" data-api-returntype="File"></p>
+<p>What’s fascinating about MapReduce is that so many different kinds of relevant computations can be mapped onto this framework. The original paper lists many examples, including word counting (as above), a distributed grep, a URL frequency access counters, a reverse web-link graph application, a term-vector per host analysis, and others.</p>
+<p>What’s also quite interesting is how easy it is to parallelize: many mappers can be running at the same time, and later, many reducers can be running at the same time. Users don’t have to worry about how to parallelize their application; rather, they just write&nbsp;<code>Map()</code>&nbsp;and&nbsp;<code>Reduce()</code>&nbsp;functions and the infrastructure does the rest.</p>
+<h1 id="code-overview">Code Overview</h1>
+<p>We give you here the&nbsp;<code>mapreduce.h</code>&nbsp;header file that specifies exactly what you must build in your MapReduce library:</p>
+<pre><code>#ifndef __mapreduce_h__
+#define __mapreduce_h__
+
+// Different function pointer types used by MR
+typedef char *(*Getter)(char *key, int partition_number);<br>typedef unsigned long (*Partitioner)(char *key, int num_partitions);<br>typedef void (*Mapper)(char *file_name);
+typedef void (*Reducer)(char *key, Getter get_func, int partition_number);<br><br>unsigned long MR_DefaultHashPartition(char *key, int num_partitions);<br><br>// External functions: these are what *you must implement*
+void MR_Emit(char *key, char *value);
+
+void MR_Run(int argc, char *argv[], 
+	    Mapper map, int num_mappers, 
+	    Reducer reduce, int num_reducers, 
+	    Partitioner partition, int num_partitions);
+
+#endif // __mapreduce_h__
+</code></pre>
+<p><strong>You must implement the <code>MR_Run</code> and <code>MR_Emit </code>functions</strong><strong>. In addition, you will have to implement a <code>get_next</code> function that is described in the next section.</strong></p>
+<ol style="list-style-type: decimal;">
+<li><code>MR_Run</code>: The most important function is <code>MR_Run</code>, which takes the command line parameters of a given program: a pointer to a Map function (type <code>Mapper</code>, called&nbsp;<code>map</code>), the number of mapper threads your library should create (<code>num_mappers</code>), a pointer to a Reduce function (type&nbsp;<code>Reducer, called reduce</code>), the number of reducers (<code>num_reducers</code>), a pointer to a Partition function (<code>partition</code>, described below), and the number of partitions. Thus, when a user is writing a MapReduce computation with your library, they will implement a Map function, implement a Reduce function, possibly implement a Partition function, and then call&nbsp;<code>MR_Run()</code>. The infrastructure will then create threads as appropriate and run the computation.<br>One basic assumption is that the library will create <code>num_mappers</code> threads (in a thread pool) that perform the map task. Another is that your library will create&nbsp;<code>num_reducers</code> threads (in a thread pool) to perform the reduction tasks. Finally, your library will create some kind of internal data structure to pass keys and values from mappers to reducers; more on this below.</li>
+<li><code>MR_Emit</code>: The&nbsp;<code>MR_Emit</code> function is another key part of your library; it needs to take key/value pairs from the many different mappers and store them in a partition such that later reducers can access them, given constraints described below. Designing and implementing this data structure is thus a central challenge of the project.</li>
+</ol>
+<p>&nbsp;</p>
+<h1 id="simple-example-wordcount">Simple Example: Wordcount</h1>
+<p>Here is a simple (but functional) wordcount program written to use the MapReduce library:</p>
+<pre><code>#include &lt;assert.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include "mapreduce.h"
+
+void Map(char *file_name) {
+    FILE *fp = fopen(file_name, "r");
+    assert(fp != NULL);
+
+    char *line = NULL;
+    size_t size = 0;
+    while (getline(&amp;line, &amp;size, fp) != -1) {
+        char *token, *dummy = line;
+        while ((token = strsep(&amp;dummy, " \t\n\r")) != NULL) {
+            MR_Emit(token, "1");
+        }
+    }
+    free(line);
+    fclose(fp);
+}
+
+void Reduce(char *key, Getter get_next, int partition_number) {
+    int count = 0;
+    char *value;
+    while ((value = get_next(key, partition_number)) != NULL)
+        count++;
+    printf("%s %d\n", key, count);
+}
+
+int main(int argc, char *argv[]) {
+    MR_Run(argc, argv, Map, 10, Reduce, 10, MR_DefaultHashPartition, 10);
+}
+</code></pre>
+<p>Let’s walk through this code, in order to see what it is doing and describe the requirements for this project.</p>
+<p>First, notice that <code>Map()</code>&nbsp;is called with a file name. In general, we assume that this type of computation is being run over many files; each invocation of&nbsp;<code>Map()</code>&nbsp;is thus handed one file name and is expected to process that file in its entirety.</p>
+<p>In this example, the code above just reads through the file, one line at a time, and uses&nbsp;<code>strsep()</code>&nbsp;to chop the line into tokens. Each token is then emitted using the&nbsp;<code>MR_Emit()</code>&nbsp;function, which takes two strings as input: a key and a value. The key here is the word itself, and the token is just a count, in this case, 1 (as a string). It then closes the file.</p>
+<p>After the mappers are finished, your library should have stored the key/value pairs(passed to <code>MR_Emit</code>) in partitions such that the reducers can access later. Your implementation must ensure that partition<strong> i</strong> is sent to a reducer before partition<strong> i+1.</strong></p>
+<p><code>Reduce()</code><span style="font-family: sans-serif; font-size: 1rem;"> is invoked per key, and is passed the key along with a function that enables iteration over all of the values that produced that same key. To iterate, the code just calls </span><code>get_next()</code><span style="font-family: sans-serif; font-size: 1rem;">&nbsp;repeatedly until a NULL value is returned;&nbsp;</span><code>get_next</code><span style="font-family: sans-serif; font-size: 1rem;">&nbsp;returns a pointer to the value passed in by the&nbsp;</span><code>MR_Emit()</code><span style="font-family: sans-serif; font-size: 1rem;">&nbsp;function above, or NULL when the key’s values have been processed. The output, in the example, is just a count of how many times a given word has appeared, and is just printed to standard output.</span></p>
+<p>All of this computation is started off by a call to&nbsp;<code>MR_Run()</code>&nbsp;in the&nbsp;<code>main()</code>&nbsp;routine of the user program. This function is passed the&nbsp;<code>argv</code>&nbsp;array, and assumes that&nbsp;<code>argv[1]</code>&nbsp;…&nbsp;<code>argv[n-1]</code>&nbsp;(with&nbsp;<code>argc</code>&nbsp;equal to&nbsp;<code>n</code>) all contain file names that will be passed to the mappers.</p>
+<p>One interesting function that you also need to pass to&nbsp;<code>MR_Run()</code> is the partitioning function. For simplicity, all the test programs will use the default function (<code>MR_DefaultHashPartition</code>), which is defined below. Copy it into your file:</p>
+<pre><code>unsigned long MR_DefaultHashPartition(char *key, int num_partitions) {
+    unsigned long hash = 5381;
+    int c;
+    while ((c = *key++) != '\0')
+        hash = hash * 33 + c;
+    return hash % num_partitions;
+}<br></code></pre>
+<p>The function’s role is to take a given&nbsp;<code>key</code>&nbsp;and map it to a number, from&nbsp;<code>0</code>&nbsp;to&nbsp;<code>num_partitions-1</code>. Its use is internal to the MapReduce library, but critical. Specifically, your MR library should use this function to decide which partition (and hence, which reducer thread) gets a particular key/list of values to process. Note that the number of partitions can be greater (or smaller) than the number of reducers; thus, some reducers may need to handle multiple (or no) partitions.&nbsp;</p>
+<p>For some applications, which reducer thread processes a particular key is not important (and thus the default function above should be passed in to <code>MR_Run()</code>); for others, it is, and this is why the user can pass in their own partitioning function as need be.</p>
+<p>One last requirement:<strong> For each partition, keys (and the value list associated with said keys) should be sorted in ascending key order; thus, when a particular reducer thread (and its associated partition) are working, the&nbsp;<code>Reduce()</code> function should be called on each key in order for that partition.&nbsp; For this sort within a partition, the sorted order should be the lexical order provided by strcmp() over the original keys.</strong></p>
+<hr>
+<h1 id="considerations">Considerations</h1>
+<p>Here are a few things to consider in your implementation:</p>
+<ul>
+<li><strong>Thread Management</strong>: This part is fairly straightforward. You should create <code>num_mappers</code>&nbsp;mapping threads, and assign a file to each&nbsp;<code>Map()</code> invocation in some manner you think is best (e.g., Round Robin, Shortest-File-First, etc.). Think about which algorithm might lead to the best performance? You should also create <code>num_reducers</code> reducer threads at some point (either at the beginning or after the mappers finish), to work on the emitted key value pairs.</li>
+<li><strong>Partitioning and sorting:</strong> Your central data structure should be concurrent, allowing mappers to each put values into different partitions correctly and efficiently. Once the mappers have completed, a sorting phase should order the key/value-lists. Then, finally, each reducer thread should start calling the user-defined&nbsp;<code>Reduce()</code>&nbsp;function on the keys in sorted order per partition. You should think about what type of locking is needed throughout this process for correctness.</li>
+<li><strong>Memory Management</strong>&nbsp;One last concern is memory management. The&nbsp;<code>MR_Emit()</code>&nbsp;function is passed a key/value pair; it is the responsibility of the MR library to make copies of each of these. However, avoid making too many copies of them since the goal is to design an efficient concurrent data structure. Then, when the entire mapping and reduction is complete, it is the responsibility of the MR library to free everything.</li>
+</ul>
+<hr>
+<h3>Testing and handin instructions</h3>
+<ul>
+<li>Tests will be provided at<span>&nbsp;</span><em>~cs537-1/tests/p6.</em><em></em><em></em></li>
+<li><strong>Handing it in: Copy your files to <em>~cs537-1/handin/login/p6</em> where login is your CS login.</strong> Do NOT use this handin directory for your work space.&nbsp; You should keep a separate copy of your project files in your own home directory and then simply copy the relevant files to this handin directory when you are done.&nbsp; The permissions to this handin directory will be turned off promptly when the deadline passes and you will no longer be able to modify files in that directory.<br>
+<p><span><strong>Each project partner should turn in their joint code to each of their handin directories.</strong> E</span>ach person should place a file named <strong>partners.txt</strong> in their <em>handin/p6</em> directory, so that we can tell who worked together on this project.&nbsp; The format of <strong>partners.txt</strong> should be exactly as follows:</p>
+<pre>cslogin1 wiscNetid1 Lastname1 Firstname1<br>cslogin2 wiscNetid2 Lastname2 Firstname2</pre>
+<p>It does not matter who is 1 and who is 2.&nbsp; If you worked alone, your <strong>partners.txt</strong> file should have only one line.&nbsp; There should be no spaces within your first or last name; just use spaces to separate fields. To repeat, <strong>both project partners should turn in their code and both should have a <em>turnin/p2a/partners.txt</em> file.<br></strong></p>
+</li>
+</ul>
+<p>Good luck!</p>
+<h1 id="testing"></h1></div>
+
+
+  <div style="display: none;">
+    <span class="timestamp">1723265999</span>
+    <span class="due_date_string">08/09/2024</span>
+    <span class="due_time_string">11:59pm</span>
+  </div>
+</div>
+
+
+
+
+
+
+  <div id="rubrics" class="mathjax_ignore" style="margin-bottom: 10px;">
+    <div style="display: none;" id="rubric_parameters">
+      <input type="hidden" name="rubric_association[association_type]" value="Assignment"/>
+      <input type="hidden" name="rubric_association[association_id]" value="2301451"/>
+      <input type="hidden" name="rubric_association[purpose]" value="grading"/>
+    </div>
+    
+<div id="rubric_long_description_dialog" style="display: none;">
+  <div class="editing">
+    <form id="edit_criterion_form" class="no-margin-bottom">
+      <div>
+        <label class="rating_form_label">Description
+          <textarea class="description" rows="1" name="description"></textarea>
+        </label>
+      </div>
+      <div>
+        <label class="rating_form_label">Long Description
+          <textarea class="long_description" rows="4" name="long_description"></textarea>
+        </label>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn save_button btn-primary">Update Criterion</button>
+      </div>
+    </form>
+  </div>
+  <div class="displaying">
+    <div class="long_description">
+    </div>
+  </div>
+</div>
+<div id="rubric_criterion_comments_dialog" style="display: none;">
+  <div
+    class="criterion_description"
+    style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;"
+    tabindex="-1"
+  ></div>
+  <div class="editing">
+    <label for="criterion_comments_textarea">
+      Additional Comments:
+    </label>
+    <textarea
+      id="criterion_comments_textarea"
+      class="criterion_comments"
+      name="criterion_comments"
+      style="width: 370px;"></textarea>
+    <div class="button-container">
+      <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+      <button type="button" class="btn save_button">Update Comments</button>
+    </div>
+  </div>
+  <div class="displaying">
+    Additional Comments:
+    <div class="criterion_comments" style="margin-top: 10px;">
+    </div>
+  </div>
+</div>
+<div id="rubric_rating_dialog" style="display: none;">
+  <div class="description" style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">
+    <span id="edit_rating_form_criterion_description"></span>
+  </div>
+  <div class="editing">
+    <form id="edit_rating_form" class="no-margin-bottom">
+      <div class="toggle_for_hide_points">
+        <div><label id='rating_form_score_label' class="rating_form_label">Rating Score</label></div>
+        <span id='rating_form_max_score_label' hidden>Rating max score</span>
+        <input id="points" aria-labelledby="rating_form_score_label" type="text" size="2" name="points" class="no-margin-bottom span1" />
+        <span class="range_rating">to >
+          <input aria-label="Rating min score" type="text" size="2" name="min_points" class="no-margin-bottom span1 min_points" placeholder="min"/>
+        </span>pts
+      </div>
+      <div>
+        <label for="rating_form_title" class="rating_form_label">Rating Title</label>
+        <input id="rating_form_title" type="text" class="rating_description" style="width: 90%;" name="description"/>
+      </div>
+      <div>
+        <label for="rating_form_description" class="rating_form_label">Rating Description</label>
+        <textarea id="rating_form_description" rows="4" style="width: 90%;" class="rating_long_description" name="rating_long_description" form="edit_rating_form"></textarea>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn btn-primary save_button ok_button">Update Rating</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  </div>
+  
+<div
+  class="rubric_container rubric  "
+  id="default_rubric"
+  style="display: none;"
+>
+  <div class="screenreader-only"><h2>Rubric</h2></div>
+  <div class="rubric_title">
+    <div style="display: none;" class="links displaying pull-right">
+      <a
+        href="/courses/402226/rubrics/%7B%7B%20id%20%7D%7D"
+        class=" edit_rubric_link no-print no-hover"
+        style=""
+        title="Edit Rubric"
+        aria-label="Edit Rubric"
+        role="button"
+      ><i class="icon-edit standalone-icon"></i></a>
+      <a
+        href="https://canvas.wisc.edu/search/rubrics?q="
+        class="find_rubric_link no-print no-hover"
+        style=""
+        title="Find Another Rubric"
+        aria-label="Find Another Rubric"
+        role="button"
+      ><i class="icon-search standalone-icon"></i></a>
+        <a
+          href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D"
+          class="delete_rubric_link no-print no-hover"
+          style=""
+          title="Delete Rubric"
+          aria-label="Delete Rubric"
+          role="button"
+        ><i class="icon-trash standalone-icon"></i></a>
+      <div style="display: none;">
+        <div class="use_for_grading">&nbsp;</div>
+        <div class="free_form_criterion_comments">&nbsp;</div>
+        <div class="hide_score_total">&nbsp;</div>
+        <div class="hide_outcome_results">&nbsp;</div>
+        <div class="hide_points">&nbsp;</div>
+        <div class="rubric_association_id">&nbsp;</div>
+          <div class="user_id">&nbsp;</div>
+        <div class="assessment_type"></div>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D/assessments/%7B%7B%20assessment_id%20%7D%7D" rel="nofollow" class="edit_assessment_link">&nbsp;</a>
+        <a href="/courses/402226/rubrics/%7B%7B%20rubric_id%20%7D%7D" class="edit_rubric_url">&nbsp;</a>
+          <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url">&nbsp;</a>
+      </div>
+    </div>
+    <div style="float: right; font-size: 0.8em; display: none;" class="links displaying locked">
+      <span style="">Can&#39;t change a rubric once you&#39;ve started using it.</span>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url" style="display: none;">&nbsp;</a>
+    </div>
+
+    <div class="editing" style="float: right;">
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" class="find_rubric_link icon-search" style="" title="Find Existing Rubric">Find a Rubric</a>
+    </div>
+    <div class="editing" style="text-align: left">
+      <label for="rubric-title">Title:</label>
+      <input id="rubric-title" type="text" class="no-margin-bottom" name="title" value="Some Rubric" style="width: 200px;" maxlength="255" aria-label="Title:"/>
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" style="display: none;"><img alt="" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/find-6164443e2a.png" /> Find Rubric</a>
+    </div>
+    <div class="displaying">
+      <span class="title" tabindex="-1">Title</span>
+    </div>
+    <div class="has-assessments-warning" style="display: none;">
+      You&#39;ve already rated students with this rubric. Any major changes could affect their assessment results.
+    </div>
+  </div>
+<table class="rubric_table">
+<caption>
+  <div class="screenreader-only">
+    <span class="title">Title</span>
+  </div>
+</caption>
+<thead>
+  <tr>
+    <th scope="col">Criteria</th>
+    <th scope="col">Ratings</th>
+    <th scope="col" class="toggle_for_hide_points ">
+      Pts
+    </th>
+  </tr>
+</thead>
+<tbody>
+  
+<tr id="criterion_blank" class="criterion blank  " style="display: none;">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+          <a href="#" class="delete_criterion_link" role="button"><i class="icon-trash standalone-icon"></i><span class="screenreader-only">Delete criterion row</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">Description of criterion</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;"></span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points">5</span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  <tr class="summary">
+    <td colspan="4">
+      <div class="total_points_holder toggle_for_hide_points "
+        style="float: right; ">
+        <span>Total Points:
+            <span class="rubric_total">
+              5
+            </span>
+ <span class="assessing">out of 5</span>        </span>
+      </div>
+      <div class="editing pull-left">
+        <span id="add_criterion_holder" class="criterion_link"></span>
+      </div>
+      <div class="clear"></div>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<table style="display: none;">
+  <tr id="edit_rubric">
+    <td colspan="4">
+      <form id="edit_rubric_form" class="edit-rubric-form no-margin-bottom">
+        <div class="rubric_custom_ratings" style="">
+          <input type="checkbox" id="rubric_custom_rating" class="rubric_custom_rating" />
+          <label for="rubric_custom_rating">I&#39;ll write free-form comments when assessing students</label>
+        </div>
+          <div class="hide_points" style="">
+            <input type="checkbox" id="hide_points" class="hide_points_checkbox" />
+            <label for="hide_points">Remove points from rubric</label>
+          </div>
+          <div class="hide_outcome_results" style="">
+            <input type="checkbox" id="hide_outcome_results" class="hide_outcome_results_checkbox" />
+            <label for="hide_outcome_results">Don&#39;t post Outcomes results to Learning Mastery Gradebook</label>
+          </div>
+          <div class="rubric_grading" style="">
+            <input type="checkbox" id="grading_rubric" class="grading_rubric_checkbox" />
+            <label for="grading_rubric">Use this rubric for assignment grading</label>
+          </div>
+        <div class="totalling_rubric" style="">
+          <input type="checkbox" id="totalling_rubric" class="totalling_rubric_checkbox" />
+          <label for="totalling_rubric">Hide score total for assessment results</label>
+        </div>
+        <div class="ic-Action-header ic-Action-header--half-margin">
+          <div class="ic-Action-header__Primary">
+            <button type="button" class="Button cancel_button">Cancel</button>
+            <button type="submit" class="Button Button--primary save_button">Create Rubric</button>
+          </div>
+        </div>
+      </form>
+    </td>
+  </tr>
+</table>
+
+
+  <div id="assignment_external_tools"></div>
+
+  
+
+
+          </div>
+        </div>
+        <div id="right-side-wrapper" class="ic-app-main-content__secondary">
+          <aside id="right-side" role="complementary">
+            
+<div id="sidebar_content">
+
+
+</div>
+
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <div style="display:none;"><!-- Everything inside of this should always stay hidden -->
+        <div id="page_view_id">76d4a3bb-6bb6-416f-a258-e047cfc42435</div>
+    </div>
+  <div id='aria_alerts' class='hide-text affix' role="alert" aria-live="assertive"></div>
+  <div id='StudentTray__Container'></div>
+    <div class="NewUserTutorialTray__Container"></div>
+  <div id="react-router-portals"></div>
+  
+
+  <iframe src="https://sso.canvaslms.com/post_message_forwarding?rev=59677caad5-de8233d392aa15f4&amp;token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJwYXJlbnRfZG9tYWluIjoiY2FudmFzLndpc2MuZWR1In0.Vn8_7bMNTbXrR91PBjKlQirgswiqpPUPf9FKxmafm8AhCw4ZfBrA7WOraGeDcLgBsrk4TM_k0DZMTAXtmA5J-A" name="post_message_forwarding" title="post_message_forwarding" id="post_message_forwarding" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
+
+
+  <script>
+    Object.assign(
+      ENV,
+      {}
+    )
+  </script>
+
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('inst_fs_service_worker');
+//]]>
+</script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/39713295/madison_changes_july2024_.js" defer="defer"></script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js" defer="defer"></script>
+
+</div> <!-- #application -->
+</body>
+</html>

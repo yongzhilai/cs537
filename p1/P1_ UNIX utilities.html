@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#990000">
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="apple-itunes-app" content="app-id=480883488">
+<link rel="manifest" href="/web-app-manifest/manifest.json">
+  <meta name="sentry-trace" content="5cdc7e90f7b94e5f8943e3be45209514-bc6949e118b04ab4-0"/>
+  <title>P1: UNIX utilities</title>
+
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Regular-bd03a2cc27.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Bold-cccb897485.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Italic-4eb103b4d1.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/common-3851139992.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/assignments-adde4b105e.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/learning_outcomes-0ef38391dc.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/new_user_tutorials-6b15f87caf.css" media="screen" />
+  <link rel="apple-touch-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/apple-touch-icon-585e5d997d.png" />
+  <link rel="icon" type="image/x-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" />
+
+  <link rel="stylesheet" href="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/38736063/Madison_041624.css" media="all" />
+  
+  <script>if (navigator.userAgent.match(/(MSIE|Trident\/)/)) location.replace('/ie-is-not-supported.html')</script>
+  <script>
+    INST = {"environment":"production","allowMediaComments":true,"kalturaSettings":{"domain":"nv.instructuremedia.com","resource_domain":"nv.instructuremedia.com","rtmp_domain":"iad.rtmp.instructuremedia.com","partner_id":"9","subpartner_id":"0","player_ui_conf":"0","kcw_ui_conf":"0","upload_ui_conf":"0","max_file_size_bytes":534773760,"do_analytics":false,"hide_rte_button":false,"js_uploader":true},"logPageViews":true,"editorButtons":[{"name":"YouTube","id":63,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=youtube","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/youtube_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSearch publicly available YouTube videos. A new icon will show up in your course rich editor letting you search YouTube and click to embed videos in your course material.\u003c/p\u003e\n"},{"name":"Vimeo","id":64,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=vimeo","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/vimeo_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eVimeo is a video sharing website on which users can upload, share, and view videos. The community of Vimeo includes indie, professional, and novice filmmakers.\u003c/p\u003e\n"},{"name":"GoogleApps","id":354,"favorite":false,"url":"https://google-drive-lti-iad-prod.instructure.com/lti/rce-content-selection","icon_url":"https://google-drive-lti-iad-prod.instructure.com/icon.png","canvas_icon_class":null,"width":700,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Google Drive to Canvas\u003c/p\u003e\n"},{"name":"Office 365","id":690,"favorite":false,"url":"https://office365-iad-prod.instructure.com/lti/rce-content-item","icon_url":"https://office365-iad-prod.instructure.com/images/office365_icon.png","canvas_icon_class":null,"width":900,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Office 365 to Canvas\u003c/p\u003e\n"},{"name":"BOX","id":691,"favorite":false,"url":"https://www.edu-apps.org/box/","icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png","canvas_icon_class":null,"width":430,"height":200,"use_tray":false,"always_on":false,"description":"\u003cp\u003eEmbed files from Box\u003c/p\u003e\n"},{"name":"Commons Favorites","id":4963,"favorite":false,"url":"https://lor.instructure.com/api/lti/favorite-resources","icon_url":"https://lor.instructure.com/img/icon_commons.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":true,"always_on":false,"description":"\u003cp\u003eFind and share course content\u003c/p\u003e\n"},{"name":"Embed Kaltura Media","id":9199,"favorite":true,"url":"https://1660902-6.kaf.kaltura.com/browseandembed/index/browseandembed","icon_url":"https://cdnsecakmi.kaltura.com/content/static/kalturalogo.png","canvas_icon_class":null,"width":1100,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eMedia Gallery and Embed\u003c/p\u003e\n"},{"name":"SAGE Vantage LTI 1.3 - editor_button","id":16667,"favorite":false,"url":"https://vantage.sagepub.com/lti1p3/tool/F2qexkPLRCSA0Qgi","icon_url":"https://vantage.sagepub.com/images/sagent/Bird-blue-right.svg","canvas_icon_class":null,"width":1000,"height":1000,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSAGE Vantage 1.3 Tool\u003c/p\u003e\n"},{"name":"myBusinessCourse Resource Selection","id":20058,"favorite":false,"url":"https://mybusinesscourse.com/platform/local/integrations/lti.php","icon_url":"https://mybusinesscourse.com/ublish/client/cpb/images/link_logo.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003emyBusinessCourse LTI 1.3\u003c/p\u003e\n"},{"name":"Pearson Links","id":21056,"favorite":false,"url":"https://interop.pearson.com/launch","icon_url":"https://www.pearson.com/us/content/dam/one-dot-com/one-dot-com/us/en/images/PearsonThumbprint-RGB-127x138.png/_jcr_content/renditions/cq5dam.web.1600.9600.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAccess Pearson\u003c/p\u003e\n"}]};
+    ENV = {"ASSET_HOST":"https://du11hjcvx0uqb.cloudfront.net","active_brand_config_json_url":"https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.json","active_brand_config":{"md5":"61f7e559cc87fd00c64673f40997d6a9","variables":{},"share":false,"name":null,"created_at":"2024-07-10T16:20:14-05:00","js_overrides":"https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js","css_overrides":"","mobile_js_overrides":"","mobile_css_overrides":"","parent_md5":"8f6dd81031a173a2b291239d3ac3f2b7"},"confetti_branding_enabled":false,"url_to_what_gets_loaded_inside_the_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-90e5ad1077.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"url_for_high_contrast_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/default/variables-high_contrast-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-795277483f.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"current_user_id":"210042","current_user_global_id":"83960000000210042","current_user_heap_id":"uu-2-b8e0df225888f508350f05f630b51a9475afbaccbb1f7ff370bb169fbe3d4d5d-0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","current_user_roles":["user","student"],"current_user_is_student":true,"current_user_types":[],"current_user_disabled_inbox":false,"current_user_visited_tabs":null,"discussions_reporting":true,"files_domain":"cluster77.canvas-user-content.com","group_information":null,"DOMAIN_ROOT_ACCOUNT_ID":"83960000000000001","DOMAIN_ROOT_ACCOUNT_UUID":"0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","k12":false,"help_link_name":"Help","help_link_icon":"help","use_high_contrast":false,"auto_show_cc":false,"disable_celebrations":false,"disable_keyboard_shortcuts":false,"LTI_LAUNCH_FRAME_ALLOWANCES":["geolocation *","microphone *","camera *","midi *","encrypted-media *","autoplay *","clipboard-write *","display-capture *"],"DEEP_LINKING_POST_MESSAGE_ORIGIN":"https://canvas.wisc.edu","comment_library_suggestions_enabled":false,"SETTINGS":{"open_registration":false,"collapse_global_nav":true,"release_notes_badge_disabled":false,"can_add_pronouns":true,"filter_speed_grader_by_student_group":false},"RAILS_ENVIRONMENT":"Production","IN_PACED_COURSE":false,"SENTRY_FRONTEND":{"dsn":"https://355a1d96717e4038ac25aa852fa79a8f@relay-iad.sentry.insops.net/388","org_slug":"instructure","base_url":"https://sentry.insops.net","normalized_route":"/courses/{course_id}/assignments/{id}","errors_sample_rate":"0.005","traces_sample_rate":"0.005","url_deny_pattern":"instructure-uploads.*amazonaws.com","revision":"canvas-lms@20240731.238"},"DATA_COLLECTION_ENDPOINT":"https://canvas-frontend-data-iad-prod.inscloudgate.net/submit","DOMAIN_ROOT_ACCOUNT_SFID":"001A000000ZQLzgIAH","DIRECT_SHARE_ENABLED":false,"CAN_VIEW_CONTENT_SHARES":false,"FEATURES":{"featured_help_links":true,"account_level_blackout_dates":false,"render_both_to_do_lists":false,"commons_new_quizzes":false,"course_paces_redesign":true,"course_paces_for_students":true,"explicit_latex_typesetting":false,"media_links_use_attachment_id":true,"permanent_page_links":true,"selective_release_backend":true,"selective_release_ui_api":true,"selective_release_optimized_tray":true,"enhanced_course_creation_account_fetching":false,"instui_for_import_page":false,"multiselect_gradebook_filters":true,"assignment_edit_placement_not_on_announcements":false,"platform_service_speedgrader":false,"instui_header":false,"rce_find_replace":true,"courses_popout_sisid":true,"dashboard_graphql_integration":false,"discussion_checkpoints":false,"speedgrader_studio_media_capture":true,"product_tours":false,"usage_rights_discussion_topics":true,"granular_permissions_manage_users":true,"create_course_subaccount_picker":true,"file_verifiers_for_quiz_links":true,"lti_deep_linking_module_index_menu_modal":true,"lti_dynamic_registration":true,"lti_multiple_assignment_deep_linking":true,"lti_overwrite_user_url_input_select_content_dialog":true,"buttons_and_icons_root_account":false,"extended_submission_state":false,"scheduled_page_publication":true,"send_usage_metrics":true,"rce_transform_loaded_content":false,"mobile_offline_mode":false,"react_discussions_post":true,"instui_nav":false,"enhanced_developer_keys_tables":true,"lti_registrations_discover_page":false,"enhanced_rubrics":false,"account_level_mastery_scales":false,"non_scoring_rubrics":true,"top_navigation_placement":false,"embedded_release_notes":true,"canvas_k6_theme":false,"new_math_equation_handling":true},"current_user":{"id":"210042","anonymous_id":"4i2i","display_name":"Yongzhi Lai","avatar_image_url":"https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128\u0026d=identicon","html_url":"https://canvas.wisc.edu/about/210042","pronouns":null,"avatar_is_fallback":false,"email":"LAI38@WISC.EDU"},"current_user_is_admin":false,"page_view_update_url":"/page_views/04306bb5-b82b-45b5-bbf3-501bb6635177?page_view_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpIjoiMDQzMDZiYjUtYjgyYi00NWI1LWJiZjMtNTAxYmI2NjM1MTc3IiwidSI6ODM5NjAwMDAwMDAyMTAwNDIsImMiOiIyMDI0LTA4LTEyVDIwOjM5OjUzLjcyWiJ9.150GnCNLkRSU8sDWrjL9CTvq86ZNsyo49OdGsoNKGOw","context_asset_string":"course_402226","ping_url":"https://canvas.wisc.edu/api/v1/courses/402226/ping","TIMEZONE":"America/Chicago","CONTEXT_TIMEZONE":"America/Chicago","LOCALES":["en"],"BIGEASY_LOCALE":"en_US","FULLCALENDAR_LOCALE":"en","MOMENT_LOCALE":"en","rce_auto_save_max_age_ms":86400000,"K5_USER":false,"USE_CLASSIC_FONT":false,"K5_HOMEROOM_COURSE":false,"K5_SUBJECT_COURSE":false,"LOCALE_TRANSLATION_FILE":"/dist/javascripts/translations/en-67c25a6858.json","ACCOUNT_ID":"123","user_cache_key":"dHBhYkxONnRSMlIyazBpMVdoUXNQTUxPZFJINGYwa01HSjVSSG13enZ5Zlc9\nO1twLTA/OntQXz1IVXBncmFxZTtuamFsa2hwdm9pdWxraW1tYXFld2c=\n","current_context":{"id":"402226","name":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","type":"Course","url":"https://canvas.wisc.edu/courses/402226"},"ASSIGNMENT_POINTS_POSSIBLE":null,"media_comment_asset_string":"user_210042","COURSE_ID":"402226","ROOT_OUTCOME_GROUP":{"id":"129584","title":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","vendor_guid":null,"url":"/api/v1/courses/402226/outcome_groups/129584","subgroups_url":"/api/v1/courses/402226/outcome_groups/129584/subgroups","outcomes_url":"/api/v1/courses/402226/outcome_groups/129584/outcomes","can_edit":false,"import_url":"/api/v1/courses/402226/outcome_groups/129584/import","context_id":"402226","context_type":"Course","description":null},"SUBMISSION_ID":"142517095","FIRST_ANNOTATION_SUBMISSION":false,"RICH_CONTENT_APP_HOST":"rich-content-iad.inscloudgate.net","JWT":"ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJSME5OSWl3aWNtVm5hVzl1SWpvaWRYTXRaV0Z6ZEMweElpd2laVzUyYVhKdmJtMWxiblFpT2lKUWNtOWtkV04wYVc5dUluMC4uQ01KSFdHQUZ3TFVhMldXTy5PVFNNUkxpdWFZa05TaVd2LWtkOUpVemJXdFNSeFFVVVVyd3dWMFhTRE1KamNzc1NMVWVmWmdOeWJuMnFsRXVqVE1VZWpQOW10LVNSVWpzRkE1S2RmaGQwc2djUjdVV2NTb2VWc3JUTHBaOFBoUXFJQzAtNy11a3M2UUVvb1ZKemZOQ1NLRUVTR243ZGlERmRQVTdrNExoLXpkWUh1WGR1Z1k2V3kwRlZzWGUtYTJVRUFiaExHWm5iT01XMy1fZi13SG9Jc2dBbWpWNDEta1NycU9CZmh1ZXpCanRVQ3g2TXhZY2ZXSnFLaG1xay0xT0l0b3BaUUlKenBHLUNqcVFzZjRXMEpKcUVaVW9WVno2aHFuMDFmVWc5NmhOaFBaeDFqZzc3ZnVITjFYTzExR3MzVnhDT1VfSFhseUxEMmhQYjVDX3MyeDVWQ29sb2tJV3hOdjFHcVhZdXN2RWFYZHIzSUJ3RFkyMjFXMjRzTGo2TzBnTlotNmFHQzV1TDJPaDZ6VDVJVTV0R09HUjhiYTI4X3lDWjAydFdic282SURLY1U0dHQwYXdpZEFPdVFGQ0FKVzNlVncxX1BTSHowOEhaTkExWE5pcmdJYjBIb0l6SGpvT1ZoSXdfN2piZFdrMDdFYVNldkxvN2dwa1hnTnJVUXliX0hqb2FmUG5uX0hoNmoyMjlJTHIxUnFNX1BleHFldFJzQnppZ1BQYnBEUlB5M0E0bUlWM0FEZnRGWUg3cERlV2oydXpWUFJZblhZaGFrVFh3bEIxSUIyRnRjTTMyUWdsYmFhcU9ZUWh2cjJZelZodDBodl9ITHFyeVNwN0FpVk5kUjVPcW13YlNfZGhUay1xNF9BVjBwOGw0VTlOdlVSMjhibjIyVkpuTWRqU01vRkRDdVgzWGJyT1RBZC1OX3JUb2tzc19saV9VZ0VMWGlQRE5hVDhxQlJMYld0aks2VTNyTUdHLXdMdXE3NUJUaUtWSXN1WEs5MHBheWZUOWZqcWp4TUZNMmRST2RGWHBybnF1Xy1aSlZRRDg0RGhjcUg0TElydFpYMUw4TEZIZWZ3Lm11cDc0VWIxWERZa2hUWnktY0FUM3c=","RICH_CONTENT_CAN_UPLOAD_FILES":false,"RICH_CONTENT_CAN_EDIT_FILES":false,"RICH_CONTENT_FILES_TAB_DISABLED":false,"RICH_CONTENT_INST_RECORD_TAB_DISABLED":false,"RICH_CONTENT_AI_TEXT_TOOLS":false,"ASSIGNMENT_ID":"2301423","PREREQS":{},"EULA_URL":null,"EXTERNAL_TOOLS":[],"PERMISSIONS":{"context":{"read_as_admin":false,"manage_assignments":false,"manage_assignments_edit":false},"assignment":{"update":false,"submit":false},"can_manage_groups":true},"SIMILARITY_PLEDGE":null,"CONFETTI_ENABLED":false,"EMOJIS_ENABLED":false,"EMOJI_DENY_LIST":null,"USER_ASSET_STRING":"user_210042","OUTCOMES_NEW_DECAYING_AVERAGE_CALCULATION":true,"CONDITIONAL_RELEASE_SERVICE_ENABLED":true,"CONDITIONAL_RELEASE_ENV":{"assignment":{"id":"2301423","title":"P1: UNIX utilities","description":"\u003ch3\u003eOverview:\u003c/h3\u003e\n\u003cp\u003eIn this assignment, you will build a set of small utilities that are variants of commonly-used commands in UNIX systems. You will be building 2 utilities:\u003c/p\u003e\n\u003col type=\"1\"\u003e\n\u003cli\u003ewisc-sed: This utility will be a variation of the sed tool which is used for searching, editing, replacing and deleting patterns in files.\u003c/li\u003e\n\u003cli\u003ewisc-tar: This utility is similar to tar, which is a commonly used UNIX utility to combine/compress a collection of files into one file. This functionality is useful in a number of scenarios e.g. offering a single file to download for software. (If you’ve heard the phrase tarball, that comes from using tar!)\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch3\u003eLearning objectives:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eRe-familiarize yourself with the C programming language\u003c/li\u003e\n\u003cli\u003eRe-familiarize yourself with a shell / terminal / command-line of UNIX\u003c/li\u003e\n\u003cli\u003eLearn how to compile C files and execute binaries on the command-line\u003c/li\u003e\n\u003cli\u003eLearn a little about how UNIX utilities are implemented\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eDeliverables:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eSet of\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003cem\u003e.c\u003c/em\u003e\u003cspan\u003e\u0026nbsp;\u003c/span\u003efiles, one for each utility :\u0026nbsp; \u003cstrong\u003ewisc-sed.c, wisc-tar\u003c/strong\u003e\u003cstrong\u003e.c\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003eEach file should compile successfully when compiled with the -Wall and -Werror flags.\u003c/li\u003e\n\u003cli\u003eEach utility should pass tests we supply as well as tests that meet our specification that we do not supply\u003c/li\u003e\n\u003cli\u003eInclude a single README.md for all the files describing your implementation\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eAdministrivia:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eThis project is to be performed alone.\u003c/li\u003e\n\u003cli\u003e\u003cstrong data-sourcepos=\"8:3-8:14\"\u003eDue Date\u003c/strong\u003e: June 10th, at 11:59pm (4 slip days throughout course, use wisely)\u003c/li\u003e\n\u003cli\u003eA small portion of the credit is allocated for good programming style and memory management. Read the \u003ca title=\"Coding style\" href=\"/courses/402226/pages/coding-style\" data-course-type=\"wikiPages\" data-published=\"false\" data-api-endpoint=\"https://canvas.wisc.edu/api/v1/courses/402226/pages/coding-style\" data-api-returntype=\"Page\"\u003edetails\u003c/a\u003e.\u003c/li\u003e\n\u003cli\u003eThis project is to be done on the\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ca class=\"inline_disabled\" href=\"https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/\" target=\"_blank\"\u003elab machines\u003c/a\u003e, so you can learn more about programming in C on a typical UNIX-based platform (Linux).\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch3\u003e\u003cspan style=\"text-decoration: underline;\"\u003ewisc-sed\u003c/span\u003e\u003c/h3\u003e\n\u003cp\u003e\u003cstrong\u003esed\u003c/strong\u003e stands for Stream Editor, it is used to perform basic text transformations on an input stream such as a file. You will build \u003cstrong\u003ewisc-sed\u003c/strong\u003e, which implements just one functionality: string substitution.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e\u003cspan style=\"font-size: 14pt;\"\u003eInput \u003c/span\u003e\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ewisc-sed\u003c/strong\u003e will take 3 mandatory inputs: \u0026lt;search string\u0026gt;, \u0026lt;replacement string\u0026gt;, \u0026lt;filename\u0026gt;. It will also take some optional flags. Here's an example which substitutes the string 'mascot' with 'bucky' in file 'a.txt' while ignoring the case of the strings during comparison.\u003c/p\u003e\n\u003cpre\u003eprompt\u0026gt; ./wisc-sed -c -s mascot -r bucky -f a.txt\u003c/pre\u003e\n\u003cp\u003eThere are 6 flags that your utility needs to handle. Some are mandatory while some are optional.\u003c/p\u003e\n\u003col style=\"list-style-type: decimal;\"\u003e\n\u003cli\u003e\u003cstrong\u003e-s \u0026lt;search string\u0026gt;: (Mandatory) \u003c/strong\u003eThis is the string to be searched and replaced.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e-r \u0026lt;replacement string\u0026gt;: (Mandatory)\u003c/strong\u003e This is the replacement string.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e-f \u0026lt;input file\u0026gt;: (Mandatory)\u003c/strong\u003e This is the input filename.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e-o \u0026lt;output file\u0026gt;: (Optional) \u003c/strong\u003eThis flag is used to specify an output file. If this isn't specified than all the output should go to stdout.\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e-n\u003c/strong\u003e \u003cstrong\u003e\u0026lt;line number\u0026gt;: (Optional)\u003c/strong\u003e If this flag is passed, then the strings should be replaced only on line \u003cstrong\u003e\u0026lt;line number\u0026gt;\u003c/strong\u003e. If this flag is not passed, then the string replacement should be applied \u003cstrong\u003eglobally\u003c/strong\u003e, i.e. all lines of the file. For this assignment, line numbers start from 1 (not 0).\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e-c: (Optional) \u003c/strong\u003eThis flag means the string comparison is not case-sensitive. If this flag is not passed (default), then the string comparison is case-sensitive.\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003e\u003cstrong\u003e\u003cspan style=\"font-size: 14pt;\"\u003eOutput \u003c/span\u003e\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eThe output of your utility is the modified file contents with the search string replaced by replacement string. If the \u003cstrong\u003e-o\u003c/strong\u003e flag is passed, then the output should be written to a new file with the specified name, else it should be printed to \u003cstrong\u003estdout\u003c/strong\u003e.\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"font-size: 14pt;\"\u003e\u003cstrong\u003eDetails\u003c/strong\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eHere are a few details and assumptions you should keep in mind during implementation:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eAll error messages are printed to stdout.\u003c/li\u003e\n\u003cli\u003eIf the 3 mandatory inputs are not passed to your utility, then you should print “usage: wisc-sed [optional flags] -s \u0026lt;search string\u0026gt; -r \u0026lt;replacement string\u0026gt; -f \u0026lt;file\u0026gt;\" (followed by a newline) and exit with status 1.\u003c/li\u003e\n\u003cli\u003eIf the input file is not found you should print “wisc-sed: cannot open file” (followed by a newline) and exit with status 1.\u003c/li\u003e\n\u003cli\u003eYou can assume that the files provided as an input exist in the directory where the program is run from (no need to handle ways to store pesky path names).\u003c/li\u003e\n\u003cli\u003eIf an output file of the same name already exists, you can overwrite it with the new contents specified.\u003c/li\u003e\n\u003cli\u003eIf the line number passed to \u003cstrong\u003e-n\u003c/strong\u003e flag exceeds the number of lines in the file, then ignore the flag and don't replace anything.\u003c/li\u003e\n\u003cli\u003eIf an unknown flag is passed, then you can ignore the flag.\u003c/li\u003e\n\u003cli\u003eFor simplicity, assume that the search string and replacement string don't contain spaces, i.e., they are one word each.\u003c/li\u003e\n\u003c/ol\u003e\n\u003chr\u003e\n\u003ch3\u003e\u003cspan style=\"text-decoration: underline;\"\u003ewisc-tar\u003c/span\u003e\u003c/h3\u003e\n\u003cp\u003eThe second utility you will build is \u003cstrong\u003ewisc-tar\u003c/strong\u003e whose functionality is similar to the actual tar utility but much simpler.\u003cstrong\u003e tar\u003c/strong\u003e is a UNIX tool, similar to zip, used to combine a collection of files into one file. tar stands for Tape Archive. This tool is useful in a number of scenarios, e.g. offering a single file to download for software.\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003e\u003cspan style=\"font-size: 14pt;\"\u003eInput\u003c/span\u003e\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003e\u003cstrong\u003ewisc-tar\u003c/strong\u003e will take 2 or more inputs: \u0026lt;output tar filename\u0026gt; \u0026lt;list of files .....\u0026gt;. For example:\u003c/p\u003e\n\u003cpre\u003eprompt\u0026gt; echo abcd \u0026gt; a.txt # creates file a.txt\u003cbr\u003eprompt\u0026gt; echo efgh \u0026gt; b.txt # creates file b.txt\u003cbr\u003eprompt\u0026gt; ./wisc-tar test.tar a.txt b.txt # combines a.txt and b.txt into test.tar\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003e\u003cspan style=\"font-size: 14pt;\"\u003eOutput\u003c/span\u003e\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eThe output will be a tar file. In the actual tar implementation, a tar file consists of a series of \u003cem\u003efile objects\u003c/em\u003e. Each file object consists of a file header (file name, size, checksum ...) and the file contents.\u003cbr\u003eFor the purpose of this assignment, we will use a simpler file format for our \u003cstrong\u003ewisc-tar\u003c/strong\u003e file objects. We will use a 128 byte header which contains only the file name and file size, followed by the file contents padded to multiples of 512 bytes, i.e., if a file only has 1000 bytes of data, 24 bytes of NULL ('\\0') are padded at the end. Here's an example format of a wisc-tar file:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e file1 name [120 bytes in ASCII] \n file1 size [8 bytes as binary]\n contents of file1 [in ASCII, padded to multiple of 512 bytes]\n file2 name [120 bytes]\n file2 size [8 bytes]\n contents of file2 [in ASCII, padded to multiple of 512 bytes]\n ...\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cstrong\u003e\u003cspan style=\"font-size: 14pt;\"\u003eDetails\u003c/span\u003e\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eHere are a few details and assumptions you should keep in mind during implementation:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eAll error messages are printed to stdout.\u003c/li\u003e\n\u003cli\u003eYou can assume that the files provided as an input exist in the directory where the program is run from (no need to handle ways to store pesky path names).\u003c/li\u003e\n\u003cli\u003eYou can also assume the files provided as inputs only contain ASCII characters.\u003c/li\u003e\n\u003cli\u003eIf fewer than two arguments are supplied to your program then you should print “wisc-tar: tar-file file1 […]” (followed by a newline) and exit with status 1.\u003c/li\u003e\n\u003cli\u003eIf any of the input files that should be a part of the tar file are not found you should print “wisc-tar: cannot open \u0026lt;filename\u0026gt;” (followed by a newline) and with exit status 1.\u003c/li\u003e\n\u003cli\u003eIf a tar-file of the same name already exists you can overwrite it with the new contents specified.\u003c/li\u003e\n\u003cli\u003eIf any of the input file names are longer than 120 characters, use the first 120 characters as the filename to store in the output tar file.\u003c/li\u003e\n\u003cli\u003eIf any of the input file names are shorter than 120 characters, you should pad the filename such that it uses 120 bytes. For example if the file name is “a.txt”, that only has 5 characters, you should append 115 NULL \u003ccode\u003e(\\0)\u003c/code\u003e characters to make the name use 120 bytes in the tar file. (Remember \u003ccode\u003e'\\0'\u003c/code\u003e is not the same as \u003ccode\u003e'0'\u003c/code\u003e. The first one represents NULL while the second one represents the character 0!)\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch4\u003e\u003cstrong\u003eExample\u003c/strong\u003e\u003c/h4\u003e\n\u003cp\u003eLets look at a complete example to make sure we understand the format and how to understand the contents of a valid tar file. In the following example we first create a text file which contains the string \"hey\". So its size is 3 (Remember this!).\u003c/p\u003e\n\u003cp\u003eNext we run wisc-tar to create \u003ccode\u003etest.tar\u003c/code\u003e as shown below. Finally we print the contents of \u003ccode\u003etest.tar\u003c/code\u003e using \u003ccode\u003ehexdump\u003c/code\u003e, a utility to print the contents of a binary file. The comments to the right explain the output of hexdump. Remember that the bytes are represented in hexadecimal format, so handy table like \u003ca href=\"https://www.ascii-code.com/\"\u003ethis\u003c/a\u003e will help you lookup the ASCII values for strings. Try to see if you can decode the contents based on the comments on the right! The below example was captured on a machine with little endian byte order.\u003cbr\u003e\u003cbr\u003e\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eprompt\u0026gt; echo -n \"hey\" \u0026gt; a.txt # '-n' does not append newline or linefeed at end of string\nprompt\u0026gt; ./wis-tar a.tar a.txt\nprompt\u0026gt; hexdump -v a.tar\u003cbr\u003e0000000 2e61 7874 0074 0000 0000 0000 0000 0000  --\u0026gt; The first five bytes here contain the file name a.txt\u003cbr\u003e0000010 0000 0000 0000 0000 0000 0000 0000 0000\u003cbr\u003e0000020 0000 0000 0000 0000 0000 0000 0000 0000\u003cbr\u003e0000030 0000 0000 0000 0000 0000 0000 0000 0000\u003cbr\u003e0000040 0000 0000 0000 0000 0000 0000 0000 0000\u003cbr\u003e0000050 0000 0000 0000 0000 0000 0000 0000 0000\u003cbr\u003e0000060 0000 0000 0000 0000 0000 0000 0000 0000 ---\u0026gt; We have padded filename using \\0 till we hit 120 bytes\u003cbr\u003e0000070 0000 0000 0000 0000 0003 0000 0000 0000 ---\u0026gt; The byte containing 03 indicates the file size is 3. Note that this is not in ASCII!\u003cbr\u003e0000080 6568 0079 0000 0000 0000 0000 0000 0000 ---\u0026gt; The first three bytes contain the string \"hey\", the contents of the file, followed by 509 bytes of \\0.\u003cbr\u003e0000090 0000 0000 0000 0000 0000 0000 0000 0000\u003cbr\u003e.................\u003c/code\u003e\u003c/pre\u003e\n\u003chr\u003e\n\u003ch3\u003eHints\u003c/h3\u003e\n\u003cp\u003eRead this \u003ca href=\"http://pages.cs.wisc.edu/~remzi/OSTEP/lab-tutorial.pdf\"\u003elab tutorial\u003c/a\u003e; it has some useful tips for programming in the C environment.\u003c/p\u003e\n\u003cp\u003eYou’ll need to learn how to use a few library routines from the C standard library (often called \u003cstrong\u003elibc\u003c/strong\u003e) to implement the source code for this assignment. All C code is automatically linked with the C library, which is full of useful functions you can call to implement your program. Learn more about the C library \u003ca href=\"https://en.wikipedia.org/wiki/C_standard_library\"\u003ehere\u003c/a\u003e and perhaps \u003ca href=\"https://www-s.acm.illinois.edu/webmonkeys/book/c_guide/\"\u003ehere\u003c/a\u003e.\u003cbr\u003eOn UNIX systems, the best way to read about such functions is to use what are called the \u003cstrong\u003eman\u003c/strong\u003e pages (short for \u003cstrong\u003emanual\u003c/strong\u003e). In our HTML/web-driven world, the man pages feel a bit antiquated, but they are useful and informative and generally quite easy to use. To access the man page for fopen(), for example, just type the following at your UNIX shell prompt: \u003ccode\u003eprompt\u0026gt; man fopen\u003c/code\u003e\u003c/p\u003e\n\u003ch4\u003eSuggested routines\u003c/h4\u003e\n\u003cp\u003eOnce a file is open, there are many different ways to read from it. There are two functions that might be useful for you in the context of this assignment.\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eOpening/closing files: For this assignment, we recommend using the following routines to open and close files: \u003ccode\u003efopen()\u003c/code\u003e and \u003ccode\u003efclose()\u003c/code\u003e. There are other system calls \u003ccode\u003eopen() \u003c/code\u003eand \u003ccode\u003eclose()\u003c/code\u003e you could also use but reading lines might be more difficult.\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eReading/Writing a line: There are two useful functions to read lines: \u003ccode\u003efgets()\u003c/code\u003e which can read a fixed number of characters but stops when it reaches the end of a line, and \u003ccode\u003egetline()\u003c/code\u003e which can read entire lines into a buffer. You can learn more about these functions in, you guessed it, the man pages! To write a string to a file you can similarly use \u003ccode\u003efputs\u003c/code\u003e() or the more powerful formatting capabilities in \u003ccode\u003efprintf()\u003c/code\u003e.\u003cbr\u003eWe recommend using \u003cstrong\u003egetline()\u003c/strong\u003e. You will need to be able to handle lines that are of an arbitrary length; this means, that you cannot simply call \u003cstrong\u003efgets()\u003c/strong\u003e once for each line of the file,\u0026nbsp; since you will not know the size of the buffer needed to fit the line.\u0026nbsp; You can either look into using a different library routine such as \u003cstrong\u003egetline()\u0026nbsp;\u003c/strong\u003eor call \u003cstrong\u003efgets()\u003c/strong\u003e multiple times for each line.\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eString search/comparison: There are many functions available for finding and comparing strings. We recommend using \u003ccode\u003estrstr()\u003c/code\u003e and \u003ccode\u003estrcasestr()\u003c/code\u003e to find the position of the matching string.\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eFinding file size: To find the size of a file, you can use either \u003ccode\u003estat()\u003c/code\u003eor \u003ccode\u003efstat()\u003c/code\u003e. Again, refer to the man pages for more information.\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch4\u003eGood practices\u003c/h4\u003e\n\u003col\u003e\n\u003cli\u003e\n\u003cp\u003e\u003cstrong\u003eUnderstand the Code Structure\u003c/strong\u003e: Start by understanding the problem description and requirements. Read through the man pages and use external resources to understand any unfamiliar concepts or functions.\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003e\u003cstrong\u003eFamiliarize yourself with the functions/APIs: \u003c/strong\u003eTest the new functions with toy examples just to understand how they work.\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003e\u003cstrong\u003eStart Small\u003c/strong\u003e: Don't try to implement everything at once. For example, begin by opening a file, reading lines from it and closing.\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eImplement step-by-step: \u003c/strong\u003eGrow your program by adding one feature at a time\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003e\u003cstrong\u003eImplement Error Handling\u003c/strong\u003e: Once the core of your code has been implemented, add error handling code as specified in requirements above.\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003e\u003cstrong\u003eTest Your Code\u003c/strong\u003e: After implementing a feature, test it thoroughly to make sure it works as expected. This will help you catch any bugs or errors early on.\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003e\u003cstrong\u003eAsk for Help When Stuck\u003c/strong\u003e: Don't hesitate to ask for help if you're having trouble understanding a concept or figuring out why your code isn't working. You can ask the instructors, classmates, or use online resources.\u003c/p\u003e\n\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003eRemember, the goal of the project isn't just to produce a working program, but also to understand the concepts and techniques you're using.\u003c/p\u003e\n\u003ch3\u003eTesting and Handing in your code\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eSome tests are provided at\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003cem\u003e~cs537-1/tests/p1\u003c/em\u003e. Read more about the tests, including how to run them, by executing the command\u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003ecat ~cs537-1/tests/p1/README.md \u003c/code\u003e on any lab machine. Note these test cases are not complete, and you are encouraged to create more on your own.\u0026nbsp;\u0026nbsp;\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003eHanding it in: Copy your files to\u0026nbsp;\u003cem\u003e~cs537-1/handin/login/p1\u003c/em\u003e where login is your CS login.\u003c/strong\u003e Do NOT use this handin directory for your work space.\u0026nbsp; You should keep a separate copy of your project files in your own home directory and then simply copy the relevant files to this handin directory when you are done.\u0026nbsp; The permissions to this handin directory will be turned off promptly when the deadline passes and you will no longer be able to modify files in that directory. If you cannot find your handin directory, send email to the instructor asking for a handin directory; \u003cstrong\u003etell us your CS login.\u003c/strong\u003e\u0026nbsp;\u003c/li\u003e\n\u003c/ul\u003e","points_possible":100.0,"grading_type":"points","submission_types":"none","grading_scheme":{"A":0.94,"A-":0.9,"B+":0.87,"B":0.84,"B-":0.8,"C+":0.77,"C":0.74,"C-":0.7,"D+":0.67,"D":0.64,"D-":0.61,"F":0.0}},"course_id":"402226","stats_url":"/api/v1/courses/402226/mastery_paths/stats","rule":null},"badge_counts":{"submissions":12},"notices":[],"active_context_tab":"assignments"};
+    BRANDABLE_CSS_HANDLEBARS_INDEX = [["new_styles_normal_contrast","new_styles_high_contrast","new_styles_normal_contrast_rtl","new_styles_high_contrast_rtl"],{"10":["908ffbc673",0,"d5c9044c6e",2],"15":["c8540c43a4",0,"0a2196be1d",2],"19":["df5777ed9c"],"61":["1fb36890db","b83a603352","4bcf82f85a","0b171e092c"],"67":["700335fb7b",0,"1cc2485e2c",2],"71":["9cb09ce3d6","9f81099c5a","e1c5edae20","b1fb18d547"],"06":["ba28819778",0,"96b99aafe5",2],"f0":["b349f31f5e",0,0,0],"c8":["718c8509f5","33cd4c40e3","03d0fbcbe8","ec23096f0d"],"1e":["6eb4ecac8e","4100cb65ce","0faf4716c8","bed54fd75e"],"b3":["e5da23fb43","0911fc8ed3","05b2bb5a6f","ba2585de5c"],"0c":["4dae5befd2",0,"c18876be89",2],"da":["b5a7f9cd8f","a4e5066985","773390ae11","8e9071910c"],"1d":["2128789890",0,"e568085637",2],"08":["64bff5a97d"],"e2":["11429f119a"],"9f":["d39b291ba6",0,0,0],"2b":["c491abf31e","b11dc54da6","b58622671f","6bb4a7ae9e"],"2c":["8a926fc28b",0,0,0],"c2":["6f2721ae01"],"9c":["c31821c764",0,"1693aba1da",2],"c5":["44c6024769","31150a4a27","53dd277fa9","5fe61c91c2"],"f2":["51574f9b13"]}]
+    REMOTES = {};
+  </script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/en_US-80a0ce259b.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/react-entry-c8c7bdb5b4feb9bd.js" crossorigin="anonymous" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/main-entry-b73a86a7e23e9536.js" crossorigin="anonymous" defer="defer"></script>
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('assignment_show');
+(window.bundles || (window.bundles = [])).push('edit_rubric');
+(window.bundles || (window.bundles = [])).push('navigation_header');
+//]]>
+</script>
+  
+  <script type="text/javascript">
+    window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+    heap.load("3001039959");
+    heap.clearEventProperties();
+    heap.addEventProperties({'Base.appName': 'Canvas'});
+    setTimeout(() => {
+      if (ENV.current_user_heap_id && ENV.current_user_heap_id !== heap.identity) {
+        heap.identify(ENV.current_user_heap_id);
+      }
+      props = {}
+      if (ENV.current_user_roles) {
+        props['role'] = ENV.current_user_roles[ENV.current_user_roles.length - 1]
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_UUID) {
+        props['Canvas.accountId'] = ENV.DOMAIN_ROOT_ACCOUNT_UUID
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_SFID) {
+        props['Canvas.salesforceAccountId'] = ENV.DOMAIN_ROOT_ACCOUNT_SFID
+      }
+      if (Object.keys(props).length > 0) {
+        heap.addUserProperties(props);
+      }
+    }, 1000);
+  </script>
+  
+</head>
+
+<body class="with-left-side course-menu-expanded with-right-side assignments primary-nav-transitions full-width context-course_402226 responsive_student_grades_page">
+
+<noscript>
+  <div role="alert" class="ic-flash-static ic-flash-error">
+    <div class="ic-flash__icon" aria-hidden="true">
+      <i class="icon-warning"></i>
+    </div>
+    <h1>You need to have JavaScript enabled in order to access this site.</h1>
+  </div>
+</noscript>
+
+
+
+
+<div id="flash_message_holder"></div>
+<div id="flash_screenreader_holder"></div>
+
+<div id="application" class="ic-app">
+  
+
+
+
+
+<header id="mobile-header" class="no-print">
+  <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-hamburger">
+    <i class="icon-solid icon-hamburger"></i>
+    <span id="mobileHeaderInboxUnreadBadge" class="menu-item__badge" style="min-width: 0; top: 12px; height: 12px; right: 6px; display:none;"></span>
+    <span class="screenreader-only">Dashboard</span>
+  </button>
+  <div class="mobile-header-space"></div>
+    <a class="mobile-header-title expandable" href="/courses/402226" role="button" aria-controls="mobileContextNavContainer">
+      <div>SU24 COMPSCI 537 001 AKK</div>
+        <div>P1: UNIX utilities</div>
+    </a>
+    <div class="mobile-header-space"></div>
+    <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-arrow" aria-label="Navigation Menu">
+      <i class="icon-arrow-open-down" id="mobileHeaderArrowIcon"></i>
+    </button>
+</header>
+<nav id="mobileContextNavContainer"></nav>
+
+<header id="header" class="ic-app-header no-print ">
+  <a href="#content" id="skip_navigation_link">Skip To Content</a>
+  <div role="region" class="ic-app-header__main-navigation" aria-label="Global Navigation">
+      <div class="ic-app-header__logomark-container">
+        <a href="https://canvas.wisc.edu/" class="ic-app-header__logomark">
+          <span class="screenreader-only">Dashboard</span>
+        </a>
+      </div>
+    <ul id="menu" class="ic-app-header__menu-list">
+        <li class="menu-item ic-app-header__menu-list-item ">
+          <a id="global_nav_profile_link" role="button" href="/profile/settings" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container">
+              <div aria-hidden="true" class="fs-exclude ic-avatar ">
+                <img src="https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128&amp;d=identicon" alt="Yongzhi Lai" />
+              </div>
+              <span class="menu-item__badge"></span>
+            </div>
+            <div class="menu-item__text">
+              Account
+            </div>
+          </a>
+        </li>
+      <li class="ic-app-header__menu-list-item ">
+        <a id="global_nav_dashboard_link" href="https://canvas.wisc.edu/" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--dashboard" version="1.1" x="0" y="0" viewBox="0 0 280 200" enable-background="new 0 0 280 200" xml:space="preserve"><path d="M273.09,180.75H197.47V164.47h62.62A122.16,122.16,0,1,0,17.85,142a124,124,0,0,0,2,22.51H90.18v16.29H6.89l-1.5-6.22A138.51,138.51,0,0,1,1.57,142C1.57,65.64,63.67,3.53,140,3.53S278.43,65.64,278.43,142a137.67,137.67,0,0,1-3.84,32.57ZM66.49,87.63,50.24,71.38,61.75,59.86,78,76.12Zm147,0L202,76.12l16.25-16.25,11.51,11.51ZM131.85,53.82v-23h16.29v23Zm15.63,142.3a31.71,31.71,0,0,1-28-16.81c-6.4-12.08-15.73-72.29-17.54-84.25a8.15,8.15,0,0,1,13.58-7.2c8.88,8.21,53.48,49.72,59.88,61.81a31.61,31.61,0,0,1-27.9,46.45ZM121.81,116.2c4.17,24.56,9.23,50.21,12,55.49A15.35,15.35,0,1,0,161,157.3C158.18,152,139.79,133.44,121.81,116.2Z" /></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Dashboard
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item ic-app-header__menu-list-item--active">
+          <a id="global_nav_courses_link" role="button" href="/courses" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--courses" version="1.1" x="0" y="0" viewBox="0 0 280 259" enable-background="new 0 0 280 259" xml:space="preserve"><path d="M73.31,198c-11.93,0-22.22,8-24,18.73a26.67,26.67,0,0,0-.3,3.63v.3a22,22,0,0,0,5.44,14.65,22.47,22.47,0,0,0,17.22,8H200V228.19h-134V213.08H200V198Zm21-105.74h90.64V62H94.3ZM79.19,107.34V46.92H200v60.42Zm7.55,30.21V122.45H192.49v15.11ZM71.65,16.71A22.72,22.72,0,0,0,49,39.36V190.88a41.12,41.12,0,0,1,24.32-8h157V16.71ZM33.88,39.36A37.78,37.78,0,0,1,71.65,1.6H245.36V198H215.15v45.32h22.66V258.4H71.65a37.85,37.85,0,0,1-37.76-37.76Z"/></svg>
+
+            </div>
+            <div class="menu-item__text">
+              Courses
+            </div>
+          </a>
+        </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+        <a id="global_nav_calendar_link" href="/calendar" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--calendar" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M197.07,213.38h16.31V197.07H197.07Zm-16.31,16.31V180.76h48.92v48.92Zm-48.92-16.31h16.31V197.07H131.85Zm-16.31,16.31V180.76h48.92v48.92ZM66.62,213.38H82.93V197.07H66.62ZM50.32,229.68V180.76H99.24v48.92Zm146.75-81.53h16.31V131.85H197.07Zm-16.31,16.31V115.54h48.92v48.92Zm-48.92-16.31h16.31V131.85H131.85Zm-16.31,16.31V115.54h48.92v48.92ZM66.62,148.15H82.93V131.85H66.62ZM50.32,164.46V115.54H99.24v48.92ZM34,262.29H246V82.93H34ZM246,66.62V42.16A8.17,8.17,0,0,0,237.84,34H213.38v8.15a8.15,8.15,0,1,1-16.31,0V34H82.93v8.15a8.15,8.15,0,0,1-16.31,0V34H42.16A8.17,8.17,0,0,0,34,42.16V66.62Zm-8.15-48.92a24.49,24.49,0,0,1,24.46,24.46V278.6H17.71V42.16A24.49,24.49,0,0,1,42.16,17.71H66.62V9.55a8.15,8.15,0,0,1,16.31,0v8.15H197.07V9.55a8.15,8.15,0,1,1,16.31,0v8.15Z"/></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Calendar
+          </div>
+        </a>
+      </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+      <!-- TODO: Add back global search when available -->
+        <a id="global_nav_conversations_link" href="/conversations" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container">
+            <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--inbox" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M91.72,120.75h96.56V104.65H91.72Zm0,48.28h80.47V152.94H91.72Zm0-96.56h80.47V56.37H91.72Zm160.94,34.88H228.52V10.78h-177v96.56H27.34A24.17,24.17,0,0,0,3.2,131.48V244.14a24.17,24.17,0,0,0,24.14,24.14H252.66a24.17,24.17,0,0,0,24.14-24.14V131.48A24.17,24.17,0,0,0,252.66,107.34Zm0,16.09a8.06,8.06,0,0,1,8,8v51.77l-32.19,19.31V123.44ZM67.58,203.91v-177H212.42v177ZM27.34,123.44H51.48v79.13L19.29,183.26V131.48A8.06,8.06,0,0,1,27.34,123.44ZM252.66,252.19H27.34a8.06,8.06,0,0,1-8-8V202l30,18H230.75l30-18v42.12A8.06,8.06,0,0,1,252.66,252.19Z"/></svg>
+</span>
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Inbox
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item" >
+          <a id="global_nav_history_link" role="button" href="#" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg viewBox="0 0 1920 1920" class="ic-icon-svg menu-item__icon svg-icon-history" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path d="M960 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.125 379.934 847.059 847.059 847.059 467.125 0 847.059-379.934 847.059-847.059 0-467.125-379.934-847.059-847.059-847.059M960 1920C430.645 1920 0 1489.355 0 960S430.645 0 960 0s960 430.645 960 960-430.645 960-960 960m417.905-575.955L903.552 988.28V395.34h112.941v536.47l429.177 321.77-67.765 90.465z" stroke="none" stroke-width="1" fill-rule="evenodd"/>
+</svg>
+            </div>
+            <div class="menu-item__text">
+              History
+            </div>
+          </a>
+        </li>
+        
+
+      <li class="ic-app-header__menu-list-item">
+        <a id="global_nav_help_link" role="button" class="ic-app-header__menu-list-link" data-track-category="help system" data-track-label="help button" href="https://help.instructure.com">
+          <div class="menu-item-icon-container" role="presentation">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg menu-item__icon svg-icon-help" version="1.1" x="0" y="0" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve" fill="currentColor"><path d="M100,127.88A11.15,11.15,0,1,0,111.16,139,11.16,11.16,0,0,0,100,127.88Zm8.82-88.08a33.19,33.19,0,0,1,23.5,23.5,33.54,33.54,0,0,1-24,41.23,3.4,3.4,0,0,0-2.74,3.15v9.06H94.42v-9.06a14.57,14.57,0,0,1,11.13-14,22.43,22.43,0,0,0,13.66-10.27,22.73,22.73,0,0,0,2.31-17.37A21.92,21.92,0,0,0,106,50.59a22.67,22.67,0,0,0-19.68,3.88,22.18,22.18,0,0,0-8.65,17.64H66.54a33.25,33.25,0,0,1,13-26.47A33.72,33.72,0,0,1,108.82,39.8ZM100,5.2A94.8,94.8,0,1,0,194.8,100,94.91,94.91,0,0,0,100,5.2m0,178.45A83.65,83.65,0,1,1,183.65,100,83.73,83.73,0,0,1,100,183.65" transform="translate(-5.2 -5.2)"/></svg>
+
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Help
+          </div>
+</a>      </li>
+    </ul>
+  </div>
+  <div class="ic-app-header__secondary-navigation">
+    <ul class="ic-app-header__menu-list">
+      <li class="menu-item ic-app-header__menu-list-item">
+        <a
+          id="primaryNavToggle"
+          role="button"
+          href="#"
+          class="ic-app-header__menu-list-link ic-app-header__menu-list-link--nav-toggle"
+          aria-label="Expand global navigation
+                "
+          title="Expand global navigation
+                "
+        >
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--navtoggle" version="1.1" x="0" y="0" width="40" height="32" viewBox="0 0 40 32" xml:space="preserve">
+  <path d="M39.5,30.28V2.48H37.18v27.8Zm-4.93-13.9L22.17,4,20.53,5.61l9.61,9.61H.5v2.31H30.14l-9.61,9.61,1.64,1.64Z"/>
+</svg>
+
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div id="global_nav_tray_container"></div>
+  <div id="global_nav_tour"></div>
+</header>
+
+
+  <div id="instructure_ajax_error_box">
+    <div style="text-align: right; background-color: #fff;"><a href="#" class="close_instructure_ajax_error_box_link">Close</a></div>
+    <iframe id="instructure_ajax_error_result" src="about:blank" style="border: 0;" title="Error"></iframe>
+  </div>
+
+  <div id="wrapper" class="ic-Layout-wrapper">
+        <div class="ic-app-nav-toggle-and-crumbs no-print">
+            <button type="button" id="courseMenuToggle" class="Button Button--link ic-app-course-nav-toggle" aria-live="polite" aria-label="Hide Courses Navigation Menu">
+              <i class="icon-hamburger" aria-hidden="true"></i>
+            </button>
+
+          <div class="ic-app-crumbs ">
+              <nav id="breadcrumbs" role="navigation" aria-label="breadcrumbs"><ul><li class="home"><a href="/"><span class="ellipsible"><i class="icon-home"
+   title="My Dashboard">
+  <span class="screenreader-only">My Dashboard</span>
+</i>
+</span></a></li><li><a href="/courses/402226"><span class="ellipsible">SU24 COMPSCI 537 001 AKK</span></a></li><li><a href="/courses/402226/assignments"><span class="ellipsible">Assignments</span></a></li><li><a href="https://canvas.wisc.edu/courses/402226/assignments/2301423"><span class="ellipsible">P1: UNIX utilities</span></a></li></ul></nav>
+          </div>
+
+
+          <div class="right-of-crumbs">
+              <div class="TutorialToggleHolder"></div>
+          </div>
+
+        </div>
+    <div id="main" class="ic-Layout-columns">
+        <div class="ic-Layout-watermark"></div>
+        <div id="left-side"
+          class="ic-app-course-menu ic-sticky-on list-view"
+          style="display: block"
+          >
+          <div id="sticky-container" class="ic-sticky-frame">
+              <span id="section-tabs-header-subtitle" class="ellipsis">Summer 2024</span>
+            <nav role="navigation" aria-label="Courses Navigation Menu"><ul id="section-tabs"><li class="section"><a href="/courses/402226" class="home">Home</a></li><li class="section"><a href="/courses/402226/announcements" class="announcements">Announcements</a></li><li class="section"><a href="/courses/402226/assignments" aria-current="page" class="assignments active">Assignments</a></li><li class="section"><a href="/courses/402226/external_tools/20073" class="context_external_tool_20073">Piazza</a></li><li class="section"><a href="/courses/402226/grades" class="grades">Grades</a></li><li class="section"><a href="/courses/402226/users" class="people">People</a></li><li class="section"><a href="/courses/402226/wiki" class="pages">Pages</a></li><li class="section"><a href="/courses/402226/files" class="files">Files</a></li><li class="section"><a href="/courses/402226/assignments/syllabus" class="syllabus">Syllabus</a></li><li class="section"><a href="/courses/402226/quizzes" class="quizzes">Quizzes</a></li><li class="section"><a href="/courses/402226/external_tools/14065" class="context_external_tool_14065">Zoom</a></li><li class="section"><a href="/courses/402226/external_tools/21691" class="context_external_tool_21691">NameCoach Roster</a></li><li class="section"><a href="/courses/402226/external_tools/9199" class="context_external_tool_9199">Kaltura Gallery</a></li><li class="section"><a href="/courses/402226/external_tools/8408" class="context_external_tool_8408">Kaltura My Media</a></li><li class="section"><a href="/courses/402226/external_tools/6536" class="context_external_tool_6536">New Analytics</a></li></ul></nav>
+          </div>
+        </div>
+      <div id="not_right_side" class="ic-app-main-content">
+        <div id="content-wrapper" class="ic-Layout-contentWrapper">
+          
+          <div id="content" class="ic-Layout-contentMain" role="main">
+            
+<style>
+  #right-side-wrapper {
+    height: 100%;
+  }
+
+  .assignment_header {
+    border-bottom: 1px solid #a4a4a4;
+    overflow: hidden;
+  }
+
+  #assignment_head {
+    margin-top: 0;
+    font-weight: bold;
+  }
+
+  .lock_explanation {
+    text-align: left;
+    margin-top: 20px;
+  }
+</style>
+
+
+
+<div id="assignment_show" class="assignment content_underline_links" data-lti-page-content="true">
+    <!--Student View-->
+    <div class='assignment-title'>
+      <div class='title-content'>
+        <h1 class="title">
+          P1: UNIX utilities
+        </h1>
+      </div>
+      <div class='assignment-buttons'>
+        
+
+        
+      </div>
+    </div>
+    
+<ul class='student-assignment-overview'>
+  <li>
+    <span class='title'>Due</span>
+    <span class='value'>
+          <span class="date_text">
+                <span class="display_date">Jun 10</span> by 
+                <span class="display_time">11:59pm</span>
+          </span><!--
+        --></span>
+  </li>
+    <li>
+      <span class='title'>Points</span>
+      <span class='value'>100</span>
+    </li>
+  
+  <li>
+    <span class="title">Available</span>
+    <span class="value">
+        after Jun 3 at 9am
+    </span>
+  </li>
+
+  <div class="clear"></div>
+</ul>
+
+  <div class="clear"></div>
+
+
+  <div class="clear"></div>
+
+
+
+
+  <div class="description user_content " data-resource-type="assignment.body" data-resource-id=2301423><h3>Overview:</h3>
+<p>In this assignment, you will build a set of small utilities that are variants of commonly-used commands in UNIX systems. You will be building 2 utilities:</p>
+<ol type="1">
+<li>wisc-sed: This utility will be a variation of the sed tool which is used for searching, editing, replacing and deleting patterns in files.</li>
+<li>wisc-tar: This utility is similar to tar, which is a commonly used UNIX utility to combine/compress a collection of files into one file. This functionality is useful in a number of scenarios e.g. offering a single file to download for software. (If you’ve heard the phrase tarball, that comes from using tar!)</li>
+</ol>
+<h3>Learning objectives:</h3>
+<ul>
+<li>Re-familiarize yourself with the C programming language</li>
+<li>Re-familiarize yourself with a shell / terminal / command-line of UNIX</li>
+<li>Learn how to compile C files and execute binaries on the command-line</li>
+<li>Learn a little about how UNIX utilities are implemented</li>
+</ul>
+<h3>Deliverables:</h3>
+<ul>
+<li>Set of<span>&nbsp;</span><em>.c</em><span>&nbsp;</span>files, one for each utility :&nbsp; <strong>wisc-sed.c, wisc-tar</strong><strong>.c</strong></li>
+<li>Each file should compile successfully when compiled with the -Wall and -Werror flags.</li>
+<li>Each utility should pass tests we supply as well as tests that meet our specification that we do not supply</li>
+<li>Include a single README.md for all the files describing your implementation</li>
+</ul>
+<h3>Administrivia:</h3>
+<ul>
+<li>This project is to be performed alone.</li>
+<li><strong data-sourcepos="8:3-8:14">Due Date</strong>: June 10th, at 11:59pm (4 slip days throughout course, use wisely)</li>
+<li>A small portion of the credit is allocated for good programming style and memory management. Read the <a title="Coding style" href="/courses/402226/pages/coding-style" data-course-type="wikiPages" data-published="false" data-api-endpoint="https://canvas.wisc.edu/api/v1/courses/402226/pages/coding-style" data-api-returntype="Page">details</a>.</li>
+<li>This project is to be done on the<span>&nbsp;</span><a class="inline_disabled" href="https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/" target="_blank">lab machines</a>, so you can learn more about programming in C on a typical UNIX-based platform (Linux).</li>
+</ul>
+<hr>
+<h3><span style="text-decoration: underline;">wisc-sed</span></h3>
+<p><strong>sed</strong> stands for Stream Editor, it is used to perform basic text transformations on an input stream such as a file. You will build <strong>wisc-sed</strong>, which implements just one functionality: string substitution.</p>
+<p><strong><span style="font-size: 14pt;">Input </span></strong></p>
+<p><strong>wisc-sed</strong> will take 3 mandatory inputs: &lt;search string&gt;, &lt;replacement string&gt;, &lt;filename&gt;. It will also take some optional flags. Here's an example which substitutes the string 'mascot' with 'bucky' in file 'a.txt' while ignoring the case of the strings during comparison.</p>
+<pre>prompt&gt; ./wisc-sed -c -s mascot -r bucky -f a.txt</pre>
+<p>There are 6 flags that your utility needs to handle. Some are mandatory while some are optional.</p>
+<ol style="list-style-type: decimal;">
+<li><strong>-s &lt;search string&gt;: (Mandatory) </strong>This is the string to be searched and replaced.</li>
+<li><strong>-r &lt;replacement string&gt;: (Mandatory)</strong> This is the replacement string.</li>
+<li><strong>-f &lt;input file&gt;: (Mandatory)</strong> This is the input filename.</li>
+<li><strong>-o &lt;output file&gt;: (Optional) </strong>This flag is used to specify an output file. If this isn't specified than all the output should go to stdout.</li>
+<li><strong>-n</strong> <strong>&lt;line number&gt;: (Optional)</strong> If this flag is passed, then the strings should be replaced only on line <strong>&lt;line number&gt;</strong>. If this flag is not passed, then the string replacement should be applied <strong>globally</strong>, i.e. all lines of the file. For this assignment, line numbers start from 1 (not 0).</li>
+<li><strong>-c: (Optional) </strong>This flag means the string comparison is not case-sensitive. If this flag is not passed (default), then the string comparison is case-sensitive.</li>
+</ol>
+<p><strong><span style="font-size: 14pt;">Output </span></strong></p>
+<p>The output of your utility is the modified file contents with the search string replaced by replacement string. If the <strong>-o</strong> flag is passed, then the output should be written to a new file with the specified name, else it should be printed to <strong>stdout</strong>.</p>
+<p><span style="font-size: 14pt;"><strong>Details</strong></span></p>
+<p>Here are a few details and assumptions you should keep in mind during implementation:</p>
+<ol>
+<li>All error messages are printed to stdout.</li>
+<li>If the 3 mandatory inputs are not passed to your utility, then you should print “usage: wisc-sed [optional flags] -s &lt;search string&gt; -r &lt;replacement string&gt; -f &lt;file&gt;" (followed by a newline) and exit with status 1.</li>
+<li>If the input file is not found you should print “wisc-sed: cannot open file” (followed by a newline) and exit with status 1.</li>
+<li>You can assume that the files provided as an input exist in the directory where the program is run from (no need to handle ways to store pesky path names).</li>
+<li>If an output file of the same name already exists, you can overwrite it with the new contents specified.</li>
+<li>If the line number passed to <strong>-n</strong> flag exceeds the number of lines in the file, then ignore the flag and don't replace anything.</li>
+<li>If an unknown flag is passed, then you can ignore the flag.</li>
+<li>For simplicity, assume that the search string and replacement string don't contain spaces, i.e., they are one word each.</li>
+</ol>
+<hr>
+<h3><span style="text-decoration: underline;">wisc-tar</span></h3>
+<p>The second utility you will build is <strong>wisc-tar</strong> whose functionality is similar to the actual tar utility but much simpler.<strong> tar</strong> is a UNIX tool, similar to zip, used to combine a collection of files into one file. tar stands for Tape Archive. This tool is useful in a number of scenarios, e.g. offering a single file to download for software.</p>
+<p><strong><span style="font-size: 14pt;">Input</span></strong></p>
+<p><strong>wisc-tar</strong> will take 2 or more inputs: &lt;output tar filename&gt; &lt;list of files .....&gt;. For example:</p>
+<pre>prompt&gt; echo abcd &gt; a.txt # creates file a.txt<br>prompt&gt; echo efgh &gt; b.txt # creates file b.txt<br>prompt&gt; ./wisc-tar test.tar a.txt b.txt # combines a.txt and b.txt into test.tar</pre>
+<p><strong><span style="font-size: 14pt;">Output</span></strong></p>
+<p>The output will be a tar file. In the actual tar implementation, a tar file consists of a series of <em>file objects</em>. Each file object consists of a file header (file name, size, checksum ...) and the file contents.<br>For the purpose of this assignment, we will use a simpler file format for our <strong>wisc-tar</strong> file objects. We will use a 128 byte header which contains only the file name and file size, followed by the file contents padded to multiples of 512 bytes, i.e., if a file only has 1000 bytes of data, 24 bytes of NULL ('\0') are padded at the end. Here's an example format of a wisc-tar file:</p>
+<pre><code> file1 name [120 bytes in ASCII] 
+ file1 size [8 bytes as binary]
+ contents of file1 [in ASCII, padded to multiple of 512 bytes]
+ file2 name [120 bytes]
+ file2 size [8 bytes]
+ contents of file2 [in ASCII, padded to multiple of 512 bytes]
+ ...</code></pre>
+<p><strong><span style="font-size: 14pt;">Details</span></strong></p>
+<p>Here are a few details and assumptions you should keep in mind during implementation:</p>
+<ol>
+<li>All error messages are printed to stdout.</li>
+<li>You can assume that the files provided as an input exist in the directory where the program is run from (no need to handle ways to store pesky path names).</li>
+<li>You can also assume the files provided as inputs only contain ASCII characters.</li>
+<li>If fewer than two arguments are supplied to your program then you should print “wisc-tar: tar-file file1 […]” (followed by a newline) and exit with status 1.</li>
+<li>If any of the input files that should be a part of the tar file are not found you should print “wisc-tar: cannot open &lt;filename&gt;” (followed by a newline) and with exit status 1.</li>
+<li>If a tar-file of the same name already exists you can overwrite it with the new contents specified.</li>
+<li>If any of the input file names are longer than 120 characters, use the first 120 characters as the filename to store in the output tar file.</li>
+<li>If any of the input file names are shorter than 120 characters, you should pad the filename such that it uses 120 bytes. For example if the file name is “a.txt”, that only has 5 characters, you should append 115 NULL <code>(\0)</code> characters to make the name use 120 bytes in the tar file. (Remember <code>'\0'</code> is not the same as <code>'0'</code>. The first one represents NULL while the second one represents the character 0!)</li>
+</ol>
+<h4><strong>Example</strong></h4>
+<p>Lets look at a complete example to make sure we understand the format and how to understand the contents of a valid tar file. In the following example we first create a text file which contains the string "hey". So its size is 3 (Remember this!).</p>
+<p>Next we run wisc-tar to create <code>test.tar</code> as shown below. Finally we print the contents of <code>test.tar</code> using <code>hexdump</code>, a utility to print the contents of a binary file. The comments to the right explain the output of hexdump. Remember that the bytes are represented in hexadecimal format, so handy table like <a href="https://www.ascii-code.com/">this</a> will help you lookup the ASCII values for strings. Try to see if you can decode the contents based on the comments on the right! The below example was captured on a machine with little endian byte order.<br><br></p>
+<pre><code>prompt&gt; echo -n "hey" &gt; a.txt # '-n' does not append newline or linefeed at end of string
+prompt&gt; ./wis-tar a.tar a.txt
+prompt&gt; hexdump -v a.tar<br>0000000 2e61 7874 0074 0000 0000 0000 0000 0000  --&gt; The first five bytes here contain the file name a.txt<br>0000010 0000 0000 0000 0000 0000 0000 0000 0000<br>0000020 0000 0000 0000 0000 0000 0000 0000 0000<br>0000030 0000 0000 0000 0000 0000 0000 0000 0000<br>0000040 0000 0000 0000 0000 0000 0000 0000 0000<br>0000050 0000 0000 0000 0000 0000 0000 0000 0000<br>0000060 0000 0000 0000 0000 0000 0000 0000 0000 ---&gt; We have padded filename using \0 till we hit 120 bytes<br>0000070 0000 0000 0000 0000 0003 0000 0000 0000 ---&gt; The byte containing 03 indicates the file size is 3. Note that this is not in ASCII!<br>0000080 6568 0079 0000 0000 0000 0000 0000 0000 ---&gt; The first three bytes contain the string "hey", the contents of the file, followed by 509 bytes of \0.<br>0000090 0000 0000 0000 0000 0000 0000 0000 0000<br>.................</code></pre>
+<hr>
+<h3>Hints</h3>
+<p>Read this <a href="http://pages.cs.wisc.edu/~remzi/OSTEP/lab-tutorial.pdf">lab tutorial</a>; it has some useful tips for programming in the C environment.</p>
+<p>You’ll need to learn how to use a few library routines from the C standard library (often called <strong>libc</strong>) to implement the source code for this assignment. All C code is automatically linked with the C library, which is full of useful functions you can call to implement your program. Learn more about the C library <a href="https://en.wikipedia.org/wiki/C_standard_library">here</a> and perhaps <a href="https://www-s.acm.illinois.edu/webmonkeys/book/c_guide/">here</a>.<br>On UNIX systems, the best way to read about such functions is to use what are called the <strong>man</strong> pages (short for <strong>manual</strong>). In our HTML/web-driven world, the man pages feel a bit antiquated, but they are useful and informative and generally quite easy to use. To access the man page for fopen(), for example, just type the following at your UNIX shell prompt: <code>prompt&gt; man fopen</code></p>
+<h4>Suggested routines</h4>
+<p>Once a file is open, there are many different ways to read from it. There are two functions that might be useful for you in the context of this assignment.</p>
+<ul>
+<li>Opening/closing files: For this assignment, we recommend using the following routines to open and close files: <code>fopen()</code> and <code>fclose()</code>. There are other system calls <code>open() </code>and <code>close()</code> you could also use but reading lines might be more difficult.</li>
+<li>
+<p>Reading/Writing a line: There are two useful functions to read lines: <code>fgets()</code> which can read a fixed number of characters but stops when it reaches the end of a line, and <code>getline()</code> which can read entire lines into a buffer. You can learn more about these functions in, you guessed it, the man pages! To write a string to a file you can similarly use <code>fputs</code>() or the more powerful formatting capabilities in <code>fprintf()</code>.<br>We recommend using <strong>getline()</strong>. You will need to be able to handle lines that are of an arbitrary length; this means, that you cannot simply call <strong>fgets()</strong> once for each line of the file,&nbsp; since you will not know the size of the buffer needed to fit the line.&nbsp; You can either look into using a different library routine such as <strong>getline()&nbsp;</strong>or call <strong>fgets()</strong> multiple times for each line.</p>
+</li>
+<li>
+<p>String search/comparison: There are many functions available for finding and comparing strings. We recommend using <code>strstr()</code> and <code>strcasestr()</code> to find the position of the matching string.</p>
+</li>
+<li>
+<p>Finding file size: To find the size of a file, you can use either <code>stat()</code>or <code>fstat()</code>. Again, refer to the man pages for more information.</p>
+</li>
+</ul>
+<h4>Good practices</h4>
+<ol>
+<li>
+<p><strong>Understand the Code Structure</strong>: Start by understanding the problem description and requirements. Read through the man pages and use external resources to understand any unfamiliar concepts or functions.</p>
+</li>
+<li>
+<p><strong>Familiarize yourself with the functions/APIs: </strong>Test the new functions with toy examples just to understand how they work.</p>
+</li>
+<li>
+<p><strong>Start Small</strong>: Don't try to implement everything at once. For example, begin by opening a file, reading lines from it and closing.</p>
+</li>
+<li><strong>Implement step-by-step: </strong>Grow your program by adding one feature at a time</li>
+<li>
+<p><strong>Implement Error Handling</strong>: Once the core of your code has been implemented, add error handling code as specified in requirements above.</p>
+</li>
+<li>
+<p><strong>Test Your Code</strong>: After implementing a feature, test it thoroughly to make sure it works as expected. This will help you catch any bugs or errors early on.</p>
+</li>
+<li>
+<p><strong>Ask for Help When Stuck</strong>: Don't hesitate to ask for help if you're having trouble understanding a concept or figuring out why your code isn't working. You can ask the instructors, classmates, or use online resources.</p>
+</li>
+</ol>
+<p>Remember, the goal of the project isn't just to produce a working program, but also to understand the concepts and techniques you're using.</p>
+<h3>Testing and Handing in your code</h3>
+<ul>
+<li>Some tests are provided at<span>&nbsp;</span><em>~cs537-1/tests/p1</em>. Read more about the tests, including how to run them, by executing the command<span>&nbsp;</span><code>cat ~cs537-1/tests/p1/README.md </code> on any lab machine. Note these test cases are not complete, and you are encouraged to create more on your own.&nbsp;&nbsp;</li>
+<li><strong>Handing it in: Copy your files to&nbsp;<em>~cs537-1/handin/login/p1</em> where login is your CS login.</strong> Do NOT use this handin directory for your work space.&nbsp; You should keep a separate copy of your project files in your own home directory and then simply copy the relevant files to this handin directory when you are done.&nbsp; The permissions to this handin directory will be turned off promptly when the deadline passes and you will no longer be able to modify files in that directory. If you cannot find your handin directory, send email to the instructor asking for a handin directory; <strong>tell us your CS login.</strong>&nbsp;</li>
+</ul></div>
+
+
+  <div style="display: none;">
+    <span class="timestamp">1718081999</span>
+    <span class="due_date_string">06/10/2024</span>
+    <span class="due_time_string">11:59pm</span>
+  </div>
+</div>
+
+
+
+
+
+
+  <div id="rubrics" class="mathjax_ignore" style="margin-bottom: 10px;">
+      
+<div
+  class="rubric_container rubric  "
+  id="rubric_175140"
+  style=""
+>
+  <div class="screenreader-only"><h2>Rubric</h2></div>
+  <div class="rubric_title">
+    <div style="display: none;" class="links displaying pull-right">
+      <a
+        href="/courses/402226/rubrics/175140?rubric_association_id=360894"
+        class="copy_edit edit_rubric_link no-print no-hover"
+        style="display: none;"
+        title="Edit Rubric"
+        aria-label="Edit Rubric"
+        role="button"
+      ><i class="icon-edit standalone-icon"></i></a>
+      <a
+        href="https://canvas.wisc.edu/search/rubrics?q="
+        class="find_rubric_link no-print no-hover"
+        style="display: none;"
+        title="Find Another Rubric"
+        aria-label="Find Another Rubric"
+        role="button"
+      ><i class="icon-search standalone-icon"></i></a>
+        <a
+          href="/courses/402226/rubric_associations/360894"
+          class="delete_rubric_link no-print no-hover"
+          style="display: none;"
+          title="Delete Rubric"
+          aria-label="Delete Rubric"
+          role="button"
+        ><i class="icon-trash standalone-icon"></i></a>
+      <div style="display: none;">
+        <div class="use_for_grading">&nbsp;</div>
+        <div class="free_form_criterion_comments">&nbsp;</div>
+        <div class="hide_score_total">&nbsp;</div>
+        <div class="hide_outcome_results">&nbsp;</div>
+        <div class="hide_points">&nbsp;</div>
+        <div class="rubric_association_id">360894</div>
+          <div class="user_id">&nbsp;</div>
+        <div class="assessment_type"></div>
+        <a href="/courses/402226/rubric_associations/360894/assessments/%7B%7B%20assessment_id%20%7D%7D" rel="nofollow" class="edit_assessment_link">&nbsp;</a>
+        <a href="/courses/402226/rubrics/%7B%7B%20rubric_id%20%7D%7D" class="edit_rubric_url">&nbsp;</a>
+          <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url">&nbsp;</a>
+      </div>
+    </div>
+    <div style="float: right; font-size: 0.8em; display: none;" class="links displaying locked">
+      <span style="">Can&#39;t change a rubric once you&#39;ve started using it.</span>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url" style="display: none;">&nbsp;</a>
+    </div>
+
+    <div class="editing" style="float: right;">
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" class="find_rubric_link icon-search" style="display: none;" title="Find Existing Rubric">Find a Rubric</a>
+    </div>
+    <div class="editing" style="text-align: left">
+      <label for="rubric-title">Title:</label>
+      <input id="rubric-title" type="text" class="no-margin-bottom" name="title" value="P1 rubric" style="width: 200px;" maxlength="255" aria-label="Title:"/>
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" style="display: none;"><img alt="" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/find-6164443e2a.png" /> Find Rubric</a>
+    </div>
+    <div class="displaying">
+      <span class="title" tabindex="-1">P1 rubric</span>
+    </div>
+    <div class="has-assessments-warning" style="display: none;">
+      You&#39;ve already rated students with this rubric. Any major changes could affect their assessment results.
+    </div>
+  </div>
+<table class="rubric_table">
+<caption>
+  <div class="screenreader-only">
+    <span class="title">P1 rubric</span>
+  </div>
+</caption>
+<thead>
+  <tr>
+    <th scope="col">Criteria</th>
+    <th scope="col">Ratings</th>
+    <th scope="col" class="toggle_for_hide_points ">
+      Pts
+    </th>
+  </tr>
+</thead>
+<tbody>
+      
+<tr id="criterion__2357" class="criterion   " style="">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">wisc-sed test cases</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;">_2357</span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points"></span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">40</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0.0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="40"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">40</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+      
+<tr id="criterion__7252" class="criterion   " style="">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">wisc-tar test cases</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;">_7252</span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points"></span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">40</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0.0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_5514</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_7618</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="40"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">40</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+      
+<tr id="criterion__7996" class="criterion   " style="">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">wisc-sed lint</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;">_7996</span>
+          <div class="long_description small_description">0-1 errors: full marks<br/>
+2-4 errors: 4 marks<br/>
+5-6 errors: 3 marks<br/>
+7-8 errors: 2 marks<br/>
+9-10 errors: 1 mark<br/>
+show quoted text&gt;10 errors: No marks</div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points"></span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0.0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_1664</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_7216</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+      
+<tr id="criterion__777" class="criterion   " style="">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">wisc-tar lint</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;">_777</span>
+          <div class="long_description small_description">0-1 errors: full marks<br/>
+2-4 errors: 4 marks<br/>
+5-6 errors: 3 marks<br/>
+7-8 errors: 2 marks<br/>
+9-10 errors: 1 mark<br/>
+show quoted text&gt;10 errors: No marks</div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points"></span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0.0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_6665</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_4503</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+      
+<tr id="criterion__8904" class="criterion   " style="">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">wisc-sed valgrind</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;">_8904</span>
+          <div class="long_description small_description">0 errors: full marks<br/>
+1 errors: 4 marks<br/>
+2 errors: 3 marks<br/>
+3errors: 2 marks<br/>
+4 errors: 1 mark<br/>
+show quoted text&gt;4 errors: No marks</div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points"></span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0.0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_9850</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_5943</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+      
+<tr id="criterion__2269" class="criterion   " style="">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">wisc-tar valgrind</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;">_2269</span>
+          <div class="long_description small_description">0 errors: full marks<br/>
+1 errors: 4 marks<br/>
+2 errors: 3 marks<br/>
+3errors: 2 marks<br/>
+4 errors: 1 mark<br/>
+show quoted text&gt;4 errors: No marks</div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points"></span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0.0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_479</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">_8378</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  
+<tr id="criterion_blank" class="criterion blank  " style="display: none;">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+          <a href="#" class="delete_criterion_link" role="button"><i class="icon-trash standalone-icon"></i><span class="screenreader-only">Delete criterion row</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">Description of criterion</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;"></span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points">5</span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  <tr class="summary">
+    <td colspan="4">
+      <div class="total_points_holder toggle_for_hide_points "
+        style="float: right; ">
+        <span>Total Points:
+            <span class="rubric_total">
+              100
+            </span>
+ <span class="assessing">out of 100</span>        </span>
+      </div>
+      <div class="editing pull-left">
+        <span id="add_criterion_holder" class="criterion_link"></span>
+      </div>
+      <div class="clear"></div>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<table style="display: none;">
+  <tr id="edit_rubric">
+    <td colspan="4">
+      <form id="edit_rubric_form" class="edit-rubric-form no-margin-bottom">
+        <div class="rubric_custom_ratings" style="">
+          <input type="checkbox" id="rubric_custom_rating" class="rubric_custom_rating" />
+          <label for="rubric_custom_rating">I&#39;ll write free-form comments when assessing students</label>
+        </div>
+          <div class="hide_points" style="">
+            <input type="checkbox" id="hide_points" class="hide_points_checkbox" />
+            <label for="hide_points">Remove points from rubric</label>
+          </div>
+          <div class="hide_outcome_results" style="">
+            <input type="checkbox" id="hide_outcome_results" class="hide_outcome_results_checkbox" />
+            <label for="hide_outcome_results">Don&#39;t post Outcomes results to Learning Mastery Gradebook</label>
+          </div>
+          <div class="rubric_grading" style="">
+            <input type="checkbox" id="grading_rubric" class="grading_rubric_checkbox" />
+            <label for="grading_rubric">Use this rubric for assignment grading</label>
+          </div>
+        <div class="totalling_rubric" style="">
+          <input type="checkbox" id="totalling_rubric" class="totalling_rubric_checkbox" />
+          <label for="totalling_rubric">Hide score total for assessment results</label>
+        </div>
+        <div class="ic-Action-header ic-Action-header--half-margin">
+          <div class="ic-Action-header__Primary">
+            <button type="button" class="Button cancel_button">Cancel</button>
+            <button type="submit" class="Button Button--primary save_button">Create Rubric</button>
+          </div>
+        </div>
+      </form>
+    </td>
+  </tr>
+</table>
+
+    <div style="display: none;" id="rubric_parameters">
+      <input type="hidden" name="rubric_association[association_type]" value="Assignment"/>
+      <input type="hidden" name="rubric_association[association_id]" value="2301423"/>
+      <input type="hidden" name="rubric_association[purpose]" value="grading"/>
+    </div>
+    
+<div id="rubric_long_description_dialog" style="display: none;">
+  <div class="editing">
+    <form id="edit_criterion_form" class="no-margin-bottom">
+      <div>
+        <label class="rating_form_label">Description
+          <textarea class="description" rows="1" name="description"></textarea>
+        </label>
+      </div>
+      <div>
+        <label class="rating_form_label">Long Description
+          <textarea class="long_description" rows="4" name="long_description"></textarea>
+        </label>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn save_button btn-primary">Update Criterion</button>
+      </div>
+    </form>
+  </div>
+  <div class="displaying">
+    <div class="long_description">
+    </div>
+  </div>
+</div>
+<div id="rubric_criterion_comments_dialog" style="display: none;">
+  <div
+    class="criterion_description"
+    style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;"
+    tabindex="-1"
+  ></div>
+  <div class="editing">
+    <label for="criterion_comments_textarea">
+      Additional Comments:
+    </label>
+    <textarea
+      id="criterion_comments_textarea"
+      class="criterion_comments"
+      name="criterion_comments"
+      style="width: 370px;"></textarea>
+    <div class="button-container">
+      <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+      <button type="button" class="btn save_button">Update Comments</button>
+    </div>
+  </div>
+  <div class="displaying">
+    Additional Comments:
+    <div class="criterion_comments" style="margin-top: 10px;">
+    </div>
+  </div>
+</div>
+<div id="rubric_rating_dialog" style="display: none;">
+  <div class="description" style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">
+    <span id="edit_rating_form_criterion_description"></span>
+  </div>
+  <div class="editing">
+    <form id="edit_rating_form" class="no-margin-bottom">
+      <div class="toggle_for_hide_points">
+        <div><label id='rating_form_score_label' class="rating_form_label">Rating Score</label></div>
+        <span id='rating_form_max_score_label' hidden>Rating max score</span>
+        <input id="points" aria-labelledby="rating_form_score_label" type="text" size="2" name="points" class="no-margin-bottom span1" />
+        <span class="range_rating">to >
+          <input aria-label="Rating min score" type="text" size="2" name="min_points" class="no-margin-bottom span1 min_points" placeholder="min"/>
+        </span>pts
+      </div>
+      <div>
+        <label for="rating_form_title" class="rating_form_label">Rating Title</label>
+        <input id="rating_form_title" type="text" class="rating_description" style="width: 90%;" name="description"/>
+      </div>
+      <div>
+        <label for="rating_form_description" class="rating_form_label">Rating Description</label>
+        <textarea id="rating_form_description" rows="4" style="width: 90%;" class="rating_long_description" name="rating_long_description" form="edit_rating_form"></textarea>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn btn-primary save_button ok_button">Update Rating</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  </div>
+  
+<div
+  class="rubric_container rubric  "
+  id="default_rubric"
+  style="display: none;"
+>
+  <div class="screenreader-only"><h2>Rubric</h2></div>
+  <div class="rubric_title">
+    <div style="display: none;" class="links displaying pull-right">
+      <a
+        href="/courses/402226/rubrics/%7B%7B%20id%20%7D%7D"
+        class=" edit_rubric_link no-print no-hover"
+        style=""
+        title="Edit Rubric"
+        aria-label="Edit Rubric"
+        role="button"
+      ><i class="icon-edit standalone-icon"></i></a>
+      <a
+        href="https://canvas.wisc.edu/search/rubrics?q="
+        class="find_rubric_link no-print no-hover"
+        style=""
+        title="Find Another Rubric"
+        aria-label="Find Another Rubric"
+        role="button"
+      ><i class="icon-search standalone-icon"></i></a>
+        <a
+          href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D"
+          class="delete_rubric_link no-print no-hover"
+          style=""
+          title="Delete Rubric"
+          aria-label="Delete Rubric"
+          role="button"
+        ><i class="icon-trash standalone-icon"></i></a>
+      <div style="display: none;">
+        <div class="use_for_grading">&nbsp;</div>
+        <div class="free_form_criterion_comments">&nbsp;</div>
+        <div class="hide_score_total">&nbsp;</div>
+        <div class="hide_outcome_results">&nbsp;</div>
+        <div class="hide_points">&nbsp;</div>
+        <div class="rubric_association_id">&nbsp;</div>
+          <div class="user_id">&nbsp;</div>
+        <div class="assessment_type"></div>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D/assessments/%7B%7B%20assessment_id%20%7D%7D" rel="nofollow" class="edit_assessment_link">&nbsp;</a>
+        <a href="/courses/402226/rubrics/%7B%7B%20rubric_id%20%7D%7D" class="edit_rubric_url">&nbsp;</a>
+          <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url">&nbsp;</a>
+      </div>
+    </div>
+    <div style="float: right; font-size: 0.8em; display: none;" class="links displaying locked">
+      <span style="">Can&#39;t change a rubric once you&#39;ve started using it.</span>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url" style="display: none;">&nbsp;</a>
+    </div>
+
+    <div class="editing" style="float: right;">
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" class="find_rubric_link icon-search" style="" title="Find Existing Rubric">Find a Rubric</a>
+    </div>
+    <div class="editing" style="text-align: left">
+      <label for="rubric-title">Title:</label>
+      <input id="rubric-title" type="text" class="no-margin-bottom" name="title" value="Some Rubric" style="width: 200px;" maxlength="255" aria-label="Title:"/>
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" style="display: none;"><img alt="" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/find-6164443e2a.png" /> Find Rubric</a>
+    </div>
+    <div class="displaying">
+      <span class="title" tabindex="-1">Title</span>
+    </div>
+    <div class="has-assessments-warning" style="display: none;">
+      You&#39;ve already rated students with this rubric. Any major changes could affect their assessment results.
+    </div>
+  </div>
+<table class="rubric_table">
+<caption>
+  <div class="screenreader-only">
+    <span class="title">Title</span>
+  </div>
+</caption>
+<thead>
+  <tr>
+    <th scope="col">Criteria</th>
+    <th scope="col">Ratings</th>
+    <th scope="col" class="toggle_for_hide_points ">
+      Pts
+    </th>
+  </tr>
+</thead>
+<tbody>
+  
+<tr id="criterion_blank" class="criterion blank  " style="display: none;">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+          <a href="#" class="delete_criterion_link" role="button"><i class="icon-trash standalone-icon"></i><span class="screenreader-only">Delete criterion row</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">Description of criterion</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;"></span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points">5</span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  <tr class="summary">
+    <td colspan="4">
+      <div class="total_points_holder toggle_for_hide_points "
+        style="float: right; ">
+        <span>Total Points:
+            <span class="rubric_total">
+              5
+            </span>
+ <span class="assessing">out of 5</span>        </span>
+      </div>
+      <div class="editing pull-left">
+        <span id="add_criterion_holder" class="criterion_link"></span>
+      </div>
+      <div class="clear"></div>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<table style="display: none;">
+  <tr id="edit_rubric">
+    <td colspan="4">
+      <form id="edit_rubric_form" class="edit-rubric-form no-margin-bottom">
+        <div class="rubric_custom_ratings" style="">
+          <input type="checkbox" id="rubric_custom_rating" class="rubric_custom_rating" />
+          <label for="rubric_custom_rating">I&#39;ll write free-form comments when assessing students</label>
+        </div>
+          <div class="hide_points" style="">
+            <input type="checkbox" id="hide_points" class="hide_points_checkbox" />
+            <label for="hide_points">Remove points from rubric</label>
+          </div>
+          <div class="hide_outcome_results" style="">
+            <input type="checkbox" id="hide_outcome_results" class="hide_outcome_results_checkbox" />
+            <label for="hide_outcome_results">Don&#39;t post Outcomes results to Learning Mastery Gradebook</label>
+          </div>
+          <div class="rubric_grading" style="">
+            <input type="checkbox" id="grading_rubric" class="grading_rubric_checkbox" />
+            <label for="grading_rubric">Use this rubric for assignment grading</label>
+          </div>
+        <div class="totalling_rubric" style="">
+          <input type="checkbox" id="totalling_rubric" class="totalling_rubric_checkbox" />
+          <label for="totalling_rubric">Hide score total for assessment results</label>
+        </div>
+        <div class="ic-Action-header ic-Action-header--half-margin">
+          <div class="ic-Action-header__Primary">
+            <button type="button" class="Button cancel_button">Cancel</button>
+            <button type="submit" class="Button Button--primary save_button">Create Rubric</button>
+          </div>
+        </div>
+      </form>
+    </td>
+  </tr>
+</table>
+
+
+  <div id="assignment_external_tools"></div>
+
+  
+
+
+          </div>
+        </div>
+        <div id="right-side-wrapper" class="ic-app-main-content__secondary">
+          <aside id="right-side" role="complementary">
+            
+<div id="sidebar_content">
+
+    
+<div class="details">
+  <h2>Submission</h2>
+  <div class="content">
+    <span class="">
+        
+    </span>
+
+    <div>
+      <a href="/courses/402226/assignments/2301423/submissions/210042">
+        Submission Details
+      </a>
+    </div>
+
+
+    <div class="module">
+          <div>Grade: 89 <span style="font-size: 0.8em;">(100 pts possible)</span></div>
+          <div>Graded Anonymously: no</div>
+
+    </div>
+
+
+    <div class="comments module">
+        <h3>Comments: </h3>
+
+        No Comments
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <div style="display:none;"><!-- Everything inside of this should always stay hidden -->
+        <div id="page_view_id">04306bb5-b82b-45b5-bbf3-501bb6635177</div>
+    </div>
+  <div id='aria_alerts' class='hide-text affix' role="alert" aria-live="assertive"></div>
+  <div id='StudentTray__Container'></div>
+    <div class="NewUserTutorialTray__Container"></div>
+  <div id="react-router-portals"></div>
+  
+
+  <iframe src="https://sso.canvaslms.com/post_message_forwarding?rev=59677caad5-de8233d392aa15f4&amp;token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJwYXJlbnRfZG9tYWluIjoiY2FudmFzLndpc2MuZWR1In0.Vn8_7bMNTbXrR91PBjKlQirgswiqpPUPf9FKxmafm8AhCw4ZfBrA7WOraGeDcLgBsrk4TM_k0DZMTAXtmA5J-A" name="post_message_forwarding" title="post_message_forwarding" id="post_message_forwarding" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
+
+
+  <script>
+    Object.assign(
+      ENV,
+      {}
+    )
+  </script>
+
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('inst_fs_service_worker');
+//]]>
+</script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/39713295/madison_changes_july2024_.js" defer="defer"></script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js" defer="defer"></script>
+
+</div> <!-- #application -->
+</body>
+</html>

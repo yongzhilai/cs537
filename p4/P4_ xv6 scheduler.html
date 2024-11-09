@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#990000">
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="apple-itunes-app" content="app-id=480883488">
+<link rel="manifest" href="/web-app-manifest/manifest.json">
+  <meta name="sentry-trace" content="16c3e4e59de94910ae19b6828f57d61e-5700062f01624e76-0"/>
+  <title>P4: xv6 scheduler</title>
+
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Regular-bd03a2cc27.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Bold-cccb897485.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://du11hjcvx0uqb.cloudfront.net/dist/fonts/lato/extended/Lato-Italic-4eb103b4d1.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/common-3851139992.css" media="all" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/assignments-adde4b105e.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/learning_outcomes-0ef38391dc.css" media="screen" />
+  <link rel="stylesheet" href="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/new_user_tutorials-6b15f87caf.css" media="screen" />
+  <link rel="apple-touch-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/apple-touch-icon-585e5d997d.png" />
+  <link rel="icon" type="image/x-icon" href="https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" />
+
+  <link rel="stylesheet" href="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/38736063/Madison_041624.css" media="all" />
+  
+  <script>if (navigator.userAgent.match(/(MSIE|Trident\/)/)) location.replace('/ie-is-not-supported.html')</script>
+  <script>
+    INST = {"environment":"production","allowMediaComments":true,"kalturaSettings":{"domain":"nv.instructuremedia.com","resource_domain":"nv.instructuremedia.com","rtmp_domain":"iad.rtmp.instructuremedia.com","partner_id":"9","subpartner_id":"0","player_ui_conf":"0","kcw_ui_conf":"0","upload_ui_conf":"0","max_file_size_bytes":534773760,"do_analytics":false,"hide_rte_button":false,"js_uploader":true},"logPageViews":true,"editorButtons":[{"name":"YouTube","id":63,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=youtube","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/youtube_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSearch publicly available YouTube videos. A new icon will show up in your course rich editor letting you search YouTube and click to embed videos in your course material.\u003c/p\u003e\n"},{"name":"Vimeo","id":64,"favorite":false,"url":"https://www.edu-apps.org/lti_public_resources/?tool_id=vimeo","icon_url":"https://www.edu-apps.org/assets/lti_public_resources/vimeo_icon.png","canvas_icon_class":null,"width":560,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eVimeo is a video sharing website on which users can upload, share, and view videos. The community of Vimeo includes indie, professional, and novice filmmakers.\u003c/p\u003e\n"},{"name":"GoogleApps","id":354,"favorite":false,"url":"https://google-drive-lti-iad-prod.instructure.com/lti/rce-content-selection","icon_url":"https://google-drive-lti-iad-prod.instructure.com/icon.png","canvas_icon_class":null,"width":700,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Google Drive to Canvas\u003c/p\u003e\n"},{"name":"Office 365","id":690,"favorite":false,"url":"https://office365-iad-prod.instructure.com/lti/rce-content-item","icon_url":"https://office365-iad-prod.instructure.com/images/office365_icon.png","canvas_icon_class":null,"width":900,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAllows you to pull in documents from Office 365 to Canvas\u003c/p\u003e\n"},{"name":"BOX","id":691,"favorite":false,"url":"https://www.edu-apps.org/box/","icon_url":"https://www.edu-apps.org/assets/lti_box_engine/icon.png","canvas_icon_class":null,"width":430,"height":200,"use_tray":false,"always_on":false,"description":"\u003cp\u003eEmbed files from Box\u003c/p\u003e\n"},{"name":"Commons Favorites","id":4963,"favorite":false,"url":"https://lor.instructure.com/api/lti/favorite-resources","icon_url":"https://lor.instructure.com/img/icon_commons.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":true,"always_on":false,"description":"\u003cp\u003eFind and share course content\u003c/p\u003e\n"},{"name":"Embed Kaltura Media","id":9199,"favorite":true,"url":"https://1660902-6.kaf.kaltura.com/browseandembed/index/browseandembed","icon_url":"https://cdnsecakmi.kaltura.com/content/static/kalturalogo.png","canvas_icon_class":null,"width":1100,"height":600,"use_tray":false,"always_on":false,"description":"\u003cp\u003eMedia Gallery and Embed\u003c/p\u003e\n"},{"name":"SAGE Vantage LTI 1.3 - editor_button","id":16667,"favorite":false,"url":"https://vantage.sagepub.com/lti1p3/tool/F2qexkPLRCSA0Qgi","icon_url":"https://vantage.sagepub.com/images/sagent/Bird-blue-right.svg","canvas_icon_class":null,"width":1000,"height":1000,"use_tray":false,"always_on":false,"description":"\u003cp\u003eSAGE Vantage 1.3 Tool\u003c/p\u003e\n"},{"name":"myBusinessCourse Resource Selection","id":20058,"favorite":false,"url":"https://mybusinesscourse.com/platform/local/integrations/lti.php","icon_url":"https://mybusinesscourse.com/ublish/client/cpb/images/link_logo.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003emyBusinessCourse LTI 1.3\u003c/p\u003e\n"},{"name":"Pearson Links","id":21056,"favorite":false,"url":"https://interop.pearson.com/launch","icon_url":"https://www.pearson.com/us/content/dam/one-dot-com/one-dot-com/us/en/images/PearsonThumbprint-RGB-127x138.png/_jcr_content/renditions/cq5dam.web.1600.9600.png","canvas_icon_class":null,"width":800,"height":400,"use_tray":false,"always_on":false,"description":"\u003cp\u003eAccess Pearson\u003c/p\u003e\n"}]};
+    ENV = {"ASSET_HOST":"https://du11hjcvx0uqb.cloudfront.net","active_brand_config_json_url":"https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.json","active_brand_config":{"md5":"61f7e559cc87fd00c64673f40997d6a9","variables":{},"share":false,"name":null,"created_at":"2024-07-10T16:20:14-05:00","js_overrides":"https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js","css_overrides":"","mobile_js_overrides":"","mobile_css_overrides":"","parent_md5":"8f6dd81031a173a2b291239d3ac3f2b7"},"confetti_branding_enabled":false,"url_to_what_gets_loaded_inside_the_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_normal_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-90e5ad1077.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"url_for_high_contrast_tinymce_editor_css":["https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/default/variables-high_contrast-7dd4b80918af0e0218ec0229e4bd5873.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/new_styles_high_contrast/bundles/what_gets_loaded_inside_the_tinymce_editor-795277483f.css","https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/no_variables/bundles/fonts-6ee09b0b2f.css"],"current_user_id":"210042","current_user_global_id":"83960000000210042","current_user_heap_id":"uu-2-b8e0df225888f508350f05f630b51a9475afbaccbb1f7ff370bb169fbe3d4d5d-0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","current_user_roles":["user","student"],"current_user_is_student":true,"current_user_types":[],"current_user_disabled_inbox":false,"current_user_visited_tabs":null,"discussions_reporting":true,"files_domain":"cluster77.canvas-user-content.com","group_information":null,"DOMAIN_ROOT_ACCOUNT_ID":"83960000000000001","DOMAIN_ROOT_ACCOUNT_UUID":"0oZnoj0EXwmozuvldCGvsOXhduumpWAJplTCVyht","k12":false,"help_link_name":"Help","help_link_icon":"help","use_high_contrast":false,"auto_show_cc":false,"disable_celebrations":false,"disable_keyboard_shortcuts":false,"LTI_LAUNCH_FRAME_ALLOWANCES":["geolocation *","microphone *","camera *","midi *","encrypted-media *","autoplay *","clipboard-write *","display-capture *"],"DEEP_LINKING_POST_MESSAGE_ORIGIN":"https://canvas.wisc.edu","comment_library_suggestions_enabled":false,"SETTINGS":{"open_registration":false,"collapse_global_nav":true,"release_notes_badge_disabled":false,"can_add_pronouns":true,"filter_speed_grader_by_student_group":false},"RAILS_ENVIRONMENT":"Production","IN_PACED_COURSE":false,"SENTRY_FRONTEND":{"dsn":"https://355a1d96717e4038ac25aa852fa79a8f@relay-iad.sentry.insops.net/388","org_slug":"instructure","base_url":"https://sentry.insops.net","normalized_route":"/courses/{course_id}/assignments/{id}","errors_sample_rate":"0.005","traces_sample_rate":"0.005","url_deny_pattern":"instructure-uploads.*amazonaws.com","revision":"canvas-lms@20240731.238"},"DATA_COLLECTION_ENDPOINT":"https://canvas-frontend-data-iad-prod.inscloudgate.net/submit","DOMAIN_ROOT_ACCOUNT_SFID":"001A000000ZQLzgIAH","DIRECT_SHARE_ENABLED":false,"CAN_VIEW_CONTENT_SHARES":false,"FEATURES":{"featured_help_links":true,"account_level_blackout_dates":false,"render_both_to_do_lists":false,"commons_new_quizzes":false,"course_paces_redesign":true,"course_paces_for_students":true,"explicit_latex_typesetting":false,"media_links_use_attachment_id":true,"permanent_page_links":true,"selective_release_backend":true,"selective_release_ui_api":true,"selective_release_optimized_tray":true,"enhanced_course_creation_account_fetching":false,"instui_for_import_page":false,"multiselect_gradebook_filters":true,"assignment_edit_placement_not_on_announcements":false,"platform_service_speedgrader":false,"instui_header":false,"rce_find_replace":true,"courses_popout_sisid":true,"dashboard_graphql_integration":false,"discussion_checkpoints":false,"speedgrader_studio_media_capture":true,"product_tours":false,"usage_rights_discussion_topics":true,"granular_permissions_manage_users":true,"create_course_subaccount_picker":true,"file_verifiers_for_quiz_links":true,"lti_deep_linking_module_index_menu_modal":true,"lti_dynamic_registration":true,"lti_multiple_assignment_deep_linking":true,"lti_overwrite_user_url_input_select_content_dialog":true,"buttons_and_icons_root_account":false,"extended_submission_state":false,"scheduled_page_publication":true,"send_usage_metrics":true,"rce_transform_loaded_content":false,"mobile_offline_mode":false,"react_discussions_post":true,"instui_nav":false,"enhanced_developer_keys_tables":true,"lti_registrations_discover_page":false,"enhanced_rubrics":false,"account_level_mastery_scales":false,"non_scoring_rubrics":true,"top_navigation_placement":false,"embedded_release_notes":true,"canvas_k6_theme":false,"new_math_equation_handling":true},"current_user":{"id":"210042","anonymous_id":"4i2i","display_name":"Yongzhi Lai","avatar_image_url":"https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128\u0026d=identicon","html_url":"https://canvas.wisc.edu/about/210042","pronouns":null,"avatar_is_fallback":false,"email":"LAI38@WISC.EDU"},"current_user_is_admin":false,"page_view_update_url":"/page_views/dd4bf15e-d508-4b92-960e-ede252a0bddc?page_view_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpIjoiZGQ0YmYxNWUtZDUwOC00YjkyLTk2MGUtZWRlMjUyYTBiZGRjIiwidSI6ODM5NjAwMDAwMDAyMTAwNDIsImMiOiIyMDI0LTA4LTEyVDIwOjM5OjM1LjUxWiJ9.6cQscHU_5OOn7rjqX0NhSSAK728Nsm1jsFTzAt7AIvA","context_asset_string":"course_402226","ping_url":"https://canvas.wisc.edu/api/v1/courses/402226/ping","TIMEZONE":"America/Chicago","CONTEXT_TIMEZONE":"America/Chicago","LOCALES":["en"],"BIGEASY_LOCALE":"en_US","FULLCALENDAR_LOCALE":"en","MOMENT_LOCALE":"en","rce_auto_save_max_age_ms":86400000,"K5_USER":false,"USE_CLASSIC_FONT":false,"K5_HOMEROOM_COURSE":false,"K5_SUBJECT_COURSE":false,"LOCALE_TRANSLATION_FILE":"/dist/javascripts/translations/en-67c25a6858.json","ACCOUNT_ID":"123","user_cache_key":"dHBhYkxONnRSMlIyazBpMVdoUXNQTUxPZFJINGYwa01HSjVSSG13enZ5Zlc9\nO1twLTA/OntQXz1IVXBncmFxZTtuamFsa2hwdm9pdWxraW1tYXFld2c=\n","current_context":{"id":"402226","name":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","type":"Course","url":"https://canvas.wisc.edu/courses/402226"},"ASSIGNMENT_POINTS_POSSIBLE":null,"media_comment_asset_string":"user_210042","COURSE_ID":"402226","ROOT_OUTCOME_GROUP":{"id":"129584","title":"COMPSCI537: Introduction to Operating Systems (001) AKK SU24","vendor_guid":null,"url":"/api/v1/courses/402226/outcome_groups/129584","subgroups_url":"/api/v1/courses/402226/outcome_groups/129584/subgroups","outcomes_url":"/api/v1/courses/402226/outcome_groups/129584/outcomes","can_edit":false,"import_url":"/api/v1/courses/402226/outcome_groups/129584/import","context_id":"402226","context_type":"Course","description":null},"SUBMISSION_ID":"142518739","FIRST_ANNOTATION_SUBMISSION":false,"RICH_CONTENT_APP_HOST":"rich-content-iad.inscloudgate.net","JWT":"ZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJSME5OSWl3aWNtVm5hVzl1SWpvaWRYTXRaV0Z6ZEMweElpd2laVzUyYVhKdmJtMWxiblFpT2lKUWNtOWtkV04wYVc5dUluMC4uRTh5c0h3OHIyUHotRFE0SC5BU1BYdkJOMW9sTjNPbVU1bncyNllaVEU4WFNZREIwT244R3REbXJsd0hkTGIzbHVpNTNESXpmN1ZpQ1I5S3FXLWRBaVg2TjJHT0pMTHdoNXo5YWluVHZ4WExrT0V1ZGROenJHUUEwanZwbEFfakp2NEpEdV9zdjN5U3dHTzItN1R1MWd2OXdNWW8teDJEVXZqT3RWZGRmc1lyNzVBTHVHcHJEdFUzcUI4UWJKMFdiTW1rNDVXZWh6X3BlRUtZNmp6ZE5sOU93Qy01dVVhMmllbFBsdDFjX3l0d1dfNjhVQ3ptZUlobjJSVjZiYWJsdGQ3MUFvb25tb2lzd3pJcThCOEplTVZ3UlhienVRZ2dEYUNoVi1WRmp5aUgteVQ5RUdZV1JKWHpJYmRFNnliTDRzVjVCd2RyR2xkQ1ZydEZ3WGtTSzB3NWFmTWVWSURVZjVPdl9nZHR3bFlPLUZ5U2ZWM1J5R015S3FFXzFuODJkOWktdnE4TGluWlByaDBTbDc2bmZfZzFXYmNyNUZhUG9QT1UxSkJiQkUzWGVxaHc2VUNHODhLR3FkRlRaSFpaQUZYeVBnd25QMmZpMVhhUW84S2hWZ1lvRWVQeW1oRGZfbHQxVURmdUlXOWtMc0haS3pVZzc3cjNORXRjbms2bjA2Q25HWUwxek9EUmJCT3dWWmliaUR5cG4ySjBGdnVpS0h1ZFBHMGpfckoyMmZkNFR6Y1d3STVxeFNlY2VWcmxvMjlON0wxQVRLSU5zSnFleXVSTERoUktvOEFOcDNZSVFUQ0JpZGtCanhtV1lkRGVOaVVMTDZRUy05VzEtZFpjOXJLMEpUc1YtLUpYOG9ONzFIMVU3M3pJQ3hSUHh6MnVseG9sOHlWVHRwbjloamhoOTVkcUdoU2lKMDVfM0VZMEU2VW43WWszdTRYdzlxWUFuQ0ZfSTFpOXhyY2l2OTdXdmdfVC1BWW16U2ctMGxlYmNlWDhHUGJsX2EzZ0k5endveVFZN0FzX2dZSlV3cmlOVzFKYW1GN0tuZ3RLMGlOM2NiQlh5M1NlNU11em1MY2RuM01nLjU1d1Y1QUo0OFFELXF4YnEyaXBJNVE=","RICH_CONTENT_CAN_UPLOAD_FILES":false,"RICH_CONTENT_CAN_EDIT_FILES":false,"RICH_CONTENT_FILES_TAB_DISABLED":false,"RICH_CONTENT_INST_RECORD_TAB_DISABLED":false,"RICH_CONTENT_AI_TEXT_TOOLS":false,"ASSIGNMENT_ID":"2301449","PREREQS":{},"EULA_URL":null,"EXTERNAL_TOOLS":[],"PERMISSIONS":{"context":{"read_as_admin":false,"manage_assignments":false,"manage_assignments_edit":false},"assignment":{"update":false,"submit":false},"can_manage_groups":true},"SIMILARITY_PLEDGE":null,"CONFETTI_ENABLED":false,"EMOJIS_ENABLED":false,"EMOJI_DENY_LIST":null,"USER_ASSET_STRING":"user_210042","OUTCOMES_NEW_DECAYING_AVERAGE_CALCULATION":true,"CONDITIONAL_RELEASE_SERVICE_ENABLED":true,"CONDITIONAL_RELEASE_ENV":{"assignment":{"id":"2301449","title":"P4: xv6 scheduler","description":"\u003ch3\u003eOverview:\u003c/h3\u003e\n\u003cp\u003eIn this assignment, you will be implementing a \u003cem\u003ecompensating-lottery scheduler\u003c/em\u003e and supporting system calls in xv6. Along with that, you will be \u003cem\u003eupdating the process sleep and wakeup mechanisms.\u003c/em\u003e\u003cbr\u003eUnlike prior projects, this project can be done in pairs, so find yourself a partner you would like to work out this assignment with.\u003c/p\u003e\n\u003ch3\u003eLearning objectives:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eUnderstand how a lottery scheduler works.\u003c/li\u003e\n\u003cli\u003eLearn how to add new features (such as a new scheduler) to existing code bases.\u003c/li\u003e\n\u003cli\u003eGain experience working with collaborators. Expect to spend a lot of time communicating with each other and working together.\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch3\u003eAdministrivia:\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003eThis project can be performed in groups of 2.\u003c/li\u003e\n\u003cli\u003eDue Date: July 15th, at 11:59PM (slip day policy will apply to both people in the the group)\u003c/li\u003e\n\u003cli\u003eThe final submission will be tests on \u003ca class=\"inline_disabled\" href=\"https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/\" target=\"_blank\"\u003elab machines\u003c/a\u003e, so make sure to test your code on these machines.\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch3\u003eDetails:\u003c/h3\u003e\n\u003ch4\u003e1) Background\u003c/h4\u003e\n\u003cp\u003eThe current xv6 scheduler implements a very simple Round Robin (RR) policy.\u0026nbsp; For example, if there are three processes A, B and C, then the xv6 round-robin scheduler will run the jobs in the order\u0026nbsp; A B C A B C … , where each letter represents a process.\u0026nbsp; The xv6 scheduler runs each process for at most one timer tick (10 ms); after each timer tick, the scheduler moves the previous job to the end of the ready queue and dispatches the next job in the list.\u0026nbsp; \u0026nbsp;The xv6 scheduler does not do anything special when a process sleeps or blocks (and is unable to be scheduled); the blocked job is simply skipped until it is ready and it is again its turn in the RR order.\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eSince RR treats all jobs equally, it is simple and fairly effective. However, there are instances where this \"ideal\" property of RR is detrimental: if compute-intensive background jobs (anti-virus checks) are given equal priority to latency-sensitive operations, operations like music streaming (latency-sensitive) suffer. \u003ca class=\"inline_disabled\" href=\"https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-lottery.pdf\" target=\"_blank\"\u003eLottery Scheduling\u003c/a\u003e is a proportional share policy which fixes this by asking users to grant tickets to processes. The scheduler holds a lottery every tick to determine the next process. Since important processes are given more tickets, they end up running more often on the CPU over a period of time.\u003c/p\u003e\n\u003ch4\u003e2) Scheduler details\u003c/h4\u003e\n\u003cp\u003e\u003cspan style=\"text-decoration: underline;\"\u003e1.1) Basic lottery scheduler\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eIn your scheduler, each process runs for an entire tick until interrupted by the xv6 timer. At each tick, the scheduler holds a lottery between RUNNABLE processes and schedules the winner. \u003cem\u003eWhen a new process arrives, it should have the same number of tickets as its parent. The first process of xv6 should start with 1 ticket\u003c/em\u003e. You will also create a system call \u003ccode\u003esettickets(int pid, int tickets)\u003c/code\u003e, to change the number of tickets held by the specified process.\u003cbr\u003eAs an example, if there is a process A with 1 ticket and process B with 4 tickets, this is what the timeline \u003cem\u003emight\u003c/em\u003e look like:\u003c/p\u003e\n\u003ctable style=\"width: 57.5621%; height: 58px;\" border=\"1\"\u003e\n\u003ctbody\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 16.2458%; height: 29px;\"\u003etimer tick\u003c/td\u003e\n\u003ctd style=\"width: 3.92156%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.03356%; height: 29px;\"\u003e2\u003c/td\u003e\n\u003ctd style=\"width: 4.03355%; height: 29px;\"\u003e3\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.03355%; height: 29px;\"\u003e5\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e6\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e7\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e8\u003c/td\u003e\n\u003ctd style=\"width: 4.03355%; height: 29px;\"\u003e9\u003c/td\u003e\n\u003ctd style=\"width: 4.39782%; height: 29px;\"\u003e10\u003c/td\u003e\n\u003ctd style=\"width: 4.39782%; height: 29px;\"\u003e11\u003c/td\u003e\n\u003ctd style=\"width: 4.39782%; height: 29px;\"\u003e12\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e13\u003c/td\u003e\n\u003ctd style=\"width: 4.28583%; height: 29px;\"\u003e14\u003c/td\u003e\n\u003ctd style=\"width: 3.94989%; height: 29px;\"\u003e15\u003c/td\u003e\n\u003ctd style=\"width: 4.28584%; height: 29px;\"\u003e16\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e17\u003c/td\u003e\n\u003ctd style=\"width: 4.39781%; height: 29px;\"\u003e18\u003c/td\u003e\n\u003ctd style=\"width: 4.17386%; height: 29px;\"\u003e19\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e20\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 16.2458%; height: 29px;\"\u003escheduled process\u003c/td\u003e\n\u003ctd style=\"width: 3.92156%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.03356%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.03355%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.03355%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.03355%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.39782%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.39782%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.39782%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003cspan style=\"color: #000000;\"\u003eB\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.28583%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.94989%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.28584%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.39781%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.17386%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003eIn this case, A was scheduled for 4 ticks, and B for 16. Given sufficiently large number of ticks, we can expect the ratio of CPU time per process to be approximately the ratio of their tickets.\u003c/p\u003e\n\u003cp\u003eScheduling is relatively easy when processes are just using the CPU; scheduling gets more interesting when jobs are arriving and exiting, or performing I/O. There are three events in xv6 that may cause a new process to be scheduled:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ewhenever the xv6 10 ms timer tick occurs\u003c/li\u003e\n\u003cli\u003ewhen a process exits\u003c/li\u003e\n\u003cli\u003ewhen a process sleeps.\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eFor simplicity, your scheduler should also not trigger a new scheduling event when a new process arrives or wakes; you should simply mark the process as \"RUNNABLE\". The next scheduling decision will be made the next time a timer tick occurs.\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"text-decoration: underline;\"\u003e1.2) Compensating lottery scheduler\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eLike we discussed in MLFQ, many schedulers contain some type of incentive for processes that sleep (or block) and voluntarily relinquish the CPU so another process can run; this improves overall system throughput since the process isn't wastefully holding on to the CPU doing nothing. We will add such an incentive to the lottery scheduler. Y\u003cspan style=\"color: #000000;\"\u003eour scheduler will track the number of ticks a process was sleeping/blocked. Once it's runnable, it will boost (double) the number of tickets for the same number of ticks. For instance, if a process slept for 5 ticks, its tickets would be artificially doubled for the next 5 lotteries it participates in.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eExample: a process A has 1 ticket and B has 4 tickets. Process A sleeps for 2 ticks, and is therefore given double tickets for the next 2 lotteries after it wakes. This allows the scheduler to keep the CPU usage ratio equal to the ratio of tickets, even when process A is blocked. The timeline could look like the following in this case (description below the timeline):\u003c/p\u003e\n\u003ctable style=\"width: 72.4522%; height: 141px;\" border=\"1\"\u003e\n\u003ctbody\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 16.9483%; height: 29px;\"\u003etimer tick\u003c/td\u003e\n\u003ctd style=\"width: 3.38777%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 3.12085%; height: 29px;\"\u003e2\u003c/td\u003e\n\u003ctd style=\"width: 3.65467%; height: 29px;\"\u003e3\u003c/td\u003e\n\u003ctd style=\"width: 3.47673%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e5\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e6\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e7\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e8\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e9\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e10\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e11\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e12\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e13\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e14\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e15\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e16\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e17\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e18\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e19\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e20\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 16.9483%; height: 29px;\"\u003escheduled\u003c/td\u003e\n\u003ctd style=\"width: 3.38777%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.12085%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 3.65467%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.47673%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 16.9483%; height: 29px;\"\u003esleeping/blocked\u003c/td\u003e\n\u003ctd style=\"width: 3.38777%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.12085%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.65467%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 3.47673%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 16.9483%; height: 29px;\"\u003eA lottery tickets\u003c/td\u003e\n\u003ctd style=\"width: 3.38777%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 3.12085%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 3.65467%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 3.47673%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 16.9483%; height: 29px;\"\u003eB lottery tickets\u003c/td\u003e\n\u003ctd style=\"width: 3.38777%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.12085%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.65467%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.47673%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.92157%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.5098%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003eNote the following:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003eAt each tick, we consider the tickets a runnable process has. Ticks 3, 4, 15 and 16 only have 1 runnable process, thus only B participates in the lottery.\u003c/li\u003e\n\u003cli\u003eOnce A is no longer blocked, it starts participating in lotteries. \u003cstrong\u003eIf it slept for\u0026nbsp;\u003cspan style=\"text-decoration: underline;\"\u003e\u003cem\u003ex\u003c/em\u003e\u003c/span\u003e ticks, it will participate in the next \u003cspan style=\"text-decoration: underline;\"\u003e\u003cem\u003ex\u003c/em\u003e\u003c/span\u003e lotteries\u0026nbsp;with double the tickets.\u003c/strong\u003e\u003c/li\u003e\n\u003cli\u003e\u003cstrong\u003e \u003c/strong\u003eMake sure that when a process sleeps, it is given compensation ticks for the amount of time it was actually sleeping, not the amount of time it wasn't scheduled.\u0026nbsp; For example, process A becomes RUNNABLE at tick 17. You should boost its tickets only for the next 2 lotteries, regardless of whether A actually wins the lottery or not.\u003c/li\u003e\n\u003c/ol\u003e\n\u003cp\u003e\u003cspan style=\"text-decoration: underline;\"\u003e1.3) Carrying forward remaining boost\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eAssume A sleeps for 3 ticks, thus its tickets are boosted for the next 3 ticks. What happens if it sleeps for 3 ticks again while it still has 3 \u003ccode\u003e\u003cem\u003eremaining\u003c/em\u003e\u003c/code\u003e\u003cstrong\u003e \u003c/strong\u003eboosts left? In this case, its tickets should be boosted for the next (3+3\u003ccode\u003e\u003cem\u003eremaining\u003c/em\u003e\u003c/code\u003e) rounds after it wakes. This is important for maintaining the lottery scheduler's proportional-CPU-share property. Given that A couldn't even participate in the lottery when it was blocked, we need to ensure it has a higher chance of winning in the corresponding number of lotteries.\u003c/p\u003e\n\u003cp\u003eThis is a potential timeline for the described situation. Realize that after tick 5, A was supposed to be boosted for 3 ticks. Since it got blocked before that, we ensure that it doesn't lose the number of favourable/boosted rounds once it wakes.\u003c/p\u003e\n\u003ctable style=\"width: 57.9522%; height: 144px;\" border=\"1\"\u003e\n\u003ctbody\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 15.4226%; height: 29px;\"\u003einterval\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e2\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e3\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e5\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e6\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e7\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e8\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e9\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e10\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e11\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e12\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e13\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e14\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e15\u003c/td\u003e\n\u003ctd style=\"width: 4.22409%; height: 29px;\"\u003e16\u003c/td\u003e\n\u003ctd style=\"width: 4.00161%; height: 29px;\"\u003e17\u003c/td\u003e\n\u003ctd style=\"width: 3.73988%; height: 29px;\"\u003e18\u003c/td\u003e\n\u003ctd style=\"width: 3.65298%; height: 29px;\"\u003e19\u003c/td\u003e\n\u003ctd style=\"width: 3.50248%; height: 29px;\"\u003e20\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 15.4226%; height: 29px;\"\u003escheduled\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.22409%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 4.00161%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.73988%; height: 29px;\"\u003eA\u003c/td\u003e\n\u003ctd style=\"width: 3.65298%; height: 29px;\"\u003eB\u003c/td\u003e\n\u003ctd style=\"width: 3.50248%; height: 29px;\"\u003e\u003cspan style=\"color: #000000;\"\u003eB\u003cbr\u003e\u003c/span\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 15.4226%; height: 29px;\"\u003esleeping\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003cspan style=\"color: #e03e2d;\"\u003eA\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003cspan style=\"color: #e03e2d;\"\u003eA\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003cspan style=\"color: #e03e2d;\"\u003eA\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003cspan style=\"color: #169179;\"\u003eA\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003cspan style=\"color: #169179;\"\u003eA\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003cspan style=\"color: #169179;\"\u003eA\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.22409%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.00161%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.73988%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.65298%; height: 29px;\"\u003e\u003c/td\u003e\n\u003ctd style=\"width: 3.50248%; height: 29px;\"\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 15.4226%; height: 29px;\"\u003eA tickets\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e\u003cspan style=\"color: #e03e2d;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e-\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003cspan style=\"color: #e03e2d;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003cspan style=\"color: #e03e2d;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003cspan style=\"color: #169179;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003cspan style=\"color: #169179;\"\u003e\u003cstrong\u003e2\u003cbr\u003e\u003c/strong\u003e\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003cspan style=\"color: #169179;\"\u003e\u003cstrong\u003e2\u003c/strong\u003e\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.22409%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 4.00161%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 3.73988%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 3.65298%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003ctd style=\"width: 3.50248%; height: 29px;\"\u003e1\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr style=\"height: 29px;\"\u003e\n\u003ctd style=\"width: 15.4226%; height: 29px;\"\u003eB tickets\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.0568%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e\u003cspan\u003e4\u003cbr\u003e\u003c/span\u003e\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.78026%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.22409%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 4.00161%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.73988%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.65298%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003ctd style=\"width: 3.50248%; height: 29px;\"\u003e4\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch4\u003e3) Enhancing sleep and wakeup mechanism in xv6\u003c/h4\u003e\n\u003cp\u003eFinally, you need to change the existing implementation of \u003ccode\u003esleep()\u003c/code\u003e syscall.\u0026nbsp; The sleep syscall allows processes to sleep for a specified number of ticks.\u0026nbsp; \u0026nbsp;Unfortunately, the current xv6 implementation of the \u003ccode\u003esleep()\u003c/code\u003e syscall forces the sleeping process to wake on every timer tick to check if it has slept for the requested number of timer ticks or not.\u0026nbsp; This has two drawbacks.\u0026nbsp; First, it is inefficient to schedule every sleeping process and force it to perform this check.\u0026nbsp; Second, and more importantly for this project, if the process was scheduled on a timer tick (even just to perform this check), it will lose at least 1 favourable round since it ended up participating in the lottery.\u003c/p\u003e\n\u003cp\u003eYou are required to fix this problem of extra wakeups by changing \u003ccode\u003ewakeup1()\u003c/code\u003e \u003cspan\u003ein \u003c/span\u003e\u003ccode\u003eproc.c\u003c/code\u003e.\u0026nbsp; You are likely to add \u003cspan\u003eadditional condition checking to avoid falsely waking up the sleeping process until it is the right time.\u0026nbsp; You may want to add more fields to \u003c/span\u003e\u003ccode\u003estruct proc\u003c/code\u003e \u003cspan\u003eto help \u003c/span\u003e\u003ccode\u003ewakeup1()\u003c/code\u003e \u003cspan\u003edecide whether if it is time to wake a process.\u0026nbsp; You might also use this mechanism to count how many ticks a process was sleeping for so it can be boosted accordingly. You may find the section \"sleep and wakeup\" in the \u003c/span\u003e\u003ca class=\"instructure_file_link inline_disabled external\" href=\"https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf\" target=\"_blank\"\u003e\u003cspan\u003exv6 book\u003c/span\u003e\u003cspan class=\"screenreader-only\"\u003e\u0026nbsp;(Links to an external site.)\u003c/span\u003e\u003c/a\u003e \u003cspan\u003e(starting from page 65) helpful.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch4\u003e\u003cspan\u003e4) Some implementation details\u003c/span\u003e\u003c/h4\u003e\n\u003cp\u003eIn order to hold a lottery, we first need a way to generate a random number. Here's the code to do so:\u003c/p\u003e\n\u003cp\u003eCopy the following at the top of \u003ccode\u003eproc.c\u003c/code\u003e after the headers:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e#define RAND_MAX 0x7fffffff\u003c/code\u003e\u003cbr\u003e\u003ccode\u003euint rseed = 0;\u003c/code\u003e\u003cbr\u003e\u003cbr\u003e\u003ccode\u003e// https://rosettacode.org/wiki/Linear_congruential_generator\u003c/code\u003e\u003cbr\u003e\u003ccode\u003euint rand() {\u003c/code\u003e\u003cbr\u003e\u003ccode\u003e\u0026nbsp; \u0026nbsp; return rseed = (rseed * 1103515245 + 12345) \u0026amp; RAND_MAX;\u003c/code\u003e\u003cbr\u003e\u003ccode\u003e}\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch4\u003e5) New system calls\u003c/h4\u003e\n\u003cp\u003eYou’ll need to create 3 new system calls for this project.\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e\u003cstrong\u003e\u003c/strong\u003e\u003ccode\u003eint settickets(int pid, int n_tickets)\u003c/code\u003e\u003cstrong\u003e.\u0026nbsp;\u0026nbsp;\u003c/strong\u003eThis syscall is used to set the number of tickets allotted to a process. It returns 0 if the pid value is valid and n_tickets is positive. Else, it returns -1.\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003evoid srand(uint seed):\u003c/code\u003e This sets the rseed variable you defined in proc.c. (Hint: in order to effectively mutate that variable in your sys_srand function, you will need to define \u003ccode\u003eextern uint rseed\u003c/code\u003e. Check \u003ca class=\"inline_disabled\" href=\"https://stackoverflow.com/a/1433226\" target=\"_blank\"\u003ehttps://stackoverflow.com/a/1433226\u003c/a\u003e).\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eint getpinfo(struct pstat *)\u003c/code\u003e\u003cstrong\u003e\u003c/strong\u003e.\u0026nbsp; \u0026nbsp;Because your scheduler is all in the kernel, you need to extract useful information for each process by creating this system call so as to better test whether your implementation works as expected. To be more specific, this system call returns 0 on success and -1 on failure (e.g., the argument is not a valid pointer).\u0026nbsp; If successful, some basic information about each running process will be returned:\u003c/li\u003e\n\u003c/ol\u003e\n\u003cpre\u003e\u003cspan\u003e\u003ccode class=\"language-c\"\u003estruct pstat {\u003cbr\u003e\u0026nbsp; int inuse[NPROC]; // whether this slot of the process table is in use (1 or 0)\u003cbr\u003e\u0026nbsp; int pid[NPROC]; // PID of each process\u003cbr\u003e\u0026nbsp; int tickets[NPROC];  // how many tickets does this process have?\u003cbr\u003e\u0026nbsp; int runticks[NPROC];  // total number of timer ticks this process has been scheduled\u003cbr\u003e\u0026nbsp; int boostsleft[NPROC]; // how many more ticks will this process be boosted?\u003cbr\u003e};\n\u003c/code\u003e\u003c/span\u003e\u003c/pre\u003e\n\u003cp\u003eYou can decide if you want to update your \u003ccode\u003epstat\u003c/code\u003e statistics whenever a change occurs, or if you have an equivalent copy of these statistics in \u003ccode\u003eptable\u003c/code\u003e and want to copy out information from the \u003ccode\u003eptable\u003c/code\u003e when \u003ccode\u003egetpinfo()\u003c/code\u003e is called.\u0026nbsp;\u0026nbsp;\u003c/p\u003e\n\u003cp\u003eThe file should be copied from \u003ccode\u003e~/cs537-1/public/p4_files/pstat.h\u003c/code\u003e.\u003cstrong\u003e\u003cbr\u003e\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eDo not change the names of the fields in \u003ccode\u003epstat.h\u003c/code\u003e. You may want to add a header guard to \u003ccode\u003epstat.h\u003c/code\u003e and \u003ccode\u003eparam.h\u003c/code\u003e to avoid redefinition.\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch4\u003e6) User-level applications for testing\u003c/h4\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003eTo demonstrate that your scheduler is doing at least some of the right things, we provide 2 such applications:\u0026nbsp; \u003ccode\u003eloop\u003c/code\u003e and \u003ccode\u003eschedtest\u003c/code\u003e. The code for these programs is available in \u003ccode\u003e~/cs537-1/public/p4_files\u003c/code\u003e.\u0026nbsp; Copy these into your src folder and have xv6 compile these as user programs by modifying the UPROGS variable in the Makefile.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003e\u003ccode\u003eloop\u003c/code\u003e is a dummy job that just does some work. It takes exactly 1 argument \u003ccode\u003esleepT\u003c/code\u003e. It sleeps\u003c/span\u003e\u003cspan style=\"color: #000000;\"\u003e for \u003ccode\u003esleepT\u003c/code\u003e ticks, t\u003c/span\u003e\u003cspan style=\"color: #000000;\"\u003ehen runs a huge loop.\u003cbr\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003e\u003ccode\u003eschedtest\u003c/code\u003e runs two copies of \u003ccode\u003eloop\u003c/code\u003e\u003cstrong\u003e \u003c/strong\u003eas child processes, controlling the number of tickets and sleep time of each child.\u0026nbsp; The \u003ccode\u003eschedtest\u003c/code\u003e application takes exactly 5 arguments in the following order:\u003c/span\u003e\u003c/p\u003e\n\u003cpre\u003e\u003cspan style=\"color: #000000;\"\u003eprompt\u0026gt; schedtest ticketsA sleepA ticketsB sleepB sleepParent\u003c/span\u003e\u003c/pre\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003e\u003ccode\u003eschedtest\u003c/code\u003e spawns two children processes, each running the \u003ccode\u003eloop\u003c/code\u003e application.\u0026nbsp; One child A is given \u003ccode\u003eticketsA\u003c/code\u003e tickets and execs \u003ccode\u003eloop sleepA\u003c/code\u003e; the other child B is given \u003ccode\u003eticketsB\u003c/code\u003e tickets and it runs \u003ccode\u003eloop sleepB\u003c/code\u003e.\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003eSpecifically, the parent process calls \u003ccode\u003efork(), settickets()\u003c/code\u003e and \u003ccode\u003eexec()\u003c/code\u003e for the two children \u003ccode\u003eloop\u003c/code\u003e processes, \u003cstrong\u003eA before B.\u003c/strong\u003e\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003eThe parent \u003ccode\u003eschedtest\u003c/code\u003e process then sleeps for \u003ccode\u003esleepParent\u003c/code\u003e ticks by calling \u003ccode\u003esleep(sleepParent)\u003c/code\u003e\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003eAfter sleeping, the parent calls \u003ccode\u003egetpinfo()\u003c/code\u003e, and prints one line of two numbers separated by a space: \u003ccode\u003eprintf(1, \"%d %d: %d\\n\", runticksA, runticksB, runticksA / runticksB\u003c/code\u003e), where\u0026nbsp;\u003ccode\u003e\u003ccode class=\"language-c\"\u003erunticksA\u003c/code\u003e\u003c/code\u003e is the\u0026nbsp;\u003ccode\u003erunticks\u003c/code\u003e of process A in the \u003ccode\u003epstat\u003c/code\u003e structure and similarly for B.\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003eThe parent then waits for the two \u003ccode\u003eloop\u003c/code\u003e processes by calling \u003ccode\u003ewait()\u003c/code\u003e twice, and exits.\u003c/span\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003eYou will be able to run \u003ccode\u003eschedtest\u003c/code\u003e to test the basic compensation behaviour of your scheduler.\u0026nbsp; For example:\u003c/span\u003e\u003c/p\u003e\n\u003cpre\u003e\u003cspan style=\"color: #000000;\"\u003eprompt\u0026gt; schedtest 10 0 2 0 120\u003c/span\u003e\u003cbr\u003e\u003cspan style=\"color: #000000;\"\u003e99 19 5   \u003c/span\u003e\u003cbr\u003e\u003cspan style=\"color: #000000;\"\u003e# Since it's randomized, it's difficult to completely predict the output of your program.\u003c/span\u003e\u003cbr\u003e\u003cspan style=\"color: #000000;\"\u003e# However, the key thing to note is that the ratio of runticksA/runticksB is close to the ratio of tickets 10/2.\u003c/span\u003e\u003cbr\u003e\u003cspan style=\"color: #000000;\"\u003e# You should play around with the number of tickets you grant each process and see the CPU-ratio match.\u003c/span\u003e\u003cbr\u003e\u003cspan style=\"color: #000000;\"\u003e# As long as one of the child hasn't terminated yet, increasing the sleepParent value should lead to the CPU-use ratio converging to 5.\u003c/span\u003e\u003cbr\u003e\u003cspan style=\"color: #000000;\"\u003e# You can also modify the code for loop so that it runs longer if needed.\u003c/span\u003e\u003c/pre\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003eThus, you might need to write your own userlevel programs to validate your scheduler. \u003cbr\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003eAs an example, in order to test the boosted algorithm, you can copy the \u003ccode\u003eloop\u003cstrong\u003e \u003c/strong\u003e\u003c/code\u003eprogram into another \u003ccode\u003eloop-print-info\u003c/code\u003e program. \u0026nbsp;\u003ccode\u003eloop-print-info\u003c/code\u003e can print\u0026nbsp; \u003ccode class=\"language-c\"\u003eboostsleft \u003c/code\u003eusing \u003ccode\u003egetpinfo()\u003c/code\u003e right after it finishes sleeping. Make sure you sleep for \u0026gt;= 10 ticks so that your process has a reasonable chance of getting scheduled during its boosted phase. Thus you can the expect value of \u003ccode\u003eboostsleft\u003c/code\u003e to be between 0 and 10. You could also print \u003ccode\u003eboostsleft\u003c/code\u003e just before the\u0026nbsp;\u003ccode\u003eloop-print-info\u003c/code\u003e program terminates to ensure that boostsleft has counted down successfully.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003eWe will not test your implementation of any other userspace programs: their purpose is to primarily help you test your scheduler. You are welcome to write more user applications and play with different values to test other aspects of the scheduler.\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u0026nbsp;\u003c/p\u003e\n\u003ch3\u003e\u003cspan style=\"color: #000000;\"\u003e7) Other details\u003c/span\u003e\u003c/h3\u003e\n\u003cul\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003e\u003cspan\u003eYou should run xv6 on only a \u003cstrong\u003esingle CPU\u003c/strong\u003e. Make sure in your Makefile\u0026nbsp;\u003ccode\u003eCPUS := 1\u003c/code\u003e.\u003c/span\u003e\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003e\u003cspan\u003eDuring a boost, you should not double the number of tickets you return in \u003ccode\u003egetpinfo.\u003c/code\u003e Instead, return the original number of tickets.\u003c/span\u003e\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003e\u003cspan\u003eChild processes will inherit the same number of tickets of the parent process irrespective of the number of boostsleft of the process. Boosts don't carry over to the child process.\u003c/span\u003e\u003c/span\u003e\u003c/li\u003e\n\u003cli\u003e\u003cspan style=\"color: #000000;\"\u003e\u003cspan\u003e\u003cspan style=\"color: #843fa1;\"\u003e\u003cspan style=\"color: #000000;\"\u003eAll blocked processes should be boosted. In xv6, a blocked process is in the \u003ccode\u003eSLEEPING\u003c/code\u003e state. A process could be in SLEEPING state even if it didn't use the \u003ccode\u003esleep\u003c/code\u003e syscall; such processes should be boosted as well. Remember that different processes could be blocked for varying number of ticks.\u003c/span\u003e\u003c/span\u003e\u003c/span\u003e\u003c/span\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003chr\u003e\n\u003ch3\u003e\u003cspan style=\"color: #000000;\"\u003e\u003cspan\u003e\u003cspan style=\"color: #843fa1;\"\u003e\u003cspan style=\"color: #000000;\"\u003eHints\u003c/span\u003e\u003c/span\u003e\u003c/span\u003e\u003c/span\u003e\u003c/h3\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003e\u003cspan\u003e\u003cspan style=\"color: #843fa1;\"\u003e\u003cspan style=\"color: #000000;\"\u003ePlease refer to this \u003ca title=\"Project4 hints\" href=\"/courses/402226/pages/project4-hints\" data-course-type=\"wikiPages\" data-published=\"true\" data-api-endpoint=\"https://canvas.wisc.edu/api/v1/courses/402226/pages/project4-hints\" data-api-returntype=\"Page\"\u003edocument\u003c/a\u003e for hints and suggestions regarding this project.\u003c/span\u003e\u003c/span\u003e\u003c/span\u003e\u003c/span\u003e\u003c/p\u003e\n\u003chr\u003e\n\u003ch3\u003e\u003cspan style=\"color: #000000;\"\u003eTesting and Handing in\u003c/span\u003e\u003c/h3\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003eTest cases have been released and can be accessed at \u003ccode\u003e~cs537-1/tests/p4\u003c/code\u003e.\u003cbr\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003e\u003cspan style=\"color: #000000;\"\u003e\u003cbr\u003e\u003c/span\u003e\u003cspan style=\"color: #000000;\"\u003eThe handin directory will be \u003cspan\u003e\u0026nbsp;\u003c/span\u003e\u003ccode\u003e~cs537-1/handin/LOGIN/p4\u003c/code\u003e\u003cspan\u003e where \u003c/span\u003e\u003ccode\u003eLOGIN \u003c/code\u003eis your CS login. Similar to P2, \u003cspan style=\"color: #ff0000;\"\u003eplease create a subdirectory called 'src': \u003ccode\u003e~cs537-1/handin/LOGIN/p4/src.\u003c/code\u003e\u003c/span\u003e\u003c/span\u003e\u003c/p\u003e\n\u003cp\u003eCopy all of your xv6 source files (but not .o files, please, or binaries!) into this directory.\u003c/p\u003e\n\u003cp\u003e\u003cspan\u003e\u003cstrong\u003eEach project partner should turn in their joint code to each of their handin directories.\u003c/strong\u003e E\u003c/span\u003each person should place a file named \u003cstrong\u003epartners.txt\u003c/strong\u003e in their \u003cem\u003ehandin/p4\u003c/em\u003e directory, so that we can tell who worked together on this project.\u0026nbsp; The format of \u003cstrong\u003epartners.txt\u003c/strong\u003e should be exactly as follows:\u003c/p\u003e\n\u003cpre\u003ecslogin1 wiscNetid1 Lastname1 Firstname1\u003cbr\u003ecslogin2 wiscNetid2 Lastname2 Firstname2\u003c/pre\u003e\n\u003cp\u003eIt does not matter who is 1 and who is 2.\u0026nbsp; If you worked alone, your \u003cstrong\u003epartners.txt\u003c/strong\u003e file should have only one line.\u0026nbsp; There should be no spaces within your first or last name; just use spaces to separate fields.\u003c/p\u003e\n\u003cp\u003eTo repeat, \u003cstrong\u003eboth project partners should turn in their code and both should have a \u003cem\u003eturnin/p2a/partners.txt\u003c/em\u003e file.\u003c/strong\u003e\u003c/p\u003e","points_possible":100.0,"grading_type":"points","submission_types":"none","grading_scheme":{"A":0.94,"A-":0.9,"B+":0.87,"B":0.84,"B-":0.8,"C+":0.77,"C":0.74,"C-":0.7,"D+":0.67,"D":0.64,"D-":0.61,"F":0.0}},"course_id":"402226","stats_url":"/api/v1/courses/402226/mastery_paths/stats","rule":null},"badge_counts":{"submissions":12},"notices":[],"active_context_tab":"assignments"};
+    BRANDABLE_CSS_HANDLEBARS_INDEX = [["new_styles_normal_contrast","new_styles_high_contrast","new_styles_normal_contrast_rtl","new_styles_high_contrast_rtl"],{"10":["908ffbc673",0,"d5c9044c6e",2],"15":["c8540c43a4",0,"0a2196be1d",2],"19":["df5777ed9c"],"61":["1fb36890db","b83a603352","4bcf82f85a","0b171e092c"],"67":["700335fb7b",0,"1cc2485e2c",2],"71":["9cb09ce3d6","9f81099c5a","e1c5edae20","b1fb18d547"],"06":["ba28819778",0,"96b99aafe5",2],"f0":["b349f31f5e",0,0,0],"c8":["718c8509f5","33cd4c40e3","03d0fbcbe8","ec23096f0d"],"1e":["6eb4ecac8e","4100cb65ce","0faf4716c8","bed54fd75e"],"b3":["e5da23fb43","0911fc8ed3","05b2bb5a6f","ba2585de5c"],"0c":["4dae5befd2",0,"c18876be89",2],"da":["b5a7f9cd8f","a4e5066985","773390ae11","8e9071910c"],"1d":["2128789890",0,"e568085637",2],"08":["64bff5a97d"],"e2":["11429f119a"],"9f":["d39b291ba6",0,0,0],"2b":["c491abf31e","b11dc54da6","b58622671f","6bb4a7ae9e"],"2c":["8a926fc28b",0,0,0],"c2":["6f2721ae01"],"9c":["c31821c764",0,"1693aba1da",2],"c5":["44c6024769","31150a4a27","53dd277fa9","5fe61c91c2"],"f2":["51574f9b13"]}]
+    REMOTES = {};
+  </script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/brandable_css/61f7e559cc87fd00c64673f40997d6a9/variables-7dd4b80918af0e0218ec0229e4bd5873.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/America/Chicago-d9fecf4265.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/timezone/en_US-80a0ce259b.js" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/react-entry-c8c7bdb5b4feb9bd.js" crossorigin="anonymous" defer="defer"></script>
+  <script src="https://du11hjcvx0uqb.cloudfront.net/dist/webpack-production/main-entry-b73a86a7e23e9536.js" crossorigin="anonymous" defer="defer"></script>
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('assignment_show');
+(window.bundles || (window.bundles = [])).push('edit_rubric');
+(window.bundles || (window.bundles = [])).push('navigation_header');
+//]]>
+</script>
+  
+  <script type="text/javascript">
+    window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.heapanalytics.com/js/heap-"+e+".js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a);for(var n=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","resetIdentity","removeEventProperty","setEventProperties","track","unsetEventProperty"],o=0;o<p.length;o++)heap[p[o]]=n(p[o])};
+    heap.load("3001039959");
+    heap.clearEventProperties();
+    heap.addEventProperties({'Base.appName': 'Canvas'});
+    setTimeout(() => {
+      if (ENV.current_user_heap_id && ENV.current_user_heap_id !== heap.identity) {
+        heap.identify(ENV.current_user_heap_id);
+      }
+      props = {}
+      if (ENV.current_user_roles) {
+        props['role'] = ENV.current_user_roles[ENV.current_user_roles.length - 1]
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_UUID) {
+        props['Canvas.accountId'] = ENV.DOMAIN_ROOT_ACCOUNT_UUID
+      }
+      if (ENV.DOMAIN_ROOT_ACCOUNT_SFID) {
+        props['Canvas.salesforceAccountId'] = ENV.DOMAIN_ROOT_ACCOUNT_SFID
+      }
+      if (Object.keys(props).length > 0) {
+        heap.addUserProperties(props);
+      }
+    }, 1000);
+  </script>
+  
+</head>
+
+<body class="with-left-side course-menu-expanded with-right-side assignments primary-nav-transitions full-width context-course_402226 responsive_student_grades_page">
+
+<noscript>
+  <div role="alert" class="ic-flash-static ic-flash-error">
+    <div class="ic-flash__icon" aria-hidden="true">
+      <i class="icon-warning"></i>
+    </div>
+    <h1>You need to have JavaScript enabled in order to access this site.</h1>
+  </div>
+</noscript>
+
+
+
+
+<div id="flash_message_holder"></div>
+<div id="flash_screenreader_holder"></div>
+
+<div id="application" class="ic-app">
+  
+
+
+
+
+<header id="mobile-header" class="no-print">
+  <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-hamburger">
+    <i class="icon-solid icon-hamburger"></i>
+    <span id="mobileHeaderInboxUnreadBadge" class="menu-item__badge" style="min-width: 0; top: 12px; height: 12px; right: 6px; display:none;"></span>
+    <span class="screenreader-only">Dashboard</span>
+  </button>
+  <div class="mobile-header-space"></div>
+    <a class="mobile-header-title expandable" href="/courses/402226" role="button" aria-controls="mobileContextNavContainer">
+      <div>SU24 COMPSCI 537 001 AKK</div>
+        <div>P4: xv6 scheduler</div>
+    </a>
+    <div class="mobile-header-space"></div>
+    <button type="button" class="Button Button--icon-action-rev Button--large mobile-header-arrow" aria-label="Navigation Menu">
+      <i class="icon-arrow-open-down" id="mobileHeaderArrowIcon"></i>
+    </button>
+</header>
+<nav id="mobileContextNavContainer"></nav>
+
+<header id="header" class="ic-app-header no-print ">
+  <a href="#content" id="skip_navigation_link">Skip To Content</a>
+  <div role="region" class="ic-app-header__main-navigation" aria-label="Global Navigation">
+      <div class="ic-app-header__logomark-container">
+        <a href="https://canvas.wisc.edu/" class="ic-app-header__logomark">
+          <span class="screenreader-only">Dashboard</span>
+        </a>
+      </div>
+    <ul id="menu" class="ic-app-header__menu-list">
+        <li class="menu-item ic-app-header__menu-list-item ">
+          <a id="global_nav_profile_link" role="button" href="/profile/settings" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container">
+              <div aria-hidden="true" class="fs-exclude ic-avatar ">
+                <img src="https://secure.gravatar.com/avatar/95551abf218112ffe89ef388f1a51d23?s=128&amp;d=identicon" alt="Yongzhi Lai" />
+              </div>
+              <span class="menu-item__badge"></span>
+            </div>
+            <div class="menu-item__text">
+              Account
+            </div>
+          </a>
+        </li>
+      <li class="ic-app-header__menu-list-item ">
+        <a id="global_nav_dashboard_link" href="https://canvas.wisc.edu/" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--dashboard" version="1.1" x="0" y="0" viewBox="0 0 280 200" enable-background="new 0 0 280 200" xml:space="preserve"><path d="M273.09,180.75H197.47V164.47h62.62A122.16,122.16,0,1,0,17.85,142a124,124,0,0,0,2,22.51H90.18v16.29H6.89l-1.5-6.22A138.51,138.51,0,0,1,1.57,142C1.57,65.64,63.67,3.53,140,3.53S278.43,65.64,278.43,142a137.67,137.67,0,0,1-3.84,32.57ZM66.49,87.63,50.24,71.38,61.75,59.86,78,76.12Zm147,0L202,76.12l16.25-16.25,11.51,11.51ZM131.85,53.82v-23h16.29v23Zm15.63,142.3a31.71,31.71,0,0,1-28-16.81c-6.4-12.08-15.73-72.29-17.54-84.25a8.15,8.15,0,0,1,13.58-7.2c8.88,8.21,53.48,49.72,59.88,61.81a31.61,31.61,0,0,1-27.9,46.45ZM121.81,116.2c4.17,24.56,9.23,50.21,12,55.49A15.35,15.35,0,1,0,161,157.3C158.18,152,139.79,133.44,121.81,116.2Z" /></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Dashboard
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item ic-app-header__menu-list-item--active">
+          <a id="global_nav_courses_link" role="button" href="/courses" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--courses" version="1.1" x="0" y="0" viewBox="0 0 280 259" enable-background="new 0 0 280 259" xml:space="preserve"><path d="M73.31,198c-11.93,0-22.22,8-24,18.73a26.67,26.67,0,0,0-.3,3.63v.3a22,22,0,0,0,5.44,14.65,22.47,22.47,0,0,0,17.22,8H200V228.19h-134V213.08H200V198Zm21-105.74h90.64V62H94.3ZM79.19,107.34V46.92H200v60.42Zm7.55,30.21V122.45H192.49v15.11ZM71.65,16.71A22.72,22.72,0,0,0,49,39.36V190.88a41.12,41.12,0,0,1,24.32-8h157V16.71ZM33.88,39.36A37.78,37.78,0,0,1,71.65,1.6H245.36V198H215.15v45.32h22.66V258.4H71.65a37.85,37.85,0,0,1-37.76-37.76Z"/></svg>
+
+            </div>
+            <div class="menu-item__text">
+              Courses
+            </div>
+          </a>
+        </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+        <a id="global_nav_calendar_link" href="/calendar" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--calendar" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M197.07,213.38h16.31V197.07H197.07Zm-16.31,16.31V180.76h48.92v48.92Zm-48.92-16.31h16.31V197.07H131.85Zm-16.31,16.31V180.76h48.92v48.92ZM66.62,213.38H82.93V197.07H66.62ZM50.32,229.68V180.76H99.24v48.92Zm146.75-81.53h16.31V131.85H197.07Zm-16.31,16.31V115.54h48.92v48.92Zm-48.92-16.31h16.31V131.85H131.85Zm-16.31,16.31V115.54h48.92v48.92ZM66.62,148.15H82.93V131.85H66.62ZM50.32,164.46V115.54H99.24v48.92ZM34,262.29H246V82.93H34ZM246,66.62V42.16A8.17,8.17,0,0,0,237.84,34H213.38v8.15a8.15,8.15,0,1,1-16.31,0V34H82.93v8.15a8.15,8.15,0,0,1-16.31,0V34H42.16A8.17,8.17,0,0,0,34,42.16V66.62Zm-8.15-48.92a24.49,24.49,0,0,1,24.46,24.46V278.6H17.71V42.16A24.49,24.49,0,0,1,42.16,17.71H66.62V9.55a8.15,8.15,0,0,1,16.31,0v8.15H197.07V9.55a8.15,8.15,0,1,1,16.31,0v8.15Z"/></svg>
+
+          </div>
+          <div class="menu-item__text">
+            Calendar
+          </div>
+        </a>
+      </li>
+      <li class="menu-item ic-app-header__menu-list-item ">
+      <!-- TODO: Add back global search when available -->
+        <a id="global_nav_conversations_link" href="/conversations" class="ic-app-header__menu-list-link">
+          <div class="menu-item-icon-container">
+            <span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--inbox" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve"><path d="M91.72,120.75h96.56V104.65H91.72Zm0,48.28h80.47V152.94H91.72Zm0-96.56h80.47V56.37H91.72Zm160.94,34.88H228.52V10.78h-177v96.56H27.34A24.17,24.17,0,0,0,3.2,131.48V244.14a24.17,24.17,0,0,0,24.14,24.14H252.66a24.17,24.17,0,0,0,24.14-24.14V131.48A24.17,24.17,0,0,0,252.66,107.34Zm0,16.09a8.06,8.06,0,0,1,8,8v51.77l-32.19,19.31V123.44ZM67.58,203.91v-177H212.42v177ZM27.34,123.44H51.48v79.13L19.29,183.26V131.48A8.06,8.06,0,0,1,27.34,123.44ZM252.66,252.19H27.34a8.06,8.06,0,0,1-8-8V202l30,18H230.75l30-18v42.12A8.06,8.06,0,0,1,252.66,252.19Z"/></svg>
+</span>
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Inbox
+          </div>
+        </a>
+      </li>
+        <li class="menu-item ic-app-header__menu-list-item" >
+          <a id="global_nav_history_link" role="button" href="#" class="ic-app-header__menu-list-link">
+            <div class="menu-item-icon-container" aria-hidden="true">
+              <svg viewBox="0 0 1920 1920" class="ic-icon-svg menu-item__icon svg-icon-history" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path d="M960 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.125 379.934 847.059 847.059 847.059 467.125 0 847.059-379.934 847.059-847.059 0-467.125-379.934-847.059-847.059-847.059M960 1920C430.645 1920 0 1489.355 0 960S430.645 0 960 0s960 430.645 960 960-430.645 960-960 960m417.905-575.955L903.552 988.28V395.34h112.941v536.47l429.177 321.77-67.765 90.465z" stroke="none" stroke-width="1" fill-rule="evenodd"/>
+</svg>
+            </div>
+            <div class="menu-item__text">
+              History
+            </div>
+          </a>
+        </li>
+        
+
+      <li class="ic-app-header__menu-list-item">
+        <a id="global_nav_help_link" role="button" class="ic-app-header__menu-list-link" data-track-category="help system" data-track-label="help button" href="https://help.instructure.com">
+          <div class="menu-item-icon-container" role="presentation">
+              <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg menu-item__icon svg-icon-help" version="1.1" x="0" y="0" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve" fill="currentColor"><path d="M100,127.88A11.15,11.15,0,1,0,111.16,139,11.16,11.16,0,0,0,100,127.88Zm8.82-88.08a33.19,33.19,0,0,1,23.5,23.5,33.54,33.54,0,0,1-24,41.23,3.4,3.4,0,0,0-2.74,3.15v9.06H94.42v-9.06a14.57,14.57,0,0,1,11.13-14,22.43,22.43,0,0,0,13.66-10.27,22.73,22.73,0,0,0,2.31-17.37A21.92,21.92,0,0,0,106,50.59a22.67,22.67,0,0,0-19.68,3.88,22.18,22.18,0,0,0-8.65,17.64H66.54a33.25,33.25,0,0,1,13-26.47A33.72,33.72,0,0,1,108.82,39.8ZM100,5.2A94.8,94.8,0,1,0,194.8,100,94.91,94.91,0,0,0,100,5.2m0,178.45A83.65,83.65,0,1,1,183.65,100,83.73,83.73,0,0,1,100,183.65" transform="translate(-5.2 -5.2)"/></svg>
+
+            <span class="menu-item__badge"></span>
+          </div>
+          <div class="menu-item__text">
+            Help
+          </div>
+</a>      </li>
+    </ul>
+  </div>
+  <div class="ic-app-header__secondary-navigation">
+    <ul class="ic-app-header__menu-list">
+      <li class="menu-item ic-app-header__menu-list-item">
+        <a
+          id="primaryNavToggle"
+          role="button"
+          href="#"
+          class="ic-app-header__menu-list-link ic-app-header__menu-list-link--nav-toggle"
+          aria-label="Expand global navigation
+                "
+          title="Expand global navigation
+                "
+        >
+          <div class="menu-item-icon-container" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ic-icon-svg ic-icon-svg--navtoggle" version="1.1" x="0" y="0" width="40" height="32" viewBox="0 0 40 32" xml:space="preserve">
+  <path d="M39.5,30.28V2.48H37.18v27.8Zm-4.93-13.9L22.17,4,20.53,5.61l9.61,9.61H.5v2.31H30.14l-9.61,9.61,1.64,1.64Z"/>
+</svg>
+
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div id="global_nav_tray_container"></div>
+  <div id="global_nav_tour"></div>
+</header>
+
+
+  <div id="instructure_ajax_error_box">
+    <div style="text-align: right; background-color: #fff;"><a href="#" class="close_instructure_ajax_error_box_link">Close</a></div>
+    <iframe id="instructure_ajax_error_result" src="about:blank" style="border: 0;" title="Error"></iframe>
+  </div>
+
+  <div id="wrapper" class="ic-Layout-wrapper">
+        <div class="ic-app-nav-toggle-and-crumbs no-print">
+            <button type="button" id="courseMenuToggle" class="Button Button--link ic-app-course-nav-toggle" aria-live="polite" aria-label="Hide Courses Navigation Menu">
+              <i class="icon-hamburger" aria-hidden="true"></i>
+            </button>
+
+          <div class="ic-app-crumbs ">
+              <nav id="breadcrumbs" role="navigation" aria-label="breadcrumbs"><ul><li class="home"><a href="/"><span class="ellipsible"><i class="icon-home"
+   title="My Dashboard">
+  <span class="screenreader-only">My Dashboard</span>
+</i>
+</span></a></li><li><a href="/courses/402226"><span class="ellipsible">SU24 COMPSCI 537 001 AKK</span></a></li><li><a href="/courses/402226/assignments"><span class="ellipsible">Assignments</span></a></li><li><a href="https://canvas.wisc.edu/courses/402226/assignments/2301449"><span class="ellipsible">P4: xv6 scheduler</span></a></li></ul></nav>
+          </div>
+
+
+          <div class="right-of-crumbs">
+              <div class="TutorialToggleHolder"></div>
+          </div>
+
+        </div>
+    <div id="main" class="ic-Layout-columns">
+        <div class="ic-Layout-watermark"></div>
+        <div id="left-side"
+          class="ic-app-course-menu ic-sticky-on list-view"
+          style="display: block"
+          >
+          <div id="sticky-container" class="ic-sticky-frame">
+              <span id="section-tabs-header-subtitle" class="ellipsis">Summer 2024</span>
+            <nav role="navigation" aria-label="Courses Navigation Menu"><ul id="section-tabs"><li class="section"><a href="/courses/402226" class="home">Home</a></li><li class="section"><a href="/courses/402226/announcements" class="announcements">Announcements</a></li><li class="section"><a href="/courses/402226/assignments" aria-current="page" class="assignments active">Assignments</a></li><li class="section"><a href="/courses/402226/external_tools/20073" class="context_external_tool_20073">Piazza</a></li><li class="section"><a href="/courses/402226/grades" class="grades">Grades</a></li><li class="section"><a href="/courses/402226/users" class="people">People</a></li><li class="section"><a href="/courses/402226/wiki" class="pages">Pages</a></li><li class="section"><a href="/courses/402226/files" class="files">Files</a></li><li class="section"><a href="/courses/402226/assignments/syllabus" class="syllabus">Syllabus</a></li><li class="section"><a href="/courses/402226/quizzes" class="quizzes">Quizzes</a></li><li class="section"><a href="/courses/402226/external_tools/14065" class="context_external_tool_14065">Zoom</a></li><li class="section"><a href="/courses/402226/external_tools/21691" class="context_external_tool_21691">NameCoach Roster</a></li><li class="section"><a href="/courses/402226/external_tools/9199" class="context_external_tool_9199">Kaltura Gallery</a></li><li class="section"><a href="/courses/402226/external_tools/8408" class="context_external_tool_8408">Kaltura My Media</a></li><li class="section"><a href="/courses/402226/external_tools/6536" class="context_external_tool_6536">New Analytics</a></li></ul></nav>
+          </div>
+        </div>
+      <div id="not_right_side" class="ic-app-main-content">
+        <div id="content-wrapper" class="ic-Layout-contentWrapper">
+          
+          <div id="content" class="ic-Layout-contentMain" role="main">
+            
+<style>
+  #right-side-wrapper {
+    height: 100%;
+  }
+
+  .assignment_header {
+    border-bottom: 1px solid #a4a4a4;
+    overflow: hidden;
+  }
+
+  #assignment_head {
+    margin-top: 0;
+    font-weight: bold;
+  }
+
+  .lock_explanation {
+    text-align: left;
+    margin-top: 20px;
+  }
+</style>
+
+
+
+<div id="assignment_show" class="assignment content_underline_links" data-lti-page-content="true">
+    <!--Student View-->
+    <div class='assignment-title'>
+      <div class='title-content'>
+        <h1 class="title">
+          P4: xv6 scheduler
+        </h1>
+      </div>
+      <div class='assignment-buttons'>
+        
+
+        
+      </div>
+    </div>
+    
+<ul class='student-assignment-overview'>
+  <li>
+    <span class='title'>Due</span>
+    <span class='value'>
+          <span class="date_text">
+                <span class="display_date">Jul 15</span> by 
+                <span class="display_time">11:59pm</span>
+          </span><!--
+        --></span>
+  </li>
+    <li>
+      <span class='title'>Points</span>
+      <span class='value'>100</span>
+    </li>
+  
+  <li>
+    <span class="title">Available</span>
+    <span class="value">
+        after Jul 4 at 10am
+    </span>
+  </li>
+
+  <div class="clear"></div>
+</ul>
+
+  <div class="clear"></div>
+
+
+  <div class="clear"></div>
+
+
+
+
+  <div class="description user_content " data-resource-type="assignment.body" data-resource-id=2301449><h3>Overview:</h3>
+<p>In this assignment, you will be implementing a <em>compensating-lottery scheduler</em> and supporting system calls in xv6. Along with that, you will be <em>updating the process sleep and wakeup mechanisms.</em><br>Unlike prior projects, this project can be done in pairs, so find yourself a partner you would like to work out this assignment with.</p>
+<h3>Learning objectives:</h3>
+<ul>
+<li>Understand how a lottery scheduler works.</li>
+<li>Learn how to add new features (such as a new scheduler) to existing code bases.</li>
+<li>Gain experience working with collaborators. Expect to spend a lot of time communicating with each other and working together.</li>
+</ul>
+<h3>Administrivia:</h3>
+<ul>
+<li>This project can be performed in groups of 2.</li>
+<li>Due Date: July 15th, at 11:59PM (slip day policy will apply to both people in the the group)</li>
+<li>The final submission will be tests on <a class="inline_disabled" href="https://csl.cs.wisc.edu/docs/csl/2014-11-03-instructional-linux-computers/" target="_blank">lab machines</a>, so make sure to test your code on these machines.</li>
+</ul>
+<hr>
+<h3>Details:</h3>
+<h4>1) Background</h4>
+<p>The current xv6 scheduler implements a very simple Round Robin (RR) policy.&nbsp; For example, if there are three processes A, B and C, then the xv6 round-robin scheduler will run the jobs in the order&nbsp; A B C A B C … , where each letter represents a process.&nbsp; The xv6 scheduler runs each process for at most one timer tick (10 ms); after each timer tick, the scheduler moves the previous job to the end of the ready queue and dispatches the next job in the list.&nbsp; &nbsp;The xv6 scheduler does not do anything special when a process sleeps or blocks (and is unable to be scheduled); the blocked job is simply skipped until it is ready and it is again its turn in the RR order.&nbsp;</p>
+<p>Since RR treats all jobs equally, it is simple and fairly effective. However, there are instances where this "ideal" property of RR is detrimental: if compute-intensive background jobs (anti-virus checks) are given equal priority to latency-sensitive operations, operations like music streaming (latency-sensitive) suffer. <a class="inline_disabled" href="https://pages.cs.wisc.edu/~remzi/OSTEP/cpu-sched-lottery.pdf" target="_blank">Lottery Scheduling</a> is a proportional share policy which fixes this by asking users to grant tickets to processes. The scheduler holds a lottery every tick to determine the next process. Since important processes are given more tickets, they end up running more often on the CPU over a period of time.</p>
+<h4>2) Scheduler details</h4>
+<p><span style="text-decoration: underline;">1.1) Basic lottery scheduler</span></p>
+<p>In your scheduler, each process runs for an entire tick until interrupted by the xv6 timer. At each tick, the scheduler holds a lottery between RUNNABLE processes and schedules the winner. <em>When a new process arrives, it should have the same number of tickets as its parent. The first process of xv6 should start with 1 ticket</em>. You will also create a system call <code>settickets(int pid, int tickets)</code>, to change the number of tickets held by the specified process.<br>As an example, if there is a process A with 1 ticket and process B with 4 tickets, this is what the timeline <em>might</em> look like:</p>
+<table style="width: 57.5621%; height: 58px;" border="1">
+<tbody>
+<tr style="height: 29px;">
+<td style="width: 16.2458%; height: 29px;">timer tick</td>
+<td style="width: 3.92156%; height: 29px;">1</td>
+<td style="width: 4.03356%; height: 29px;">2</td>
+<td style="width: 4.03355%; height: 29px;">3</td>
+<td style="width: 3.92157%; height: 29px;">4</td>
+<td style="width: 4.03355%; height: 29px;">5</td>
+<td style="width: 3.92157%; height: 29px;">6</td>
+<td style="width: 3.92157%; height: 29px;">7</td>
+<td style="width: 3.92157%; height: 29px;">8</td>
+<td style="width: 4.03355%; height: 29px;">9</td>
+<td style="width: 4.39782%; height: 29px;">10</td>
+<td style="width: 4.39782%; height: 29px;">11</td>
+<td style="width: 4.39782%; height: 29px;">12</td>
+<td style="width: 4.5098%; height: 29px;">13</td>
+<td style="width: 4.28583%; height: 29px;">14</td>
+<td style="width: 3.94989%; height: 29px;">15</td>
+<td style="width: 4.28584%; height: 29px;">16</td>
+<td style="width: 4.5098%; height: 29px;">17</td>
+<td style="width: 4.39781%; height: 29px;">18</td>
+<td style="width: 4.17386%; height: 29px;">19</td>
+<td style="width: 4.5098%; height: 29px;">20</td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 16.2458%; height: 29px;">scheduled process</td>
+<td style="width: 3.92156%; height: 29px;">B</td>
+<td style="width: 4.03356%; height: 29px;">B</td>
+<td style="width: 4.03355%; height: 29px;">A</td>
+<td style="width: 3.92157%; height: 29px;">B</td>
+<td style="width: 4.03355%; height: 29px;">B</td>
+<td style="width: 3.92157%; height: 29px;">B</td>
+<td style="width: 3.92157%; height: 29px;">B</td>
+<td style="width: 3.92157%; height: 29px;">B</td>
+<td style="width: 4.03355%; height: 29px;">B</td>
+<td style="width: 4.39782%; height: 29px;">A</td>
+<td style="width: 4.39782%; height: 29px;">A</td>
+<td style="width: 4.39782%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;"><span style="color: #000000;">B</span></td>
+<td style="width: 4.28583%; height: 29px;">B</td>
+<td style="width: 3.94989%; height: 29px;">A</td>
+<td style="width: 4.28584%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.39781%; height: 29px;">B</td>
+<td style="width: 4.17386%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+</tr>
+</tbody>
+</table>
+<p>In this case, A was scheduled for 4 ticks, and B for 16. Given sufficiently large number of ticks, we can expect the ratio of CPU time per process to be approximately the ratio of their tickets.</p>
+<p>Scheduling is relatively easy when processes are just using the CPU; scheduling gets more interesting when jobs are arriving and exiting, or performing I/O. There are three events in xv6 that may cause a new process to be scheduled:</p>
+<ul>
+<li>whenever the xv6 10 ms timer tick occurs</li>
+<li>when a process exits</li>
+<li>when a process sleeps.</li>
+</ul>
+<p>For simplicity, your scheduler should also not trigger a new scheduling event when a new process arrives or wakes; you should simply mark the process as "RUNNABLE". The next scheduling decision will be made the next time a timer tick occurs.</p>
+<p><span style="text-decoration: underline;">1.2) Compensating lottery scheduler</span></p>
+<p>Like we discussed in MLFQ, many schedulers contain some type of incentive for processes that sleep (or block) and voluntarily relinquish the CPU so another process can run; this improves overall system throughput since the process isn't wastefully holding on to the CPU doing nothing. We will add such an incentive to the lottery scheduler. Y<span style="color: #000000;">our scheduler will track the number of ticks a process was sleeping/blocked. Once it's runnable, it will boost (double) the number of tickets for the same number of ticks. For instance, if a process slept for 5 ticks, its tickets would be artificially doubled for the next 5 lotteries it participates in.</span></p>
+<p>Example: a process A has 1 ticket and B has 4 tickets. Process A sleeps for 2 ticks, and is therefore given double tickets for the next 2 lotteries after it wakes. This allows the scheduler to keep the CPU usage ratio equal to the ratio of tickets, even when process A is blocked. The timeline could look like the following in this case (description below the timeline):</p>
+<table style="width: 72.4522%; height: 141px;" border="1">
+<tbody>
+<tr style="height: 29px;">
+<td style="width: 16.9483%; height: 29px;">timer tick</td>
+<td style="width: 3.38777%; height: 29px;">1</td>
+<td style="width: 3.12085%; height: 29px;">2</td>
+<td style="width: 3.65467%; height: 29px;">3</td>
+<td style="width: 3.47673%; height: 29px;">4</td>
+<td style="width: 3.92157%; height: 29px;">5</td>
+<td style="width: 3.92157%; height: 29px;">6</td>
+<td style="width: 3.92157%; height: 29px;">7</td>
+<td style="width: 3.92157%; height: 29px;">8</td>
+<td style="width: 3.92157%; height: 29px;">9</td>
+<td style="width: 4.5098%; height: 29px;">10</td>
+<td style="width: 4.5098%; height: 29px;">11</td>
+<td style="width: 4.5098%; height: 29px;">12</td>
+<td style="width: 4.5098%; height: 29px;">13</td>
+<td style="width: 4.5098%; height: 29px;">14</td>
+<td style="width: 4.5098%; height: 29px;">15</td>
+<td style="width: 4.5098%; height: 29px;">16</td>
+<td style="width: 4.5098%; height: 29px;">17</td>
+<td style="width: 4.5098%; height: 29px;">18</td>
+<td style="width: 4.5098%; height: 29px;">19</td>
+<td style="width: 4.5098%; height: 29px;">20</td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 16.9483%; height: 29px;">scheduled</td>
+<td style="width: 3.38777%; height: 29px;">B</td>
+<td style="width: 3.12085%; height: 29px;">A</td>
+<td style="width: 3.65467%; height: 29px;">B</td>
+<td style="width: 3.47673%; height: 29px;">B</td>
+<td style="width: 3.92157%; height: 29px;">B</td>
+<td style="width: 3.92157%; height: 29px;">A</td>
+<td style="width: 3.92157%; height: 29px;">A</td>
+<td style="width: 3.92157%; height: 29px;">B</td>
+<td style="width: 3.92157%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">A</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+<td style="width: 4.5098%; height: 29px;">B</td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 16.9483%; height: 29px;">sleeping/blocked</td>
+<td style="width: 3.38777%; height: 29px;"></td>
+<td style="width: 3.12085%; height: 29px;"></td>
+<td style="width: 3.65467%; height: 29px;">A</td>
+<td style="width: 3.47673%; height: 29px;">A</td>
+<td style="width: 3.92157%; height: 29px;"></td>
+<td style="width: 3.92157%; height: 29px;"></td>
+<td style="width: 3.92157%; height: 29px;"></td>
+<td style="width: 3.92157%; height: 29px;"></td>
+<td style="width: 3.92157%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;">A</td>
+<td style="width: 4.5098%; height: 29px;">A</td>
+<td style="width: 4.5098%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;"></td>
+<td style="width: 4.5098%; height: 29px;"></td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 16.9483%; height: 29px;">A lottery tickets</td>
+<td style="width: 3.38777%; height: 29px;">1</td>
+<td style="width: 3.12085%; height: 29px;">1</td>
+<td style="width: 3.65467%; height: 29px;">-</td>
+<td style="width: 3.47673%; height: 29px;">-</td>
+<td style="width: 3.92157%; height: 29px;"><strong>2</strong></td>
+<td style="width: 3.92157%; height: 29px;"><strong>2</strong></td>
+<td style="width: 3.92157%; height: 29px;">1</td>
+<td style="width: 3.92157%; height: 29px;">1</td>
+<td style="width: 3.92157%; height: 29px;">1</td>
+<td style="width: 4.5098%; height: 29px;">1</td>
+<td style="width: 4.5098%; height: 29px;">1</td>
+<td style="width: 4.5098%; height: 29px;">1</td>
+<td style="width: 4.5098%; height: 29px;">1</td>
+<td style="width: 4.5098%; height: 29px;">1</td>
+<td style="width: 4.5098%; height: 29px;">-</td>
+<td style="width: 4.5098%; height: 29px;">-</td>
+<td style="width: 4.5098%; height: 29px;"><strong>2</strong></td>
+<td style="width: 4.5098%; height: 29px;"><strong>2</strong></td>
+<td style="width: 4.5098%; height: 29px;">1</td>
+<td style="width: 4.5098%; height: 29px;">1</td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 16.9483%; height: 29px;">B lottery tickets</td>
+<td style="width: 3.38777%; height: 29px;">4</td>
+<td style="width: 3.12085%; height: 29px;">4</td>
+<td style="width: 3.65467%; height: 29px;">4</td>
+<td style="width: 3.47673%; height: 29px;">4</td>
+<td style="width: 3.92157%; height: 29px;">4</td>
+<td style="width: 3.92157%; height: 29px;">4</td>
+<td style="width: 3.92157%; height: 29px;">4</td>
+<td style="width: 3.92157%; height: 29px;">4</td>
+<td style="width: 3.92157%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+<td style="width: 4.5098%; height: 29px;">4</td>
+</tr>
+</tbody>
+</table>
+<p>Note the following:</p>
+<ol>
+<li>At each tick, we consider the tickets a runnable process has. Ticks 3, 4, 15 and 16 only have 1 runnable process, thus only B participates in the lottery.</li>
+<li>Once A is no longer blocked, it starts participating in lotteries. <strong>If it slept for&nbsp;<span style="text-decoration: underline;"><em>x</em></span> ticks, it will participate in the next <span style="text-decoration: underline;"><em>x</em></span> lotteries&nbsp;with double the tickets.</strong></li>
+<li><strong> </strong>Make sure that when a process sleeps, it is given compensation ticks for the amount of time it was actually sleeping, not the amount of time it wasn't scheduled.&nbsp; For example, process A becomes RUNNABLE at tick 17. You should boost its tickets only for the next 2 lotteries, regardless of whether A actually wins the lottery or not.</li>
+</ol>
+<p><span style="text-decoration: underline;">1.3) Carrying forward remaining boost</span></p>
+<p>Assume A sleeps for 3 ticks, thus its tickets are boosted for the next 3 ticks. What happens if it sleeps for 3 ticks again while it still has 3 <code><em>remaining</em></code><strong> </strong>boosts left? In this case, its tickets should be boosted for the next (3+3<code><em>remaining</em></code>) rounds after it wakes. This is important for maintaining the lottery scheduler's proportional-CPU-share property. Given that A couldn't even participate in the lottery when it was blocked, we need to ensure it has a higher chance of winning in the corresponding number of lotteries.</p>
+<p>This is a potential timeline for the described situation. Realize that after tick 5, A was supposed to be boosted for 3 ticks. Since it got blocked before that, we ensure that it doesn't lose the number of favourable/boosted rounds once it wakes.</p>
+<table style="width: 57.9522%; height: 144px;" border="1">
+<tbody>
+<tr style="height: 29px;">
+<td style="width: 15.4226%; height: 29px;">interval</td>
+<td style="width: 4.0568%; height: 29px;">1</td>
+<td style="width: 4.0568%; height: 29px;">2</td>
+<td style="width: 4.0568%; height: 29px;">3</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">5</td>
+<td style="width: 4.0568%; height: 29px;">6</td>
+<td style="width: 4.0568%; height: 29px;">7</td>
+<td style="width: 4.0568%; height: 29px;">8</td>
+<td style="width: 4.0568%; height: 29px;">9</td>
+<td style="width: 4.78026%; height: 29px;">10</td>
+<td style="width: 4.78026%; height: 29px;">11</td>
+<td style="width: 4.78026%; height: 29px;">12</td>
+<td style="width: 4.78026%; height: 29px;">13</td>
+<td style="width: 4.78026%; height: 29px;">14</td>
+<td style="width: 4.78026%; height: 29px;">15</td>
+<td style="width: 4.22409%; height: 29px;">16</td>
+<td style="width: 4.00161%; height: 29px;">17</td>
+<td style="width: 3.73988%; height: 29px;">18</td>
+<td style="width: 3.65298%; height: 29px;">19</td>
+<td style="width: 3.50248%; height: 29px;">20</td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 15.4226%; height: 29px;">scheduled</td>
+<td style="width: 4.0568%; height: 29px;">B</td>
+<td style="width: 4.0568%; height: 29px;">A</td>
+<td style="width: 4.0568%; height: 29px;">B</td>
+<td style="width: 4.0568%; height: 29px;">B</td>
+<td style="width: 4.0568%; height: 29px;">B</td>
+<td style="width: 4.0568%; height: 29px;">A</td>
+<td style="width: 4.0568%; height: 29px;"></td>
+<td style="width: 4.0568%; height: 29px;"></td>
+<td style="width: 4.0568%; height: 29px;"></td>
+<td style="width: 4.78026%; height: 29px;">B</td>
+<td style="width: 4.78026%; height: 29px;">A</td>
+<td style="width: 4.78026%; height: 29px;">A</td>
+<td style="width: 4.78026%; height: 29px;">B</td>
+<td style="width: 4.78026%; height: 29px;">B</td>
+<td style="width: 4.78026%; height: 29px;">B</td>
+<td style="width: 4.22409%; height: 29px;">B</td>
+<td style="width: 4.00161%; height: 29px;">B</td>
+<td style="width: 3.73988%; height: 29px;">A</td>
+<td style="width: 3.65298%; height: 29px;">B</td>
+<td style="width: 3.50248%; height: 29px;"><span style="color: #000000;">B<br></span></td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 15.4226%; height: 29px;">sleeping</td>
+<td style="width: 4.0568%; height: 29px;"></td>
+<td style="width: 4.0568%; height: 29px;"></td>
+<td style="width: 4.0568%; height: 29px;"><span style="color: #e03e2d;">A</span></td>
+<td style="width: 4.0568%; height: 29px;"><span style="color: #e03e2d;">A</span></td>
+<td style="width: 4.0568%; height: 29px;"><span style="color: #e03e2d;">A</span></td>
+<td style="width: 4.0568%; height: 29px;"></td>
+<td style="width: 4.0568%; height: 29px;"><span style="color: #169179;">A</span></td>
+<td style="width: 4.0568%; height: 29px;"><span style="color: #169179;">A</span></td>
+<td style="width: 4.0568%; height: 29px;"><span style="color: #169179;">A</span></td>
+<td style="width: 4.78026%; height: 29px;"></td>
+<td style="width: 4.78026%; height: 29px;"></td>
+<td style="width: 4.78026%; height: 29px;"></td>
+<td style="width: 4.78026%; height: 29px;"></td>
+<td style="width: 4.78026%; height: 29px;"></td>
+<td style="width: 4.78026%; height: 29px;"></td>
+<td style="width: 4.22409%; height: 29px;"></td>
+<td style="width: 4.00161%; height: 29px;"></td>
+<td style="width: 3.73988%; height: 29px;"></td>
+<td style="width: 3.65298%; height: 29px;"></td>
+<td style="width: 3.50248%; height: 29px;"></td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 15.4226%; height: 29px;">A tickets</td>
+<td style="width: 4.0568%; height: 29px;">1</td>
+<td style="width: 4.0568%; height: 29px;">1</td>
+<td style="width: 4.0568%; height: 29px;">-</td>
+<td style="width: 4.0568%; height: 29px;">-</td>
+<td style="width: 4.0568%; height: 29px;">-</td>
+<td style="width: 4.0568%; height: 29px;"><span style="color: #e03e2d;"><strong>2</strong></span></td>
+<td style="width: 4.0568%; height: 29px;">-</td>
+<td style="width: 4.0568%; height: 29px;">-</td>
+<td style="width: 4.0568%; height: 29px;">-</td>
+<td style="width: 4.78026%; height: 29px;"><span style="color: #e03e2d;"><strong>2</strong></span></td>
+<td style="width: 4.78026%; height: 29px;"><span style="color: #e03e2d;"><strong>2</strong></span></td>
+<td style="width: 4.78026%; height: 29px;"><span style="color: #169179;"><strong>2</strong></span></td>
+<td style="width: 4.78026%; height: 29px;"><span style="color: #169179;"><strong>2<br></strong></span></td>
+<td style="width: 4.78026%; height: 29px;"><span style="color: #169179;"><strong>2</strong></span></td>
+<td style="width: 4.78026%; height: 29px;">1</td>
+<td style="width: 4.22409%; height: 29px;">1</td>
+<td style="width: 4.00161%; height: 29px;">1</td>
+<td style="width: 3.73988%; height: 29px;">1</td>
+<td style="width: 3.65298%; height: 29px;">1</td>
+<td style="width: 3.50248%; height: 29px;">1</td>
+</tr>
+<tr style="height: 29px;">
+<td style="width: 15.4226%; height: 29px;">B tickets</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.0568%; height: 29px;">4</td>
+<td style="width: 4.78026%; height: 29px;">4</td>
+<td style="width: 4.78026%; height: 29px;">4</td>
+<td style="width: 4.78026%; height: 29px;">4</td>
+<td style="width: 4.78026%; height: 29px;"><span>4<br></span></td>
+<td style="width: 4.78026%; height: 29px;">4</td>
+<td style="width: 4.78026%; height: 29px;">4</td>
+<td style="width: 4.22409%; height: 29px;">4</td>
+<td style="width: 4.00161%; height: 29px;">4</td>
+<td style="width: 3.73988%; height: 29px;">4</td>
+<td style="width: 3.65298%; height: 29px;">4</td>
+<td style="width: 3.50248%; height: 29px;">4</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<h4>3) Enhancing sleep and wakeup mechanism in xv6</h4>
+<p>Finally, you need to change the existing implementation of <code>sleep()</code> syscall.&nbsp; The sleep syscall allows processes to sleep for a specified number of ticks.&nbsp; &nbsp;Unfortunately, the current xv6 implementation of the <code>sleep()</code> syscall forces the sleeping process to wake on every timer tick to check if it has slept for the requested number of timer ticks or not.&nbsp; This has two drawbacks.&nbsp; First, it is inefficient to schedule every sleeping process and force it to perform this check.&nbsp; Second, and more importantly for this project, if the process was scheduled on a timer tick (even just to perform this check), it will lose at least 1 favourable round since it ended up participating in the lottery.</p>
+<p>You are required to fix this problem of extra wakeups by changing <code>wakeup1()</code> <span>in </span><code>proc.c</code>.&nbsp; You are likely to add <span>additional condition checking to avoid falsely waking up the sleeping process until it is the right time.&nbsp; You may want to add more fields to </span><code>struct proc</code> <span>to help </span><code>wakeup1()</code> <span>decide whether if it is time to wake a process.&nbsp; You might also use this mechanism to count how many ticks a process was sleeping for so it can be boosted accordingly. You may find the section "sleep and wakeup" in the </span><a class="instructure_file_link inline_disabled external" href="https://pdos.csail.mit.edu/6.828/2018/xv6/book-rev11.pdf" target="_blank"><span>xv6 book</span><span class="screenreader-only">&nbsp;(Links to an external site.)</span></a> <span>(starting from page 65) helpful.</span></p>
+<p>&nbsp;</p>
+<h4><span>4) Some implementation details</span></h4>
+<p>In order to hold a lottery, we first need a way to generate a random number. Here's the code to do so:</p>
+<p>Copy the following at the top of <code>proc.c</code> after the headers:</p>
+<pre><code>#define RAND_MAX 0x7fffffff</code><br><code>uint rseed = 0;</code><br><br><code>// https://rosettacode.org/wiki/Linear_congruential_generator</code><br><code>uint rand() {</code><br><code>&nbsp; &nbsp; return rseed = (rseed * 1103515245 + 12345) &amp; RAND_MAX;</code><br><code>}</code></pre>
+<p>&nbsp;</p>
+<h4>5) New system calls</h4>
+<p>You’ll need to create 3 new system calls for this project.</p>
+<ol>
+<li><strong></strong><code>int settickets(int pid, int n_tickets)</code><strong>.&nbsp;&nbsp;</strong>This syscall is used to set the number of tickets allotted to a process. It returns 0 if the pid value is valid and n_tickets is positive. Else, it returns -1.</li>
+<li><code>void srand(uint seed):</code> This sets the rseed variable you defined in proc.c. (Hint: in order to effectively mutate that variable in your sys_srand function, you will need to define <code>extern uint rseed</code>. Check <a class="inline_disabled" href="https://stackoverflow.com/a/1433226" target="_blank">https://stackoverflow.com/a/1433226</a>).</li>
+<li><code>int getpinfo(struct pstat *)</code><strong></strong>.&nbsp; &nbsp;Because your scheduler is all in the kernel, you need to extract useful information for each process by creating this system call so as to better test whether your implementation works as expected. To be more specific, this system call returns 0 on success and -1 on failure (e.g., the argument is not a valid pointer).&nbsp; If successful, some basic information about each running process will be returned:</li>
+</ol>
+<pre><span><code class="language-c">struct pstat {<br>&nbsp; int inuse[NPROC]; // whether this slot of the process table is in use (1 or 0)<br>&nbsp; int pid[NPROC]; // PID of each process<br>&nbsp; int tickets[NPROC];  // how many tickets does this process have?<br>&nbsp; int runticks[NPROC];  // total number of timer ticks this process has been scheduled<br>&nbsp; int boostsleft[NPROC]; // how many more ticks will this process be boosted?<br>};
+</code></span></pre>
+<p>You can decide if you want to update your <code>pstat</code> statistics whenever a change occurs, or if you have an equivalent copy of these statistics in <code>ptable</code> and want to copy out information from the <code>ptable</code> when <code>getpinfo()</code> is called.&nbsp;&nbsp;</p>
+<p>The file should be copied from <code>~/cs537-1/public/p4_files/pstat.h</code>.<strong><br></strong></p>
+<p>Do not change the names of the fields in <code>pstat.h</code>. You may want to add a header guard to <code>pstat.h</code> and <code>param.h</code> to avoid redefinition.</p>
+<p>&nbsp;</p>
+<h4>6) User-level applications for testing</h4>
+<p><span style="color: #000000;">To demonstrate that your scheduler is doing at least some of the right things, we provide 2 such applications:&nbsp; <code>loop</code> and <code>schedtest</code>. The code for these programs is available in <code>~/cs537-1/public/p4_files</code>.&nbsp; Copy these into your src folder and have xv6 compile these as user programs by modifying the UPROGS variable in the Makefile.</span></p>
+<p><span style="color: #000000;"><code>loop</code> is a dummy job that just does some work. It takes exactly 1 argument <code>sleepT</code>. It sleeps</span><span style="color: #000000;"> for <code>sleepT</code> ticks, t</span><span style="color: #000000;">hen runs a huge loop.<br></span></p>
+<p><span style="color: #000000;"><code>schedtest</code> runs two copies of <code>loop</code><strong> </strong>as child processes, controlling the number of tickets and sleep time of each child.&nbsp; The <code>schedtest</code> application takes exactly 5 arguments in the following order:</span></p>
+<pre><span style="color: #000000;">prompt&gt; schedtest ticketsA sleepA ticketsB sleepB sleepParent</span></pre>
+<ul>
+<li><span style="color: #000000;"><code>schedtest</code> spawns two children processes, each running the <code>loop</code> application.&nbsp; One child A is given <code>ticketsA</code> tickets and execs <code>loop sleepA</code>; the other child B is given <code>ticketsB</code> tickets and it runs <code>loop sleepB</code>.</span></li>
+<li><span style="color: #000000;">Specifically, the parent process calls <code>fork(), settickets()</code> and <code>exec()</code> for the two children <code>loop</code> processes, <strong>A before B.</strong></span></li>
+<li><span style="color: #000000;">The parent <code>schedtest</code> process then sleeps for <code>sleepParent</code> ticks by calling <code>sleep(sleepParent)</code></span></li>
+<li><span style="color: #000000;">After sleeping, the parent calls <code>getpinfo()</code>, and prints one line of two numbers separated by a space: <code>printf(1, "%d %d: %d\n", runticksA, runticksB, runticksA / runticksB</code>), where&nbsp;<code><code class="language-c">runticksA</code></code> is the&nbsp;<code>runticks</code> of process A in the <code>pstat</code> structure and similarly for B.</span></li>
+<li><span style="color: #000000;">The parent then waits for the two <code>loop</code> processes by calling <code>wait()</code> twice, and exits.</span></li>
+</ul>
+<p><span style="color: #000000;">You will be able to run <code>schedtest</code> to test the basic compensation behaviour of your scheduler.&nbsp; For example:</span></p>
+<pre><span style="color: #000000;">prompt&gt; schedtest 10 0 2 0 120</span><br><span style="color: #000000;">99 19 5   </span><br><span style="color: #000000;"># Since it's randomized, it's difficult to completely predict the output of your program.</span><br><span style="color: #000000;"># However, the key thing to note is that the ratio of runticksA/runticksB is close to the ratio of tickets 10/2.</span><br><span style="color: #000000;"># You should play around with the number of tickets you grant each process and see the CPU-ratio match.</span><br><span style="color: #000000;"># As long as one of the child hasn't terminated yet, increasing the sleepParent value should lead to the CPU-use ratio converging to 5.</span><br><span style="color: #000000;"># You can also modify the code for loop so that it runs longer if needed.</span></pre>
+<p><span style="color: #000000;">Thus, you might need to write your own userlevel programs to validate your scheduler. <br></span></p>
+<p><span style="color: #000000;">As an example, in order to test the boosted algorithm, you can copy the <code>loop<strong> </strong></code>program into another <code>loop-print-info</code> program. &nbsp;<code>loop-print-info</code> can print&nbsp; <code class="language-c">boostsleft </code>using <code>getpinfo()</code> right after it finishes sleeping. Make sure you sleep for &gt;= 10 ticks so that your process has a reasonable chance of getting scheduled during its boosted phase. Thus you can the expect value of <code>boostsleft</code> to be between 0 and 10. You could also print <code>boostsleft</code> just before the&nbsp;<code>loop-print-info</code> program terminates to ensure that boostsleft has counted down successfully.</span></p>
+<p><span style="color: #000000;">We will not test your implementation of any other userspace programs: their purpose is to primarily help you test your scheduler. You are welcome to write more user applications and play with different values to test other aspects of the scheduler.</span></p>
+<p>&nbsp;</p>
+<h3><span style="color: #000000;">7) Other details</span></h3>
+<ul>
+<li><span style="color: #000000;"><span>You should run xv6 on only a <strong>single CPU</strong>. Make sure in your Makefile&nbsp;<code>CPUS := 1</code>.</span></span></li>
+<li><span style="color: #000000;"><span>During a boost, you should not double the number of tickets you return in <code>getpinfo.</code> Instead, return the original number of tickets.</span></span></li>
+<li><span style="color: #000000;"><span>Child processes will inherit the same number of tickets of the parent process irrespective of the number of boostsleft of the process. Boosts don't carry over to the child process.</span></span></li>
+<li><span style="color: #000000;"><span><span style="color: #843fa1;"><span style="color: #000000;">All blocked processes should be boosted. In xv6, a blocked process is in the <code>SLEEPING</code> state. A process could be in SLEEPING state even if it didn't use the <code>sleep</code> syscall; such processes should be boosted as well. Remember that different processes could be blocked for varying number of ticks.</span></span></span></span></li>
+</ul>
+<hr>
+<h3><span style="color: #000000;"><span><span style="color: #843fa1;"><span style="color: #000000;">Hints</span></span></span></span></h3>
+<p><span style="color: #000000;"><span><span style="color: #843fa1;"><span style="color: #000000;">Please refer to this <a title="Project4 hints" href="/courses/402226/pages/project4-hints" data-course-type="wikiPages" data-published="true" data-api-endpoint="https://canvas.wisc.edu/api/v1/courses/402226/pages/project4-hints" data-api-returntype="Page">document</a> for hints and suggestions regarding this project.</span></span></span></span></p>
+<hr>
+<h3><span style="color: #000000;">Testing and Handing in</span></h3>
+<p><span style="color: #000000;">Test cases have been released and can be accessed at <code>~cs537-1/tests/p4</code>.<br></span></p>
+<p><span style="color: #000000;"><br></span><span style="color: #000000;">The handin directory will be <span>&nbsp;</span><code>~cs537-1/handin/LOGIN/p4</code><span> where </span><code>LOGIN </code>is your CS login. Similar to P2, <span style="color: #ff0000;">please create a subdirectory called 'src': <code>~cs537-1/handin/LOGIN/p4/src.</code></span></span></p>
+<p>Copy all of your xv6 source files (but not .o files, please, or binaries!) into this directory.</p>
+<p><span><strong>Each project partner should turn in their joint code to each of their handin directories.</strong> E</span>ach person should place a file named <strong>partners.txt</strong> in their <em>handin/p4</em> directory, so that we can tell who worked together on this project.&nbsp; The format of <strong>partners.txt</strong> should be exactly as follows:</p>
+<pre>cslogin1 wiscNetid1 Lastname1 Firstname1<br>cslogin2 wiscNetid2 Lastname2 Firstname2</pre>
+<p>It does not matter who is 1 and who is 2.&nbsp; If you worked alone, your <strong>partners.txt</strong> file should have only one line.&nbsp; There should be no spaces within your first or last name; just use spaces to separate fields.</p>
+<p>To repeat, <strong>both project partners should turn in their code and both should have a <em>turnin/p2a/partners.txt</em> file.</strong></p></div>
+
+
+  <div style="display: none;">
+    <span class="timestamp">1721105999</span>
+    <span class="due_date_string">07/15/2024</span>
+    <span class="due_time_string">11:59pm</span>
+  </div>
+</div>
+
+
+
+
+
+
+  <div id="rubrics" class="mathjax_ignore" style="margin-bottom: 10px;">
+    <div style="display: none;" id="rubric_parameters">
+      <input type="hidden" name="rubric_association[association_type]" value="Assignment"/>
+      <input type="hidden" name="rubric_association[association_id]" value="2301449"/>
+      <input type="hidden" name="rubric_association[purpose]" value="grading"/>
+    </div>
+    
+<div id="rubric_long_description_dialog" style="display: none;">
+  <div class="editing">
+    <form id="edit_criterion_form" class="no-margin-bottom">
+      <div>
+        <label class="rating_form_label">Description
+          <textarea class="description" rows="1" name="description"></textarea>
+        </label>
+      </div>
+      <div>
+        <label class="rating_form_label">Long Description
+          <textarea class="long_description" rows="4" name="long_description"></textarea>
+        </label>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn save_button btn-primary">Update Criterion</button>
+      </div>
+    </form>
+  </div>
+  <div class="displaying">
+    <div class="long_description">
+    </div>
+  </div>
+</div>
+<div id="rubric_criterion_comments_dialog" style="display: none;">
+  <div
+    class="criterion_description"
+    style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;"
+    tabindex="-1"
+  ></div>
+  <div class="editing">
+    <label for="criterion_comments_textarea">
+      Additional Comments:
+    </label>
+    <textarea
+      id="criterion_comments_textarea"
+      class="criterion_comments"
+      name="criterion_comments"
+      style="width: 370px;"></textarea>
+    <div class="button-container">
+      <button type="button" class="btn btn button-secondary cancel_button">Cancel</button>
+      <button type="button" class="btn save_button">Update Comments</button>
+    </div>
+  </div>
+  <div class="displaying">
+    Additional Comments:
+    <div class="criterion_comments" style="margin-top: 10px;">
+    </div>
+  </div>
+</div>
+<div id="rubric_rating_dialog" style="display: none;">
+  <div class="description" style="border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 1.2em; font-weight: bold; margin-bottom: 5px;">
+    <span id="edit_rating_form_criterion_description"></span>
+  </div>
+  <div class="editing">
+    <form id="edit_rating_form" class="no-margin-bottom">
+      <div class="toggle_for_hide_points">
+        <div><label id='rating_form_score_label' class="rating_form_label">Rating Score</label></div>
+        <span id='rating_form_max_score_label' hidden>Rating max score</span>
+        <input id="points" aria-labelledby="rating_form_score_label" type="text" size="2" name="points" class="no-margin-bottom span1" />
+        <span class="range_rating">to >
+          <input aria-label="Rating min score" type="text" size="2" name="min_points" class="no-margin-bottom span1 min_points" placeholder="min"/>
+        </span>pts
+      </div>
+      <div>
+        <label for="rating_form_title" class="rating_form_label">Rating Title</label>
+        <input id="rating_form_title" type="text" class="rating_description" style="width: 90%;" name="description"/>
+      </div>
+      <div>
+        <label for="rating_form_description" class="rating_form_label">Rating Description</label>
+        <textarea id="rating_form_description" rows="4" style="width: 90%;" class="rating_long_description" name="rating_long_description" form="edit_rating_form"></textarea>
+      </div>
+      <div class="button-container">
+        <button type="button" class="btn button-secondary cancel_button">Cancel</button>
+        <button type="button" class="btn btn-primary save_button ok_button">Update Rating</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  </div>
+  
+<div
+  class="rubric_container rubric  "
+  id="default_rubric"
+  style="display: none;"
+>
+  <div class="screenreader-only"><h2>Rubric</h2></div>
+  <div class="rubric_title">
+    <div style="display: none;" class="links displaying pull-right">
+      <a
+        href="/courses/402226/rubrics/%7B%7B%20id%20%7D%7D"
+        class=" edit_rubric_link no-print no-hover"
+        style=""
+        title="Edit Rubric"
+        aria-label="Edit Rubric"
+        role="button"
+      ><i class="icon-edit standalone-icon"></i></a>
+      <a
+        href="https://canvas.wisc.edu/search/rubrics?q="
+        class="find_rubric_link no-print no-hover"
+        style=""
+        title="Find Another Rubric"
+        aria-label="Find Another Rubric"
+        role="button"
+      ><i class="icon-search standalone-icon"></i></a>
+        <a
+          href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D"
+          class="delete_rubric_link no-print no-hover"
+          style=""
+          title="Delete Rubric"
+          aria-label="Delete Rubric"
+          role="button"
+        ><i class="icon-trash standalone-icon"></i></a>
+      <div style="display: none;">
+        <div class="use_for_grading">&nbsp;</div>
+        <div class="free_form_criterion_comments">&nbsp;</div>
+        <div class="hide_score_total">&nbsp;</div>
+        <div class="hide_outcome_results">&nbsp;</div>
+        <div class="hide_points">&nbsp;</div>
+        <div class="rubric_association_id">&nbsp;</div>
+          <div class="user_id">&nbsp;</div>
+        <div class="assessment_type"></div>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20rubric_association_id%20%7D%7D/assessments/%7B%7B%20assessment_id%20%7D%7D" rel="nofollow" class="edit_assessment_link">&nbsp;</a>
+        <a href="/courses/402226/rubrics/%7B%7B%20rubric_id%20%7D%7D" class="edit_rubric_url">&nbsp;</a>
+          <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url">&nbsp;</a>
+      </div>
+    </div>
+    <div style="float: right; font-size: 0.8em; display: none;" class="links displaying locked">
+      <span style="">Can&#39;t change a rubric once you&#39;ve started using it.</span>
+        <a href="/courses/402226/rubric_associations/%7B%7B%20association_id%20%7D%7D" class="delete_rubric_url" style="display: none;">&nbsp;</a>
+    </div>
+
+    <div class="editing" style="float: right;">
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" class="find_rubric_link icon-search" style="" title="Find Existing Rubric">Find a Rubric</a>
+    </div>
+    <div class="editing" style="text-align: left">
+      <label for="rubric-title">Title:</label>
+      <input id="rubric-title" type="text" class="no-margin-bottom" name="title" value="Some Rubric" style="width: 200px;" maxlength="255" aria-label="Title:"/>
+      <a href="https://canvas.wisc.edu/search/rubrics?q=" style="display: none;"><img alt="" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/find-6164443e2a.png" /> Find Rubric</a>
+    </div>
+    <div class="displaying">
+      <span class="title" tabindex="-1">Title</span>
+    </div>
+    <div class="has-assessments-warning" style="display: none;">
+      You&#39;ve already rated students with this rubric. Any major changes could affect their assessment results.
+    </div>
+  </div>
+<table class="rubric_table">
+<caption>
+  <div class="screenreader-only">
+    <span class="title">Title</span>
+  </div>
+</caption>
+<thead>
+  <tr>
+    <th scope="col">Criteria</th>
+    <th scope="col">Ratings</th>
+    <th scope="col" class="toggle_for_hide_points ">
+      Pts
+    </th>
+  </tr>
+</thead>
+<tbody>
+  
+<tr id="criterion_blank" class="criterion blank  " style="display: none;">
+  <td class="criterion_description hover-container pad-box-micro">
+    <div class="container">
+      <div class="links editing">
+          <a href="#" class="edit_criterion_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit criterion description</span></a>
+          <a href="#" class="delete_criterion_link" role="button"><i class="icon-trash standalone-icon"></i><span class="screenreader-only">Delete criterion row</span></a>
+      </div>
+      <div class="description_content">
+        <span class="outcome_sr_content" aria-hidden="true">
+          <i class="learning_outcome_flag icon-outcomes" aria-hidden="true"></i>
+          <span class="screenreader-only">This criterion is linked to a Learning Outcome</span>
+        </span>
+        <span class="description description_title">Description of criterion</span>
+        <span class="learning_outcome_id" style="display: none;"></span>
+        <span class="criterion_id" style="display: none;"></span>
+          <div class="long_description small_description"></div>
+        <div class="hide_when_learning_outcome ">
+          <div class="criterion_use_range_div editing toggle_for_hide_points ">
+            <label>Range
+              <input type="checkbox" class="criterion_use_range" /></label>
+          </div>
+        </div>
+        <div class="threshold toggle_for_hide_points ">
+          threshold:
+          <span class="mastery_points">5</span> pts
+        </div>
+      </div>
+
+    </div>
+  </td>
+  <td style="padding: 0;">
+      <table class="ratings" style=""><tr>
+          <td class="rating edge_rating
+                
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">5</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">Full Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank</span>
+              </div>
+                <div class="editing links add_rating_link">
+                  <a href="#" class="add_rating_link_after" aria-label="Add rating" role="button"><i class="icon-add icon-Solid"></i></a>
+                </div>
+            </div>
+          </td>
+          <td class="rating edge_rating
+                infinitesimal
+                "
+          >
+            <div class="container">
+              <div class="rating-main">
+                  <div class="editing links">
+                    <a href="#" class="edit_rating_link" role="button"><i class="icon-edit standalone-icon"></i><span class="screenreader-only">Edit rating</span></a>
+                    <a href="#" class="delete_rating_link"><i class="icon-trash standalone-icon" ></i><span class="screenreader-only">Delete rating</span></a>
+                  </div>
+                  <div class="clear"></div>
+                <span class="nobr toggle_for_hide_points ">
+                  <span class="points">0</span>
+                  <span class="range_rating" style="display: none;">to ><span class="min_points">0</span></span> pts
+                </span>
+                <div class="description rating_description_value">No Marks</div>
+                <div class="rating_long_description small_description"></div>
+                <span class="rating_id" style="display: none;">blank_2</span>
+              </div>
+            </div>
+          </td>
+      </tr></table>
+      <div style="display: none; font-size: 0.8em; margin: 5px;" class="custom_ratings">
+        This area will be used by the assessor to leave comments related to this criterion.
+      </div>
+  </td>
+  <td class="nobr points_form toggle_for_hide_points ">
+    <div class="editing" style="white-space: normal">
+      <span style="white-space: nowrap; font-size: 0.8em">
+          
+            <input
+              type="text"
+              aria-label="Points"
+              value="5"
+              class="criterion_points span1 no-margin-bottom"
+            />
+           pts
+      </span><br />
+    </div>
+    <div class="displaying">
+      <span style="white-space: nowrap;">
+        <span class="criterion_rating_points_holder" style="display: none;">
+          <span class="criterion_rating_points">&nbsp;</span> /
+        </span>
+        <span class="display_criterion_points">5</span> pts<br />
+      </span>
+    </div>
+    <div class="ignoring">
+      <span> -- </span>
+    </div>
+    <div class="criterion_comments">
+        <a href="#" class="no-hover criterion_comments_link" title="Additional Comments">
+          <img alt="Additional Comments" src="https://du11hjcvx0uqb.cloudfront.net/dist/images/rubric_comment-ddae8546ab.png" />
+        </a>
+        <div class="custom_rating" style="display: none;"></div>
+    </div>
+  </td>
+</tr>
+
+  <tr class="summary">
+    <td colspan="4">
+      <div class="total_points_holder toggle_for_hide_points "
+        style="float: right; ">
+        <span>Total Points:
+            <span class="rubric_total">
+              5
+            </span>
+ <span class="assessing">out of 5</span>        </span>
+      </div>
+      <div class="editing pull-left">
+        <span id="add_criterion_holder" class="criterion_link"></span>
+      </div>
+      <div class="clear"></div>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<table style="display: none;">
+  <tr id="edit_rubric">
+    <td colspan="4">
+      <form id="edit_rubric_form" class="edit-rubric-form no-margin-bottom">
+        <div class="rubric_custom_ratings" style="">
+          <input type="checkbox" id="rubric_custom_rating" class="rubric_custom_rating" />
+          <label for="rubric_custom_rating">I&#39;ll write free-form comments when assessing students</label>
+        </div>
+          <div class="hide_points" style="">
+            <input type="checkbox" id="hide_points" class="hide_points_checkbox" />
+            <label for="hide_points">Remove points from rubric</label>
+          </div>
+          <div class="hide_outcome_results" style="">
+            <input type="checkbox" id="hide_outcome_results" class="hide_outcome_results_checkbox" />
+            <label for="hide_outcome_results">Don&#39;t post Outcomes results to Learning Mastery Gradebook</label>
+          </div>
+          <div class="rubric_grading" style="">
+            <input type="checkbox" id="grading_rubric" class="grading_rubric_checkbox" />
+            <label for="grading_rubric">Use this rubric for assignment grading</label>
+          </div>
+        <div class="totalling_rubric" style="">
+          <input type="checkbox" id="totalling_rubric" class="totalling_rubric_checkbox" />
+          <label for="totalling_rubric">Hide score total for assessment results</label>
+        </div>
+        <div class="ic-Action-header ic-Action-header--half-margin">
+          <div class="ic-Action-header__Primary">
+            <button type="button" class="Button cancel_button">Cancel</button>
+            <button type="submit" class="Button Button--primary save_button">Create Rubric</button>
+          </div>
+        </div>
+      </form>
+    </td>
+  </tr>
+</table>
+
+
+  <div id="assignment_external_tools"></div>
+
+  
+
+
+          </div>
+        </div>
+        <div id="right-side-wrapper" class="ic-app-main-content__secondary">
+          <aside id="right-side" role="complementary">
+            
+<div id="sidebar_content">
+
+
+</div>
+
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <div style="display:none;"><!-- Everything inside of this should always stay hidden -->
+        <div id="page_view_id">dd4bf15e-d508-4b92-960e-ede252a0bddc</div>
+    </div>
+  <div id='aria_alerts' class='hide-text affix' role="alert" aria-live="assertive"></div>
+  <div id='StudentTray__Container'></div>
+    <div class="NewUserTutorialTray__Container"></div>
+  <div id="react-router-portals"></div>
+  
+
+  <iframe src="https://sso.canvaslms.com/post_message_forwarding?rev=59677caad5-de8233d392aa15f4&amp;token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJwYXJlbnRfZG9tYWluIjoiY2FudmFzLndpc2MuZWR1In0.Vn8_7bMNTbXrR91PBjKlQirgswiqpPUPf9FKxmafm8AhCw4ZfBrA7WOraGeDcLgBsrk4TM_k0DZMTAXtmA5J-A" name="post_message_forwarding" title="post_message_forwarding" id="post_message_forwarding" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
+
+
+  <script>
+    Object.assign(
+      ENV,
+      {}
+    )
+  </script>
+
+<script>
+//<![CDATA[
+(window.bundles || (window.bundles = [])).push('inst_fs_service_worker');
+//]]>
+</script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/39713295/madison_changes_july2024_.js" defer="defer"></script>
+  <script src="https://instructure-uploads.s3.amazonaws.com/account_83960000000000001/attachments/27416442/MadisonCourseCatalog.js" defer="defer"></script>
+
+</div> <!-- #application -->
+</body>
+</html>

@@ -1,0 +1,281 @@
+key: -c
+Current directory: /u/c/s/cs537-1/handin/yongzhi/p6/tempdir_for_p6tests
+[Test1 - Sorting 1 file(s) with 1 mapper(s), 1 reducer(s) and 1 partitioner]
+(simple1.txt)
+  Running $./sort_m1r1 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+** 0.320 ms elapsed **
+[Test1 Success]
+
+[Test2 - Sorting 1 file(s) with 2 mapper(s), 1 reducer(s) and 1 partitioner]
+(simple1.txt)
+  Running $./sort_m2r1 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+** 0.540 ms elapsed **
+[Test2 Success]
+
+[Test3 - Sorting 1 file(s) with 1 mapper(s), 2 reducer(s) and 2 partitioner]
+(simple1.txt)
+  Running $./sort_m1r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+** 0.396 ms elapsed **
+[Test3 Success]
+
+[Test4 - Sorting 1 file(s) with 1 mapper(s), 2 reducer(s) and 4 partitioner]
+(simple1.txt)
+  Running $./sort_m1r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+** 0.309 ms elapsed **
+[Test4 Success]
+
+[Test5 - Sorting 1 file(s) with 2 mapper(s), 2 reducer(s) and 2 partitioner]
+(simple1.txt)
+  Running $./sort_m2r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+** 0.496 ms elapsed **
+[Test5 Success]
+
+[Test6 - Sorting 2 file(s) with 2 mapper(s), 2 reducer(s) and 2 partitioner]
+(simple1.txt simple2.txt)
+  Running $./sort_m2r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+** 0.456 ms elapsed **
+[Test6 Success]
+
+[Test7 - Wordcounting 1 file(s) with 1 mapper(s) and 1 reducer(s) and  1 partitioner]
+(simple1.txt)
+  Running $./wordcount_m1r1 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+** 0.387 ms elapsed **
+[Test7 Success]
+
+[Test8 - Wordcounting 1 file(s) with 2 mapper(s) and 1 reducer(s) and  1 partitioner]
+(simple2.txt)
+  Running $./wordcount_m2r1 /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+** 0.374 ms elapsed **
+[Test8 Success]
+
+[Test9 - Wordcounting 1 file(s) with 1 mapper(s) and 2 reducer(s) and  2 partitioner]
+(simple1.txt)
+  Running $./wordcount_m1r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+** 0.469 ms elapsed **
+[Test9 Success]
+
+[Test10 - Wordcounting 1 file(s) with 1 mapper(s) and 2 reducer(s) and  4 partitioner]
+(simple1.txt)
+  Running $./wordcount_m1r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+** 0.442 ms elapsed **
+[Test10 Success]
+
+[Test11 - Wordcounting 1 file(s) with 2 mapper(s) and 2 reducer(s) and  2 partitioner]
+(simple2.txt)
+  Running $./wordcount_m2r2 /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+** 0.611 ms elapsed **
+[Test11 Success]
+
+[Test12 - Wordcounting 2 file(s) with 2 mapper(s) and 2 reducer(s) and  2 partitioner]
+(simple1.txt simple2.txt)
+  Running $./wordcount_m2r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+** 0.617 ms elapsed **
+[Test12 Success]
+
+[Test13 - Wordcounting iterates 2 times 1 file(s) with 1 mapper(s) and 1 reducer(s) and 1 partitioner]
+(simple1.txt)
+  Running $./wordcount_multi_m1r1 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+[Test13 failed]
+  Error occured while running ./wordcount_multi_m1r1 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+
+[Test14 - Wordcounting iterates 2 times 1 file(s) with 2 mapper(s) and 1 reducer(s) and 1 partitioner]
+(simple2.txt)
+  Running $./wordcount_multi_m2r1 /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+[Test14 failed]
+  Error occured while running ./wordcount_multi_m2r1 /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+
+[Test15 - Wordcounting iterates 2 times 1 file(s) with 1 mapper(s) and 2 reducer(s) and 2 partitioner]
+(simple1.txt)
+  Running $./wordcount_multi_m1r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+[Test15 failed]
+  Error occured while running ./wordcount_multi_m1r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+
+[Test16 - Wordcounting iterates 2 times 1 file(s) with 1 mapper(s) and 2 reducer(s) and 4 partitioner]
+(simple1.txt)
+  Running $./wordcount_multi_m1r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+[Test16 failed]
+  Error occured while running ./wordcount_multi_m1r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt
+
+[Test17 - Wordcounting iterates 2 times 1 file(s) with 2 mapper(s) and 2 reducer(s) and 2 partitioner]
+(simple2.txt)
+  Running $./wordcount_multi_m2r2 /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+[Test17 failed]
+  Error occured while running ./wordcount_multi_m2r2 /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+
+[Test18 - Wordcounting iterates 2 times 2 file(s) with 2 mapper(s) and 2 reducer(s) and 2 partitioner]
+(simple1.txt simple2.txt)
+  Running $./wordcount_multi_m2r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+[Test18 failed]
+  Error occured while running ./wordcount_multi_m2r2 /u/c/s/cs537-1/tests/p6/inputs/simple1.txt /u/c/s/cs537-1/tests/p6/inputs/simple2.txt
+
+[Test19 - Sorting 1 file(s) with 2 mapper(s), 2 reducer(s) and 2 partitioner]
+(sort wordlist.in)
+  Running $./sort_m2r2 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 153.399 ms elapsed **
+[Test19 Success]
+
+[Test20 - Sorting 1 file(s) with 1 mapper(s), 1 reducer(s) and 1 partitioner]
+(sort wordlist.in)
+  Running $./sort_m1r1 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 136.947 ms elapsed **
+[Test20 Success]
+
+[Test21 - Sorting 1 file(s) with 4 mapper(s), 1 reducer(s) and 1 partitioner]
+(sort wordlist.in)
+  Running $./sort_m4r1 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 138.997 ms elapsed **
+[Test21 Success]
+
+[Test22 - Sorting 1 file(s) with 1 mapper(s), 4 reducer(s) and 4 partitioner]
+(sort wordlist.in)
+  Running $./sort_m1r4 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 161.403 ms elapsed **
+[Test22 Success]
+
+[Test23 - Sorting 1 file(s) with 4 mapper(s), 4 reducer(s) and 4 partitioner]
+(sort wordlist.in)
+  Running $./sort_m4r4 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 159.050 ms elapsed **
+[Test23 Success]
+
+[Test24 - Sorting 4 file(s) with 1 mapper(s), 1 reducer(s) and 1 partitioner]
+(sort wordlist.in * 4)
+  Running $./sort_m1r1 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 559.738 ms elapsed **
+[Test24 Success]
+
+[Test25 - Sorting 4 file(s) with 4 mapper(s), 4 reducer(s) and 4 partitioner]
+(sort wordlist.in * 4)
+  Running $./sort_m4r4 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 686.314 ms elapsed **
+[Test25 Success]
+
+[Test26 - Sorting 4 file(s) with 4 mapper(s), 4 reducer(s) and 12 partitioner]
+(sort wordlist.in * 4)
+  Running $./sort_m4r4 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 589.457 ms elapsed **
+[Test26 Success]
+
+[Test27 - Sorting 4 file(s) with 4 mapper(s), 4 reducer(s) and 1 partitioner]
+(sort wordlist.in * 4)
+  Running $./sort_m4r4 /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in /u/c/s/cs537-1/tests/p6/inputs/wordlist.in
+** 573.604 ms elapsed **
+[Test27 Success]
+
+[Test28 - Wordcounting 1 file(s) with 1 mapper(s) and 1 reducer(s) and  1 partitioner]
+(wordcount 1mb file)
+  Running $./wordcount_m1r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 111.077 ms elapsed **
+[Test28 Success]
+
+[Test29 - Wordcounting 1 file(s) with 1 mapper(s) and 1 reducer(s) and  1 partitioner]
+(wordcount 1mb file)
+  Running $./wordcount_m1r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 111.059 ms elapsed **
+[Test29 Success]
+
+[Test30 - Wordcounting 1 file(s) with 1 mapper(s) and 1 reducer(s) and  1 partitioner]
+(wordcount 100mb file)
+  Running $./wordcount_m1r1 /u/c/s/cs537-1/tests/p6/inputs/file100m.in
+[Test30 failed]
+  Error occured while running ./wordcount_m1r1 /u/c/s/cs537-1/tests/p6/inputs/file100m.in
+
+[Test31 - Wordcounting 1 file(s) with 1 mapper(s) and 4 reducer(s) and  4 partitioner]
+(1mb file)
+  Running $./wordcount_m1r4 /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 112.762 ms elapsed **
+[Test31 Success]
+
+[Test32 - Wordcounting 1 file(s) with 1 mapper(s) and 20 reducer(s) and  20 partitioner]
+(1mb file)
+  Running $./wordcount_m1r20 /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 113.251 ms elapsed **
+[Test32 Success]
+
+[Test33 - Wordcounting 10 file(s) with 1 mapper(s) and 1 reducer(s) and  1 partitioner]
+(1mb file * 20)
+  Running $./wordcount_m1r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 1255.093 ms elapsed **
+[Test33 Success]
+
+[Test34 - Wordcounting 10 file(s) with 4 mapper(s) and 1 reducer(s) and  1 partitioner]
+(1mb file * 20)
+  Running $./wordcount_m4r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 2124.860 ms elapsed **
+[Test34 Success]
+
+[Test35 - Wordcounting 10 file(s) with 1 mapper(s) and 4 reducer(s) and  4 partitioner]
+(1mb file * 20)
+  Running $./wordcount_m1r4 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 1223.041 ms elapsed **
+[Test35 Success]
+
+[Test36 - Wordcounting 10 file(s) with 20 mapper(s) and 1 reducer(s) and  1 partitioner]
+(1mb file * 20)
+  Running $./wordcount_m20r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 2268.386 ms elapsed **
+[Test36 Success]
+
+[Test37 - Wordcounting 10 file(s) with 1 mapper(s) and 20 reducer(s) and  20 partitioner]
+(1mb file * 20)
+  Running $./wordcount_m1r20 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 1133.478 ms elapsed **
+[Test37 Success]
+
+[Test38 - Wordcounting 5 file(s) with 5 mapper(s) and 1 reducer(s) and  1 partitioner]
+(100mb file *1 , 1mb file * 4)
+  Running $./wordcount_m5r1 /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 19954.887 ms elapsed **
+[Test38 Success]
+
+[Test39 - Wordcounting 5 file(s) with 5 mapper(s) and 1 reducer(s) and  1 partitioner]
+(100mb file *4 , 1mb file * 1)
+  Running $./wordcount_m5r1 /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+** 135224.386 ms elapsed **
+[Test39 Success]
+
+[Test40 - Wordcounting 5 file(s) with 5 mapper(s) and 1 reducer(s) and  20 partitioner]
+(100mb file *4 , 1mb file * 1)
+  Running $./wordcount_m5r1 /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+[Test40 failed]
+  Error occured while running ./wordcount_m5r1 /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+
+[Test41 - Wordcounting 5 file(s) with 5 mapper(s) and 3 reducer(s) and  2 partitioner]
+(100mb file *1 , 1mb file * 4)
+  Running $./wordcount_m5r3 /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+[Test41 failed]
+  Error occured while running ./wordcount_m5r3 /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+
+[Test42 - Wordcounting iterates 2 times 10 file(s) with 1 mapper(s) and 1 reducer(s) and 1 partitioner]
+(1mb file * 10)
+  Running $./wordcount_multi_m1r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+[Test42 failed]
+  Error occured while running ./wordcount_multi_m1r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+
+[Test43 - Wordcounting iterates 10 times 10 file(s) with 10 mapper(s) and 1 reducer(s) and 1 partitioner]
+(1mb file * 10)
+  Running $./wordcount_multi_m10r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+[Test43 failed]
+  Error occured while running ./wordcount_multi_m10r1 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+
+[Test44 - Wordcounting iterates 10 times 10 file(s) with 10 mapper(s) and 4 reducer(s) and 4 partitioner]
+(1mb file * 10)
+  Running $./wordcount_multi_m10r4 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+[Test44 failed]
+  Error occured while running ./wordcount_multi_m10r4 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+
+[Test45 - Wordcounting iterates 10 times 10 file(s) with 10 mapper(s) and 4 reducer(s) and 100 partitioner]
+(1mb file * 10)
+  Running $./wordcount_multi_m10r4 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+[Test45 failed]
+  Error occured while running ./wordcount_multi_m10r4 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+
+[Test46 - Wordcounting iterates 10 times 10 file(s) with 10 mapper(s) and 4 reducer(s) and 1 partitioner]
+(1mb file * 10)
+  Running $./wordcount_multi_m10r4 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+[Test46 failed]
+  Error occured while running ./wordcount_multi_m10r4 /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
+
+[Test47 - Wordcounting iterates 5 times 10 file(s) with 10 mapper(s) and 4 reducer(s) and 4 partitioner]
+(100mb file * 2 , 1mb file * 8)
+  Running $./wordcount_multi_m10r4 /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file100m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in /u/c/s/cs537-1/tests/p6/inputs/file1m.in
